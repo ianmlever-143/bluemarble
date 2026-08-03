@@ -5,8 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>SeeCoast</title>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,500;0,600;0,700;0,900;1,500&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<link rel="stylesheet" href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css"/>
+<script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
 <style>
 :root{
   --paper:#FAF6EE; --card:#FFFFFF;
@@ -97,9 +97,11 @@ body{font-family:var(--font-body);background:var(--paper);color:var(--ink);min-h
 .map-wrapper{border:1px solid var(--line);border-radius:20px;overflow:hidden;box-shadow:var(--shadow-sm),var(--shadow-md);position:relative;background:#DCE9E6;}
 #leaflet-map{width:100%;height:440px;}
 .map-locked-msg{display:none;position:absolute;top:12px;left:50%;transform:translateX(-50%);background:var(--card);border:1px solid var(--line);border-radius:10px;padding:.32rem .9rem;font-size:.76rem;font-weight:700;color:var(--coral);z-index:1000;white-space:nowrap;pointer-events:none;box-shadow:var(--shadow-sm);}
-.leaflet-control-attribution{font-size:9px !important;opacity:.55;}
-.leaflet-control-zoom{border:1px solid var(--line) !important;border-radius:10px !important;overflow:hidden;box-shadow:var(--shadow-sm);}
-.leaflet-control-zoom a{background:var(--card) !important;color:var(--ink) !important;border-color:var(--line) !important;}
+.maplibregl-ctrl-attrib{font-size:9px !important;opacity:.55;}
+.maplibregl-ctrl-attrib a{color:var(--ink-faint) !important;}
+.maplibregl-ctrl-group{border:1px solid var(--line) !important;border-radius:10px !important;overflow:hidden;box-shadow:var(--shadow-sm);background:var(--card) !important;}
+.maplibregl-ctrl-group button{background:var(--card) !important;}
+.maplibregl-ctrl-group button+button{border-top:1px solid var(--line) !important;}
 
 .confirm-area{margin-top:.9rem;text-align:center;}
 .guess-coords{font-size:.78rem;color:var(--teal);min-height:1.4em;margin-bottom:.5rem;font-weight:600;}
@@ -228,7 +230,6 @@ body{font-family:var(--font-body);background:var(--paper);color:var(--ink);min-h
     <div>
       <div class="loc-title-row">
         <div class="loc-name" id="loc-name"></div>
-        <div class="loc-town" id="loc-town"></div>
       </div>
       <div class="loc-teaser" id="loc-teaser"></div>
     </div>
@@ -315,9 +316,7 @@ body{font-family:var(--font-body);background:var(--paper);color:var(--ink);min-h
 <!-- FOOTER -->
 <div class="site-footer"><b>Blue Marble Games</b><br>created by Ian Lever</div>
 
-<script>
-// ── ICONS (monochrome, currentColor) ────────────────────────────────────
-const ICONS = {
+<script>const ICONS = {
 logomark: `<svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 3.5C10.2 3.5 5.5 8.2 5.5 14c0 8.3 10.5 14.5 10.5 14.5S26.5 22.3 26.5 14c0-5.8-4.7-10.5-10.5-10.5Z"/><path d="M9.6 14c1.4-1.7 3-1.7 4.4 0s3 1.7 4.4 0 3-1.7 4.4 0"/></svg>`,
 parks: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 6 12h3l-4 7h14l-4-7h3Z"/><path d="M12 19v2.3"/></svg>`,
 coffee: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 9h11v5.5A4.5 4.5 0 0 1 11.5 19H9.5A4.5 4.5 0 0 1 5 14.5Z"/><path d="M16 10h1.3a2.1 2.1 0 0 1 0 4.2H16"/><path d="M8 5.2c0 .9-.9 1-.9 1.9M12 5.2c0 .9-.9 1-.9 1.9"/></svg>`,
@@ -352,14 +351,15 @@ parks: {
   intro:`From a windswept headland to a mountain notch, these five state parks hold some of New Hampshire's best stories — a colonial fort, a fallen mountain face, and glacial boulders the size of houses. Read up, then pin them on the map.`,
   locations:[
     {name:`Odiorne Point State Park`, town:`Rye, NH`, lat:43.0436, lon:-70.7144,
-      teaser:`New Hampshire's largest stretch of undeveloped coastline sits at the tip of Rye — 330 acres of rocky headland, salt marsh, and tide pool that outlasted hotels, cottages, and a wartime army base.`,
+      teaser:`New Hampshire's largest stretch of undeveloped coastline sits at the tip of this seacoast town — 330 acres of rocky headland, salt marsh, and tide pool that outlasted hotels, cottages, and a wartime army base.`,
       facts:[
         `In 1623, David Thomson landed here to found Pannaway Plantation — the first European settlement in New Hampshire, two years before the Pilgrims were fully settled at Plymouth.`,
         `The Odiorne family farmed this land for roughly 280 years after buying it in the 1660s, giving the point its name.`,
         `The U.S. Army seized the land in 1942, tore down a 40-cottage summer resort, and built Fort Dearborn's coastal gun batteries — bunkers you can still walk through today.`,
         `The state bought the land back for $91,000 in 1961, and the park, now home to the Seacoast Science Center, finally opened to the public in 1972.`
       ],
-      cites:[{label:`Wikipedia — Odiorne Point State Park`, url:`https://en.wikipedia.org/wiki/Odiorne_Point_State_Park`},{label:`NHPR — How a World War Created a State Park`, url:`https://www.nhpr.org/nh-news/2016-09-01/how-a-world-war-created-a-state-park-on-n-h-s-seacoast`}]
+      cites:[{label:`Wikipedia — Odiorne Point State Park`, url:`https://en.wikipedia.org/wiki/Odiorne_Point_State_Park`},{label:`NHPR — How a World War Created a State Park`, url:`https://www.nhpr.org/nh-news/2016-09-01/how-a-world-war-created-a-state-park-on-n-h-s-seacoast`}],
+      poly:[[43.0475,-70.7205],[43.0492,-70.7128],[43.0454,-70.7078],[43.0388,-70.7098],[43.0372,-70.7178],[43.0420,-70.7228]]
     },
     {name:`Franconia Notch State Park`, town:`Franconia / Lincoln, NH`, lat:44.1494, lon:-71.6867,
       teaser:`An eight-mile mountain pass through the White Mountains, threaded by a two-lane parkway that needed its own act of Congress — home to Cannon Mountain, the Flume Gorge, and New Hampshire's most famous face.`,
@@ -369,7 +369,8 @@ parks: {
         `Interstate 93 narrows to one lane each way here — one of the only places in the country where the interstate standard was waived to protect the landscape.`,
         `The Basin, a 20-foot granite pothole at the base of a waterfall, was smoothed by swirling glacial meltwater and pebbles over roughly 15,000 years.`
       ],
-      cites:[{label:`Wikipedia — Franconia Notch State Park`, url:`https://en.wikipedia.org/wiki/Franconia_Notch_State_Park`},{label:`Old Man of the Mountain Legacy Fund`, url:`https://www.oldmannh.org/franconianotchstatepark.php`}]
+      cites:[{label:`Wikipedia — Franconia Notch State Park`, url:`https://en.wikipedia.org/wiki/Franconia_Notch_State_Park`},{label:`Old Man of the Mountain Legacy Fund`, url:`https://www.oldmannh.org/franconianotchstatepark.php`}],
+      poly:[[44.1785,-71.6955],[44.1785,-71.6645],[44.1450,-71.6595],[44.0945,-71.6745],[44.0945,-71.7005],[44.1450,-71.6985]]
     },
     {name:`Fort Constitution Historic Site`, town:`New Castle, NH`, lat:43.0715, lon:-70.7095,
       teaser:`Guarding the mouth of the Piscataqua River since the 1630s, this fort saw the first armed uprising of the American Revolution — four months before Lexington and Concord, and Paul Revere had a hand in it.`,
@@ -379,7 +380,8 @@ parks: {
         `Some of the seized gunpowder is believed to have later been used by colonial forces at the Battle of Bunker Hill.`,
         `The fort has worn three names across four centuries — "The Castle," then "Fort William and Mary," then "Fort Constitution" — and its grounds still hold the working Portsmouth Harbor Light.`
       ],
-      cites:[{label:`NH Sons of the American Revolution — The 1774 Raid`, url:`https://nhsar.org/the-raid-on-fort-william-and-mary-in-1774/`},{label:`NH Magazine — Stealing the King's Powder`, url:`https://www.nhmagazine.com/stealing-the-kings-powder-did-the-american-revolution-start-here/`}]
+      cites:[{label:`NH Sons of the American Revolution — The 1774 Raid`, url:`https://nhsar.org/the-raid-on-fort-william-and-mary-in-1774/`},{label:`NH Magazine — Stealing the King's Powder`, url:`https://www.nhmagazine.com/stealing-the-kings-powder-did-the-american-revolution-start-here/`}],
+      poly:[[43.0726,-70.7112],[43.0726,-70.7078],[43.0704,-70.7072],[43.0698,-70.7098],[43.0708,-70.7116]]
     },
     {name:`Pawtuckaway State Park`, town:`Nottingham, NH`, lat:43.0803, lon:-71.1533,
       teaser:`Five thousand acres built on the bones of a 100-million-year-old volcano, where glacial boulders the size of houses draw climbers from across New England.`,
@@ -389,17 +391,19 @@ parks: {
         `A hike to the fire tower atop South Mountain rewards climbers with views stretching from the White Mountains to the Boston skyline on a clear day.`,
         `"Pawtuckaway" comes from an Algonquian word roughly meaning "land of the big buck," reflecting the Pennacook people who hunted here long before European settlement.`
       ],
-      cites:[{label:`America's State Parks — Pawtuckaway`, url:`https://www.americasstateparks.org/state-park/pawtuckaway/`},{label:`Curiouser Maine — Boulders, Fire Tower & Volcanic History`, url:`https://curiousermaine.com/pawtuckaway-state-park-nottingham-new-hampshire/`}]
+      cites:[{label:`America's State Parks — Pawtuckaway`, url:`https://www.americasstateparks.org/state-park/pawtuckaway/`},{label:`Curiouser Maine — Boulders, Fire Tower & Volcanic History`, url:`https://curiousermaine.com/pawtuckaway-state-park-nottingham-new-hampshire/`}],
+      poly:[[43.1080,-71.1850],[43.1100,-71.1350],[43.0850,-71.1195],[43.0595,-71.1300],[43.0545,-71.1650],[43.0700,-71.1905],[43.0955,-71.1955]]
     },
     {name:`Jenness State Beach`, town:`Rye, NH`, lat:42.9856, lon:-70.7619,
-      teaser:`A half-mile of golden sand on Rye's Route 1A — small enough to fill up fast on a summer weekend, but beloved by early-morning surfers and sunrise photographers.`,
+      teaser:`A half-mile of golden sand on this town's Route 1A — small enough to fill up fast on a summer weekend, but beloved by early-morning surfers and sunrise photographers.`,
       facts:[
         `The beach is named for the Jenness family, early settlers who immigrated from Rye, East Sussex, England — the same family that gave the town of Rye its name.`,
         `It's a protected nesting site for piping plovers, a threatened shorebird species that returns to this stretch of coast each spring.`,
         `The beach's steady, gentle breaks have made it one of the Seacoast's most popular longboard surf spots.`,
         `Jenness sits just south of Odiorne Point, along the same coastline that Rye has protected through its network of state beaches since the mid-20th century.`
       ],
-      cites:[{label:`Wikipedia — Jenness State Beach`, url:`https://en.wikipedia.org/wiki/Jenness_State_Beach`},{label:`Rye NH Historical Society — A Short History of Rye`, url:`https://www.ryenhhistoricalsociety.org/history-of-rye`}]
+      cites:[{label:`Wikipedia — Jenness State Beach`, url:`https://en.wikipedia.org/wiki/Jenness_State_Beach`},{label:`Rye NH Historical Society — A Short History of Rye`, url:`https://www.ryenhhistoricalsociety.org/history-of-rye`}],
+      poly:[[42.9877,-70.7632],[42.9877,-70.7606],[42.9836,-70.7603],[42.9836,-70.7629]]
     }
   ]
 },
@@ -408,7 +412,7 @@ coffee: {
   intro:`Five local coffee shops fueling mornings from Kittery to Dover. Read a bit about each one, then guess where you'd find your cup.`,
   locations:[
     {name:`Wild Valentine`, town:`Portsmouth, NH`, lat:43.0709, lon:-70.7595,
-      teaser:`Part flower shop, part café, tucked into Portsmouth's South End — order a Lavender Vanilla latte and walk out with a bouquet in the same breath.`,
+      teaser:`Part flower shop, part café, tucked into this city's South End — order a Lavender Vanilla latte and walk out with a bouquet in the same breath.`,
       facts:[
         `Wild Valentine pours beans from La Mulita, a roaster based just down the coast in Rye, NH.`,
         `Its signature drinks — Lavender Vanilla and Cardamom Rose lattes — lean into the shop's identity as a florist as much as a café.`,
@@ -417,7 +421,7 @@ coffee: {
       cites:[{label:`Wild Valentine — Our Story`, url:`https://www.wildvalentine.co/pages/our-story`}]
     },
     {name:`The Islander Cafe`, town:`New Castle, NH`, lat:43.0786, lon:-70.7133,
-      teaser:`A tiny, cherished breakfast spot on New Castle Island, just up the road from Fort Constitution — known for its Dutch Baby pancake and a line that's worth the wait.`,
+      teaser:`A tiny, cherished breakfast spot on a small island, just up the road from Fort Constitution — known for its Dutch Baby pancake and a line that's worth the wait.`,
       facts:[
         `New Castle is New Hampshire's only town located entirely on islands, and its smallest by area.`,
         `The café's pastries, including its famous crullers, arrive fresh each morning from its sister bakery, Lil's Café, across the river in Kittery, Maine.`,
@@ -426,7 +430,7 @@ coffee: {
       cites:[{label:`The Islander Cafe — About Us`, url:`https://theislandercafe.com/about-us/`},{label:`Union Leader — Islander Cafe Sizzles in the Summer`, url:`https://www.unionleader.com/nh/food/our_gourmet/our-gourmet-new-castles-islander-cafe-sizzles-in-the-summer/article_ea90cb10-b149-4874-a6a3-d2465516478b.html`}]
     },
     {name:`Lil's Cafe`, town:`Kittery, ME`, lat:43.0925, lon:-70.7477,
-      teaser:`A neighborhood bakery-café in a converted bank building in Kittery Foreside — famous for a maple cruller worth the line, with a crate of used vinyl to dig through while you wait.`,
+      teaser:`A neighborhood bakery-café in a converted bank building in a small coastal downtown — famous for a maple cruller worth the line, with a crate of used vinyl to dig through while you wait.`,
       facts:[
         `Lil's opened in November 2013 inside a former bank building — the old vault door still stands near a small room stocked with used vinyl records for sale.`,
         `The café is named for Lilian Mangos, who worked the register at nearby Bob's Clam Hut for more than 20 years.`,
@@ -436,7 +440,7 @@ coffee: {
       cites:[{label:`The Maine Mag — Lil's Cafe`, url:`https://www.themainemag.com/2907-lils-cafe/`},{label:`Lil's Cafe`, url:`https://www.lilscafe.com/`}]
     },
     {name:`Flamingo's Coffee Bar`, town:`Exeter, NH`, lat:42.9814, lon:-70.9478,
-      teaser:`A pink-accented coffee shop that started as a Hampton Beach cart and grew a second flock in downtown Exeter, founded by a UNH grad chasing beach vibes inland.`,
+      teaser:`A pink-accented coffee shop that started as a Hampton Beach cart and grew a second flock in this downtown, founded by a UNH grad chasing beach vibes inland.`,
       facts:[
         `Flamingo's got its start on Hampton Beach before opening its second location in downtown Exeter — its founder calls the loyal customer base "the flock."`,
         `The shop roasts with Flight Coffee Co. out of Bedford, NH, and is proud to be a women-led local business.`,
@@ -445,7 +449,7 @@ coffee: {
       cites:[{label:`Flamingo's Coffee Bar — About`, url:`https://www.flamingoscoffeebar.com/about`}]
     },
     {name:`Two Bees Cafe + Patisserie`, town:`Dover, NH`, lat:43.1979, lon:-70.8737,
-      teaser:`A French-inspired café on the banks of the Cocheco River in downtown Dover — the kouign amann might be the best reason to get out of bed.`,
+      teaser:`A French-inspired café on the banks of the Cocheco River in this downtown — the kouign amann might be the best reason to get out of bed.`,
       facts:[
         `The café's menu draws on French and Mediterranean technique, changing seasonally with produce from local farms.`,
         `Its patio looks out over the Cocheco River, historically the industrial heart of Dover's 19th-century mill economy.`,
@@ -469,7 +473,7 @@ theatre: {
       cites:[{label:`Wikipedia — Ogunquit Playhouse`, url:`https://en.wikipedia.org/wiki/Ogunquit_Playhouse`},{label:`Ogunquit Playhouse — About Us`, url:`https://www.ogunquitplayhouse.org/about-us/`}]
     },
     {name:`The Music Hall`, town:`Portsmouth, NH`, lat:43.0757, lon:-70.7597,
-      teaser:`New Hampshire's oldest operating theater, built in 1878 after its predecessor burned down — the Peirce family funded a Victorian showpiece that's still Portsmouth's cultural anchor today.`,
+      teaser:`New Hampshire's oldest operating theater, built in 1878 after its predecessor burned down — the Peirce family funded a Victorian showpiece that's still this city's cultural anchor today.`,
       facts:[
         `The Music Hall opened January 30, 1878, funded by the prominent Peirce family after Portsmouth's previous venue, The Temple, burned down on Christmas Eve 1876.`,
         `In 1901, "ale tycoon" and local politician Frank Jones bought and remodeled the theater, adding the proscenium arch and opera boxes still visible today.`,
@@ -487,7 +491,7 @@ theatre: {
       cites:[{label:`Wikipedia — BankNH Pavilion`, url:`https://en.wikipedia.org/wiki/BankNH_Pavilion`},{label:`BankNH Pavilion — Our History`, url:`https://banknhpavilion.com/?d=about&page=history`}]
     },
     {name:`3S Artspace`, town:`Portsmouth, NH`, lat:43.0763, lon:-70.76,
-      teaser:`A converted storage building in Portsmouth's West End holding a performance stage, a contemporary art gallery, and a restaurant, all under one roof — hence the name.`,
+      teaser:`A converted storage building in this city's West End holding a performance stage, a contemporary art gallery, and a restaurant, all under one roof — hence the name.`,
       facts:[
         `Founded in 2011, 3S opened its current 20,000-square-foot home, a converted storage facility, in March 2014.`,
         `The "3S" stands for the three spaces combined under one roof: Stage, art Space, and restaurant.`,
@@ -496,7 +500,7 @@ theatre: {
       cites:[{label:`3S Artspace`, url:`https://www.3sarts.org/`},{label:`Art New England — 3S Artspace: The Voyage Out`, url:`https://artnewengland.com/ed_columns/3s-artspace-the-voyage-out/`}]
     },
     {name:`Stone Church Music Club`, town:`Newmarket, NH`, lat:43.0806, lon:-70.9384,
-      teaser:`A live-music venue inside an actual 1832 church atop Newmarket's Zion Hill — exterior murals of Bob Marley and Jerry Garcia announce exactly what kind of congregation gathers here now.`,
+      teaser:`A live-music venue inside an actual 1832 church atop this town's Zion Hill — exterior murals of Bob Marley and Jerry Garcia announce exactly what kind of congregation gathers here now.`,
       facts:[
         `Built in 1832 as a Universalist meetinghouse, the building later served as a Unitarian church, a Catholic church and school, a roller-skating rink, and a VFW hall before becoming a music venue in 1970.`,
         `A 1968 fire damaged the building — the original charred beams are still visible in the main room and upstairs ballroom today.`,
@@ -512,7 +516,7 @@ const CATS = ['parks','coffee','theatre'];
 
 // ── STATE ─────────────────────────────────────────────────────────────────
 let activeCat = 'parks';
-let lmap=null, guessMarker=null, correctMarker=null, arcLine=null;
+let lmap=null, guessMarker=null, correctMarker=null, styleReadyPromise=null;
 const STATE = {};
 CATS.forEach(c=>STATE[c]={round:0,totalMiles:0,states:[null,null,null,null,null],done:false});
 
@@ -523,51 +527,165 @@ function haversineMiles(a,b,c,d){
   return R*2*Math.atan2(Math.sqrt(x),Math.sqrt(1-x));
 }
 
-// ── MAP ───────────────────────────────────────────────────────────────────
+// ── POINT-IN-POLYGON / DISTANCE-TO-POLYGON (for area-based parks) ─────────
+function pointInPolygon(lat,lon,poly){
+  let inside=false;
+  for(let i=0,j=poly.length-1;i<poly.length;j=i++){
+    const yi=poly[i][0],xi=poly[i][1],yj=poly[j][0],xj=poly[j][1];
+    const intersect=((yi>lat)!==(yj>lat)) && (lon < (xj-xi)*(lat-yi)/(yj-yi)+xi);
+    if(intersect) inside=!inside;
+  }
+  return inside;
+}
+function milesPerDegAt(lat){
+  return {latMiles:69.0, lonMiles:69.0*Math.cos(lat*Math.PI/180)};
+}
+function distPointToSegmentMiles(pLat,pLon,aLat,aLon,bLat,bLon,refLat){
+  const {latMiles,lonMiles}=milesPerDegAt(refLat);
+  const px=pLon*lonMiles, py=pLat*latMiles;
+  const ax=aLon*lonMiles, ay=aLat*latMiles;
+  const bx=bLon*lonMiles, by=bLat*latMiles;
+  const dx=bx-ax, dy=by-ay;
+  const len2=dx*dx+dy*dy;
+  let t = len2===0 ? 0 : ((px-ax)*dx+(py-ay)*dy)/len2;
+  t = Math.max(0,Math.min(1,t));
+  const cx=ax+t*dx, cy=ay+t*dy;
+  const distMiles=Math.sqrt((px-cx)**2+(py-cy)**2);
+  return {distMiles, closestLat:cy/latMiles, closestLon:cx/lonMiles};
+}
+function distToPolygonMiles(lat,lon,poly){
+  if(pointInPolygon(lat,lon,poly)) return {distMiles:0, inside:true, closestLat:lat, closestLon:lon};
+  const refLat = poly.reduce((s,p)=>s+p[0],0)/poly.length;
+  let best=null;
+  for(let i=0;i<poly.length;i++){
+    const a=poly[i], b=poly[(i+1)%poly.length];
+    const r=distPointToSegmentMiles(lat,lon,a[0],a[1],b[0],b[1],refLat);
+    if(!best||r.distMiles<best.distMiles) best=r;
+  }
+  best.inside=false;
+  return best;
+}
+function computeResult(cat, idx, lat, lng){
+  const loc = DATA[cat].locations[idx];
+  if(cat==='parks' && loc.poly){
+    const r = distToPolygonMiles(lat,lng,loc.poly);
+    return {mi:r.distMiles, inside:r.inside};
+  }
+  return {mi:haversineMiles(lat,lng,loc.lat,loc.lon), inside:false};
+}
+
+// ── MAP (MapLibre GL + CARTO Voyager vector style, minus place-identifying labels) ─
+const HIDDEN_LAYER_IDS = new Set([
+  // points of interest / landmarks — the whole point of the game is finding these yourself
+  'poi_park','poi_stadium',
+  // town / city / village / hamlet / suburb name labels — would give away the answer outright
+  'place_hamlet','place_suburbs','place_villages','place_town',
+  'place_city_r6','place_city_r5','place_city_dot_r7','place_city_dot_r4','place_city_dot_r2',
+  'place_city_dot_z7','place_capital_dot_z7'
+]);
+function emptyFC(){ return {type:'FeatureCollection', features:[]}; }
 function pinHtml(color){
   return `<svg width="28" height="37" viewBox="0 0 30 40"><path d="M15 1C7.8 1 2 6.8 2 14c0 9.5 13 24 13 24s13-14.5 13-24C28 6.8 22.2 1 15 1Z" fill="${color}" stroke="#1C2B33" stroke-width="1.6"/><circle cx="15" cy="14.5" r="5.4" fill="#FFFEFB"/></svg>`;
 }
-function initMap(){
-  if(lmap) return;
-  lmap=L.map('leaflet-map',{center:[43.6,-71.3],zoom:7,minZoom:2,maxZoom:18,worldCopyJump:false});
-  L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',{
-    maxZoom:19,subdomains:'abcd',attribution:'&copy; OpenStreetMap &copy; CARTO'
-  }).addTo(lmap);
-  lmap.on('click', onMapClick);
+function makeMarkerEl(color){
+  const el=document.createElement('div');
+  el.innerHTML=pinHtml(color);
+  return el;
+}
+function ensureMap(){
+  if(styleReadyPromise) return styleReadyPromise;
+  styleReadyPromise = fetch('https://basemaps.cartocdn.com/gl/voyager-gl-style/style.json')
+    .then(r=>r.json())
+    .then(style=>{
+      style.layers = style.layers.filter(l=>!HIDDEN_LAYER_IDS.has(l.id));
+      return new Promise(resolve=>{
+        lmap = new maplibregl.Map({
+          container:'leaflet-map',
+          style,
+          center:[-71.3,43.6],
+          zoom:7,
+          minZoom:2,
+          maxZoom:18
+        });
+        lmap.addControl(new maplibregl.NavigationControl({showCompass:false}), 'top-right');
+        lmap.on('load', ()=>{
+          lmap.addSource('connector', {type:'geojson', data:emptyFC()});
+          lmap.addLayer({id:'connector-line', type:'line', source:'connector',
+            paint:{'line-color':'#1C2B33','line-width':2,'line-dasharray':[1,2],'line-opacity':.8}});
+          lmap.addSource('park-area', {type:'geojson', data:emptyFC()});
+          lmap.addLayer({id:'park-area-fill', type:'fill', source:'park-area',
+            paint:{'fill-color':'#0F6D66','fill-opacity':0.16}});
+          lmap.addLayer({id:'park-area-line', type:'line', source:'park-area',
+            paint:{'line-color':'#0F6D66','line-width':2.2}});
+          lmap.on('click', onMapClick);
+          resolve();
+        });
+      });
+    });
+  return styleReadyPromise;
 }
 function onMapClick(e){
   const s=STATE[activeCat];
   if(s.states[s.round]) return;
-  const {lat,lng}=e.latlng;
+  const {lat,lng}=e.lngLat;
   placeGuessMarker(lat,lng);
   lmap._pendingLat=lat; lmap._pendingLng=lng;
-  document.getElementById('guess-coords').textContent=
+  document.getElementById('guess-coords').textContent =
     `${Math.abs(lat).toFixed(3)}°${lat>=0?'N':'S'}, ${Math.abs(lng).toFixed(3)}°${lng>=0?'E':'W'}`;
   document.getElementById('confirm-btn').style.display='inline-flex';
 }
-function placeGuessMarker(lat,lng){if(guessMarker){lmap.removeLayer(guessMarker);guessMarker=null;}guessMarker=L.marker([lat,lng],{icon:L.divIcon({className:'',html:pinHtml('#E8734A'),iconSize:[28,37],iconAnchor:[14,37]}),zIndexOffset:1000}).addTo(lmap);}
-function placeCorrectMarker(lat,lon){if(correctMarker){lmap.removeLayer(correctMarker);correctMarker=null;}correctMarker=L.marker([lat,lon],{icon:L.divIcon({className:'',html:pinHtml('#0F6D66'),iconSize:[28,37],iconAnchor:[14,37]}),zIndexOffset:1001}).addTo(lmap);}
-function drawArc(lat1,lon1,lat2,lon2){
-  if(arcLine){lmap.removeLayer(arcLine);arcLine=null;}
-  const pts=[],n=60;
-  for(let i=0;i<=n;i++){const t=i/n,p=gcInterp(lat1,lon1,lat2,lon2,t);pts.push([p.lat,p.lon]);}
-  arcLine=L.polyline(pts,{color:'#1C2B33',weight:2,dashArray:'1,7',lineCap:'round'}).addTo(lmap);
+function placeGuessMarker(lat,lng){
+  if(guessMarker){guessMarker.remove();guessMarker=null;}
+  guessMarker=new maplibregl.Marker({element:makeMarkerEl('#E8734A'),anchor:'bottom'}).setLngLat([lng,lat]).addTo(lmap);
 }
-function gcInterp(lat1,lon1,lat2,lon2,t){
-  const d=Math.PI/180,deg=180/Math.PI;
-  const f1=lat1*d,l1=lon1*d,f2=lat2*d,l2=lon2*d;
-  const x1=Math.cos(f1)*Math.cos(l1),y1=Math.cos(f1)*Math.sin(l1),z1=Math.sin(f1);
-  const x2=Math.cos(f2)*Math.cos(l2),y2=Math.cos(f2)*Math.sin(l2),z2=Math.sin(f2);
-  const dot=x1*x2+y1*y2+z1*z2,om=Math.acos(Math.max(-1,Math.min(1,dot)));
-  if(om<1e-10)return{lat:lat1,lon:lon1};
-  const s=Math.sin(om),a=Math.sin((1-t)*om)/s,b=Math.sin(t*om)/s;
-  const x=a*x1+b*x2,y=a*y1+b*y2,z=a*z1+b*z2;
-  return{lat:Math.atan2(z,Math.sqrt(x*x+y*y))*deg,lon:Math.atan2(y,x)*deg};
+function placeCorrectMarker(lat,lon){
+  if(correctMarker){correctMarker.remove();correctMarker=null;}
+  correctMarker=new maplibregl.Marker({element:makeMarkerEl('#0F6D66'),anchor:'bottom'}).setLngLat([lon,lat]).addTo(lmap);
+}
+function setConnector(coords){
+  if(!lmap.getSource('connector')) return;
+  if(!coords){ lmap.getSource('connector').setData(emptyFC()); return; }
+  lmap.getSource('connector').setData({type:'FeatureCollection',features:[{type:'Feature',geometry:{type:'LineString',coordinates:coords}}]});
+}
+function setParkArea(poly){
+  if(!lmap.getSource('park-area')) return;
+  if(!poly){ lmap.getSource('park-area').setData(emptyFC()); return; }
+  const ring=poly.map(p=>[p[1],p[0]]); ring.push(ring[0]);
+  lmap.getSource('park-area').setData({type:'FeatureCollection',features:[{type:'Feature',geometry:{type:'Polygon',coordinates:[ring]}}]});
 }
 function clearMarkers(){
-  if(guessMarker){lmap.removeLayer(guessMarker);guessMarker=null;}
-  if(correctMarker){lmap.removeLayer(correctMarker);correctMarker=null;}
-  if(arcLine){lmap.removeLayer(arcLine);arcLine=null;}
+  if(guessMarker){guessMarker.remove();guessMarker=null;}
+  if(correctMarker){correctMarker.remove();correctMarker=null;}
+  setConnector(null);
+  setParkArea(null);
+}
+function fitBoundsTwoPoints(lat1,lng1,lat2,lng2){
+  const b=new maplibregl.LngLatBounds([lng1,lat1],[lng1,lat1]);
+  b.extend([lng2,lat2]);
+  lmap.fitBounds(b,{padding:60,maxZoom:15});
+}
+function fitToPolyAndGuess(poly,gLat,gLng){
+  const b=new maplibregl.LngLatBounds([gLng,gLat],[gLng,gLat]);
+  poly.forEach(p=>b.extend([p[1],p[0]]));
+  lmap.fitBounds(b,{padding:60,maxZoom:15});
+}
+function visualizeAnswer(cat, idx, rs){
+  const loc=DATA[cat].locations[idx];
+  if(cat==='parks' && loc.poly){
+    setParkArea(loc.poly);
+    if(rs.inside){
+      setConnector(null);
+    }else{
+      const r=distToPolygonMiles(rs.lat,rs.lon,loc.poly);
+      placeCorrectMarker(r.closestLat,r.closestLon);
+      setConnector([[rs.lon,rs.lat],[r.closestLon,r.closestLat]]);
+    }
+    fitToPolyAndGuess(loc.poly, rs.lat, rs.lon);
+  }else{
+    placeCorrectMarker(loc.lat, loc.lon);
+    setConnector([[rs.lon,rs.lat],[loc.lon,loc.lat]]);
+    fitBoundsTwoPoints(rs.lat, rs.lon, loc.lat, loc.lon);
+  }
 }
 
 // ── CONFIRM ───────────────────────────────────────────────────────────────
@@ -575,18 +693,15 @@ function confirmGuess(){
   const s=STATE[activeCat];
   const lat=lmap._pendingLat,lng=lmap._pendingLng;
   if(lat===undefined)return;
-  const loc=DATA[activeCat].locations[s.round];
-  const mi=haversineMiles(lat,lng,loc.lat,loc.lon);
-  s.states[s.round]={lat,lon:lng,mi};
+  const {mi,inside}=computeResult(activeCat, s.round, lat, lng);
+  s.states[s.round]={lat,lon:lng,mi,inside};
   s.totalMiles=s.states.reduce((sum,r)=>sum+(r?r.mi:0),0);
   document.getElementById('score-value-total').textContent=s.totalMiles.toFixed(1);
   document.getElementById('confirm-btn').style.display='none';
   document.getElementById('guess-coords').textContent='';
   document.getElementById('map-locked-msg').style.display='block';
   document.getElementById('map-instruction').textContent='';
-  placeCorrectMarker(loc.lat,loc.lon);
-  drawArc(lat,lng,loc.lat,loc.lon);
-  lmap.fitBounds(L.latLngBounds([[lat,lng],[loc.lat,loc.lon]]).pad(0.4));
+  visualizeAnswer(activeCat, s.round, s.states[s.round]);
   showResult(s.round,true);
   updateProgress();updateNav();updateTabStatus(activeCat);updateGrandTotal();
   window.scrollTo({top:0,behavior:'smooth'});
@@ -604,7 +719,12 @@ function showResult(idx,animate){
   document.getElementById('stamp-icon').innerHTML=ICONS[tier.icon];
   document.getElementById('stamp-name').textContent=tier.name;
   document.getElementById('stamp-name').style.color=tier.color;
-  document.getElementById('stamp-miles').innerHTML=`<strong>${rs.mi.toFixed(1)} mi</strong> from ${loc.name}`;
+  if(rs.inside){
+    document.getElementById('stamp-miles').innerHTML=`<strong>Right in the park!</strong> (0 mi off)`;
+  }else{
+    const label = (activeCat==='parks') ? `from the edge of ${loc.name}` : `from ${loc.name}`;
+    document.getElementById('stamp-miles').innerHTML=`<strong>${rs.mi.toFixed(1)} mi</strong> ${label}`;
+  }
   document.getElementById('stamp-quip').textContent=tier.text;
   document.getElementById('correct-tag').textContent=`${loc.name} · ${loc.town}`;
   document.getElementById('stamp-wrap').style.display='block';
@@ -627,7 +747,6 @@ function renderRound(cat,idx){
   badge.style.background=cs.tint; badge.style.color=cs.color;
   document.getElementById('loc-badge-icon').innerHTML=ICONS[cs.icon];
   document.getElementById('loc-name').textContent=loc.name;
-  document.getElementById('loc-town').textContent=loc.town;
   document.getElementById('loc-teaser').textContent=loc.teaser;
   document.getElementById('round-num-display').textContent=`${idx+1} / 5`;
   document.getElementById('score-value-total').textContent=s.totalMiles.toFixed(1);
@@ -642,16 +761,14 @@ function renderRound(cat,idx){
   const rs=s.states[idx];
   if(rs){
     placeGuessMarker(rs.lat,rs.lon);
-    placeCorrectMarker(loc.lat,loc.lon);
-    drawArc(rs.lat,rs.lon,loc.lat,loc.lon);
-    lmap.fitBounds(L.latLngBounds([[rs.lat,rs.lon],[loc.lat,loc.lon]]).pad(0.4));
+    visualizeAnswer(cat, idx, rs);
     document.getElementById('map-locked-msg').style.display='block';
     document.getElementById('confirm-btn').style.display='none';
     document.getElementById('guess-coords').textContent='';
     document.getElementById('map-instruction').textContent='';
     showResult(idx,false);
   }else{
-    lmap.setView([43.6,-71.3],7);
+    lmap.jumpTo({center:[-71.3,43.6],zoom:7});
     document.getElementById('confirm-btn').style.display='none';
     document.getElementById('guess-coords').textContent='';
     document.getElementById('map-instruction').textContent=`Tap the map where you think ${loc.name} is located.`;
@@ -727,7 +844,7 @@ function renderFinal(){
     const el=document.createElement('div');el.className='mini-stamp';
     el.style.borderColor=t.color; el.style.color=t.color; el.style.background=t.tint;
     el.innerHTML=`<div class="ico">${ICONS[t.icon]}</div>`;
-    el.title=`${DATA[cat].locations[i].name} — ${t.name} (${r.mi.toFixed(1)} mi)`;
+    el.title=`${DATA[cat].locations[i].name} — ${t.name} (${r.inside?'inside the park':r.mi.toFixed(1)+' mi'})`;
     el.onclick=()=>reviewRound(i);
     stampRow.appendChild(el);
   });
@@ -735,8 +852,9 @@ function renderFinal(){
   const grid=document.getElementById('breakdown-grid');grid.innerHTML='';
   s.states.forEach((r,i)=>{
     const loc=d.locations[i],t=getTier(r.mi);
+    const distLabel = r.inside ? 'inside' : `${r.mi.toFixed(1)} mi`;
     const el=document.createElement('div');el.className='bd-item';
-    el.innerHTML=`<div class="bd-num">R${i+1}</div><div class="bd-name">${loc.name}</div><div class="bd-tier" style="color:${t.color}">${t.name}</div><div class="bd-dist">${r.mi.toFixed(1)} mi</div>`;
+    el.innerHTML=`<div class="bd-num">R${i+1}</div><div class="bd-name">${loc.name}</div><div class="bd-tier" style="color:${t.color}">${t.name}</div><div class="bd-dist">${distLabel}</div>`;
     el.onclick=()=>reviewRound(i);
     grid.appendChild(el);
   });
@@ -762,14 +880,14 @@ document.getElementById('restart-btn').onclick=restartGame;
 
 function reviewRound(idx){
   showScreen('game');
-  setTimeout(()=>{lmap.invalidateSize();renderRound(activeCat,idx);},50);
+  ensureMap().then(()=>{ setTimeout(()=>{ lmap.resize(); renderRound(activeCat,idx); },50); });
 }
 function restartGame(){
   const cat=activeCat;
   STATE[cat]={round:0,totalMiles:0,states:[null,null,null,null,null],done:false};
   updateTabStatus(cat);updateGrandTotal();
   showScreen('game');
-  setTimeout(()=>{initMap();lmap.invalidateSize();renderRound(cat,0);},50);
+  ensureMap().then(()=>{ setTimeout(()=>{ lmap.resize(); renderRound(cat,0); },50); });
 }
 
 // ── TABS ──────────────────────────────────────────────────────────────────
@@ -790,7 +908,7 @@ function setTab(cat){
     renderFinal();
   }else{
     showScreen('game');
-    setTimeout(()=>{initMap();lmap.invalidateSize();renderRound(cat,s.round);},50);
+    ensureMap().then(()=>{ setTimeout(()=>{ lmap.resize(); renderRound(cat,s.round); },50); });
   }
 }
 function updateTabStatus(cat){
@@ -842,13 +960,13 @@ function buildTabNav(){
 }
 document.getElementById('info-btn').innerHTML=`<span class="ico">${ICONS.info}</span>`;
 document.getElementById('logomark').innerHTML=ICONS.logomark;
+document.getElementById('confirm-btn').onclick=confirmGuess;
 
 buildTabNav();
 buildModalTiers();
 CATS.forEach(updateTabStatus);
 updateGrandTotal();
-initMap();
-renderRound('parks',0);
+ensureMap().then(()=>{ renderRound('parks',0); });
 </script>
 </body>
 </html>
