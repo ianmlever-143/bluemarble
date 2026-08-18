@@ -1,0 +1,1151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SeeCoast — How well do you know the Seacoast?</title>
+<meta name="description" content="A free guessing game about New Hampshire's Seacoast. Read the clue, drop your pin, see how close you got. Five spots per round.">
+
+<!-- ===================================================================== -->
+<!-- SOCIAL SHARING / OPEN GRAPH                                           -->
+<!-- ⚠️  AFTER DEPLOYING: find-and-replace https://seecoast.pages.dev       -->
+<!--     with your real URL (appears 4 times below). Scrapers need          -->
+<!--     absolute URLs — they do not run JavaScript.                        -->
+<!-- ===================================================================== -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Blue Marble Games">
+<meta property="og:title" content="SeeCoast — How well do you know the Seacoast?">
+<meta property="og:description" content="Read the clue, drop your pin, see how close you got. Can you earn Seacoast Star, or are you just from Boston?">
+<meta property="og:url" content="https://seecoast.pages.dev">
+<meta property="og:image" content="https://seecoast.pages.dev/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="SeeCoast — a geography guessing game about New Hampshire's Seacoast.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="SeeCoast — How well do you know the Seacoast?">
+<meta name="twitter:description" content="Read the clue, drop your pin, see how close you got. Can you earn Seacoast Star, or are you just from Boston?">
+<meta name="twitter:image" content="https://seecoast.pages.dev/og-image.png">
+<meta name="theme-color" content="#0F6D66">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🗺️</text></svg>">
+
+<!-- ===================================================================== -->
+<!-- GOOGLE ANALYTICS 4                                                    -->
+<!-- ⚠️  Replace G-XXXXXXXXXX below (2 places) with your Measurement ID.    -->
+<!--     Until then this is inert and safely does nothing.                  -->
+<!-- ===================================================================== -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-XXXXXXXXXX');
+</script>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,500;0,600;0,700;0,900;1,500&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css"/>
+<script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
+<style>
+:root{
+  --paper:#FAF6EE; --card:#FFFFFF;
+  --ink:#1C2B33; --ink-soft:#5B6B72; --ink-faint:#95A1A8;
+  --line:#E9E1D2;
+  --teal:#0F6D66; --teal-tint:#DFEEEB;
+  --coral:#E8734A; --coral-tint:#FBE6DA;
+  --plum:#7A4B6D; --plum-tint:#F1E1EC;
+  --gold:#DFA435; --gold-tint:#FAF0DC;
+  --slate:#7C8B93; --slate-tint:#EEF1F2;
+  --shadow-sm:0 1px 2px rgba(28,43,51,.05);
+  --shadow-md:0 14px 32px -16px rgba(28,43,51,.22);
+  --font-display:'Fraunces',serif;
+  --font-body:'Inter',sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:var(--font-body);background:var(--paper);color:var(--ink);min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased;}
+.ico{display:inline-flex;flex-shrink:0;}
+.ico svg{width:100%;height:100%;display:block;}
+.card{background:var(--card);border:1px solid var(--line);border-radius:20px;box-shadow:var(--shadow-sm),var(--shadow-md);}
+.icon-badge{border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.eyebrow{font-size:.68rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-faint);}
+
+/* ── HEADER ── */
+.header{max-width:940px;margin:0 auto;padding:1.7rem 1.3rem 1.2rem;display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;}
+.brand-block{display:flex;align-items:center;gap:.75rem;}
+.logomark{width:38px;height:38px;color:var(--teal);flex-shrink:0;margin-top:.3rem;}
+.game-title{font-family:var(--font-display);font-weight:600;font-size:clamp(1.9rem,6vw,2.5rem);color:var(--ink);line-height:1;letter-spacing:-.01em;}
+.tagline{margin-top:.35rem;display:inline-flex;align-items:center;gap:.4rem;background:var(--coral-tint);color:var(--coral);font-weight:700;font-size:.72rem;letter-spacing:.05em;text-transform:uppercase;padding:.32rem .75rem;border-radius:50px;}
+.info-btn{width:38px;height:38px;border-radius:50%;background:var(--card);border:1px solid var(--line);color:var(--ink-soft);cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:var(--shadow-sm);transition:all .15s;flex-shrink:0;}
+.info-btn:hover{color:var(--teal);border-color:var(--teal);transform:translateY(-1px);}
+.info-btn .ico{width:20px;height:20px;}
+.wave-divider{height:12px;background-repeat:repeat-x;background-size:36px 12px;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='36' height='12'%3E%3Cpath d='M0 6 Q9 0 18 6 T36 6' fill='none' stroke='%230F6D66' stroke-width='1.6' opacity='0.35'/%3E%3C/svg%3E");}
+
+/* ── TAB NAV ── */
+.tab-nav{display:flex;justify-content:center;gap:.5rem;flex-wrap:wrap;padding:1.2rem 1.2rem .3rem;max-width:940px;margin:0 auto;}
+.tab-btn{display:flex;align-items:center;gap:.5rem;background:var(--card);border:1px solid var(--line);border-radius:50px;padding:.5rem .95rem .5rem .55rem;cursor:pointer;font-family:var(--font-body);font-weight:700;font-size:.85rem;color:var(--ink-soft);box-shadow:var(--shadow-sm);transition:all .15s;}
+.tab-btn .icon-badge{width:28px;height:28px;}
+.tab-btn .icon-badge .ico{width:16px;height:16px;}
+.tab-btn:hover{transform:translateY(-1px);box-shadow:var(--shadow-md);}
+.tab-btn.active{color:var(--card);}
+.tab-status{font-size:.68rem;font-weight:700;opacity:.85;margin-left:.05rem;white-space:nowrap;}
+
+.grand-total{max-width:940px;margin:.6rem auto 0;text-align:center;}
+.grand-total-pill{display:inline-flex;align-items:center;gap:.4rem;background:var(--card);border:1px solid var(--line);border-radius:50px;padding:.4rem 1rem;font-size:.76rem;font-weight:600;color:var(--ink-soft);box-shadow:var(--shadow-sm);}
+.grand-total-pill .val{font-family:var(--font-display);font-weight:600;font-size:.95rem;color:var(--coral);}
+.grand-total-pill.complete{background:var(--gold-tint);border-color:var(--gold);}
+.grand-total-pill.complete .val{color:var(--ink);}
+
+/* ── SCREENS ── */
+.screen{display:none;position:relative;z-index:10;max-width:800px;margin:0 auto;padding:1.2rem 1.2rem 3.5rem;}
+.screen.active{display:block;animation:fadeUp .3s ease forwards;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
+
+/* ── BUTTONS ── */
+.btn{display:inline-flex;align-items:center;gap:.4rem;padding:.75rem 1.6rem;background:var(--coral);color:#fff;font-family:var(--font-body);font-size:.88rem;font-weight:700;border:none;border-radius:50px;cursor:pointer;transition:all .15s;box-shadow:var(--shadow-sm);}
+.btn:hover{transform:translateY(-1px);box-shadow:var(--shadow-md);}
+.btn:active{transform:translateY(0);}
+.btn-teal{background:var(--teal);}
+.btn-ghost{background:var(--card);color:var(--ink);border:1px solid var(--line);}
+.btn-ghost:hover{border-color:var(--ink-soft);}
+.btn-sm{padding:.55rem 1.1rem;font-size:.8rem;}
+.btn[disabled]{opacity:.35;cursor:default;pointer-events:none;transform:none !important;}
+a.btn{text-decoration:none;}
+
+/* ── PROGRESS ── */
+.round-progress{display:flex;justify-content:center;align-items:center;gap:.4rem;margin-bottom:1.1rem;}
+.round-dot{width:30px;height:30px;border-radius:50%;border:1.5px solid var(--line);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.75rem;color:var(--ink-faint);background:var(--card);cursor:pointer;transition:all .2s;}
+.round-dot.active{box-shadow:0 0 0 3px var(--teal-tint);border-color:var(--teal);color:var(--teal);}
+.round-dot:hover{transform:scale(1.08);}
+
+/* ── TOP BAR ── */
+.top-bar{display:flex;justify-content:space-between;align-items:center;padding:.15rem .1rem 1rem;gap:.75rem;flex-wrap:wrap;}
+.score-block{display:flex;flex-direction:column;}
+.score-value{font-family:var(--font-display);font-weight:600;font-size:1.15rem;color:var(--ink);}
+.nav-btns{display:flex;gap:.5rem;align-items:center;}
+
+/* ── LOCATION CARD ── */
+.location-card{padding:1.3rem;margin-bottom:1rem;display:flex;gap:1rem;align-items:flex-start;}
+.location-card .icon-badge{width:52px;height:52px;}
+.location-card .icon-badge .ico{width:26px;height:26px;}
+.loc-title-row{display:flex;align-items:baseline;gap:.55rem;flex-wrap:wrap;margin-bottom:.35rem;}
+.loc-name{font-family:var(--font-display);font-weight:600;font-size:1.2rem;color:var(--ink);}
+.loc-town{font-size:.76rem;font-weight:700;color:var(--ink-faint);text-transform:uppercase;letter-spacing:.04em;}
+.loc-teaser{font-size:.92rem;line-height:1.7;color:var(--ink-soft);}
+
+/* ── MAP ── */
+.map-instruction{text-align:center;margin-bottom:.6rem;color:var(--teal);font-size:.85rem;font-weight:600;min-height:1.4em;}
+.map-wrapper{border:1px solid var(--line);border-radius:20px;overflow:hidden;box-shadow:var(--shadow-sm),var(--shadow-md);position:relative;background:#DCE9E6;}
+#leaflet-map{width:100%;height:440px;}
+.map-locked-msg{display:none;position:absolute;top:12px;left:50%;transform:translateX(-50%);background:var(--card);border:1px solid var(--line);border-radius:10px;padding:.32rem .9rem;font-size:.76rem;font-weight:700;color:var(--coral);z-index:1000;white-space:nowrap;pointer-events:none;box-shadow:var(--shadow-sm);}
+/* Teal grab hand — the default white one disappears against the basemap.
+   Falls back to the native grab/grabbing cursor if SVG cursors aren't supported. */
+.maplibregl-canvas-container.maplibregl-interactive,
+.maplibregl-canvas-container.maplibregl-interactive .maplibregl-canvas{
+  cursor:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'><g fill='%230F6D66' stroke='%23FFFEFB' stroke-width='1.6' stroke-linejoin='round'><path d='M11 14V6.6a2.1 2.1 0 0 1 4.2 0V13'/><path d='M15.2 13V5.4a2.1 2.1 0 0 1 4.2 0V13'/><path d='M19.4 13.4V7.4a2.1 2.1 0 0 1 4.2 0V17c0 5.2-3 8.8-7.7 8.8-4.6 0-7.7-2.6-7.7-6.4v-4.1a2 2 0 0 1 4 0v2.1'/></g></svg>") 13 12, grab;
+}
+.maplibregl-canvas-container.maplibregl-interactive:active,
+.maplibregl-canvas-container.maplibregl-interactive:active .maplibregl-canvas{
+  cursor:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'><g fill='%230F6D66' stroke='%23FFFEFB' stroke-width='1.6' stroke-linejoin='round'><path d='M9.5 16.6v-3.2a1.9 1.9 0 0 1 3.8 0v1.4'/><path d='M13.3 14.4v-2.1a1.9 1.9 0 0 1 3.8 0v2'/><path d='M17.1 14.3v-1.7a1.9 1.9 0 0 1 3.8 0v2'/><path d='M20.9 15v-.8a1.9 1.9 0 0 1 3.8 0v4.5c0 4.6-2.8 7.6-7.4 7.6-4.5 0-7.8-2.4-7.8-6.2v-3.5'/></g></svg>") 13 12, grabbing;
+}
+.maplibregl-ctrl-attrib{font-size:9px !important;opacity:.55;}
+.maplibregl-ctrl-attrib a{color:var(--ink-faint) !important;}
+.maplibregl-ctrl-group{border:1px solid var(--line) !important;border-radius:10px !important;overflow:hidden;box-shadow:var(--shadow-sm);background:var(--card) !important;}
+.maplibregl-ctrl-group button{background:var(--card) !important;}
+.maplibregl-ctrl-group button+button{border-top:1px solid var(--line) !important;}
+
+.confirm-area{margin-top:.9rem;text-align:center;}
+.guess-coords{font-size:.78rem;color:var(--teal);min-height:1.4em;margin-bottom:.5rem;font-weight:600;}
+
+/* ── STAMP REVEAL ── */
+.stamp-wrap{display:none;text-align:center;margin-top:1.1rem;}
+.stamp-card{display:inline-flex;flex-direction:column;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:20px;padding:1.3rem 2rem;box-shadow:var(--shadow-sm),var(--shadow-md);animation:stampIn .38s cubic-bezier(.28,1.4,.5,1) forwards;}
+@keyframes stampIn{from{transform:scale(.85) translateY(6px);opacity:0;}to{transform:scale(1) translateY(0);opacity:1;}}
+.stamp-icon-badge{width:56px;height:56px;margin-bottom:.55rem;}
+.stamp-icon-badge .ico{width:28px;height:28px;}
+.stamp-name{font-family:var(--font-display);font-weight:600;font-size:1.25rem;color:var(--tier-color,var(--ink));}
+.stamp-miles{font-size:.85rem;font-weight:600;color:var(--ink-soft);margin-top:.3rem;}
+.stamp-miles strong{color:var(--ink);font-family:var(--font-display);font-weight:600;}
+.stamp-quip{font-size:.9rem;color:var(--ink-soft);line-height:1.6;max-width:440px;margin:.9rem auto 0;}
+.correct-tag{display:inline-block;margin-top:.8rem;background:var(--teal-tint);border-radius:50px;padding:.28rem 1rem;font-size:.78rem;color:var(--teal);font-weight:700;}
+
+/* ── FACTS PANEL ── */
+.facts-panel{display:none;padding:1.3rem;margin-top:1.1rem;}
+.facts-panel h3{font-family:var(--font-display);font-weight:600;font-size:1.02rem;color:var(--ink);margin-bottom:.85rem;padding-bottom:.6rem;border-bottom:1px solid var(--line);}
+.facts-list{list-style:none;display:flex;flex-direction:column;gap:.6rem;}
+.facts-list li{position:relative;padding-left:1.35rem;font-size:.9rem;line-height:1.7;color:var(--ink-soft);}
+.facts-list li::before{content:'';position:absolute;left:0;top:.5em;width:5px;height:5px;border-radius:50%;background:var(--coral);}
+.citations{margin-top:1.1rem;padding-top:.9rem;border-top:1px solid var(--line);}
+.citations h4{font-size:.68rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-faint);margin-bottom:.55rem;}
+.citations ul{list-style:none;display:flex;flex-wrap:wrap;gap:.4rem .75rem;}
+.citations a{color:var(--teal);font-weight:600;text-decoration:none;font-size:.8rem;}
+.citations a:hover{text-decoration:underline;}
+.next-area{text-align:center;margin-top:1.3rem;display:flex;justify-content:center;gap:.65rem;flex-wrap:wrap;}
+
+/* ── FINAL ── */
+.final-box{padding:2.3rem 1.8rem;text-align:center;margin-bottom:1.2rem;}
+.final-icon-badge{width:52px;height:52px;margin:0 auto .5rem;}
+.final-icon-badge .ico{width:26px;height:26px;}
+.final-cat-label{font-size:.7rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-faint);margin-bottom:.4rem;}
+.final-total{font-family:var(--font-display);font-style:italic;font-weight:600;font-size:clamp(3rem,10vw,4.6rem);line-height:1;color:var(--ink);}
+.final-total .unit{font-family:var(--font-body);font-style:normal;font-weight:700;font-size:clamp(1rem,3vw,1.25rem);color:var(--coral);margin-left:.35rem;}
+.final-out-of{color:var(--ink-faint);font-size:.78rem;margin-top:.3rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;}
+.final-verdict-name{font-family:var(--font-display);font-weight:600;font-size:clamp(1.2rem,4vw,1.5rem);color:var(--tier-color,var(--teal));margin:1.1rem 0 .35rem;}
+.final-verdict-text{font-size:.92rem;color:var(--ink-soft);max-width:440px;margin:0 auto;line-height:1.65;}
+.stamp-row{display:flex;justify-content:center;gap:.55rem;margin-top:1.4rem;flex-wrap:wrap;}
+.mini-stamp{width:56px;height:56px;border-radius:50%;background:var(--card);border:1.5px solid var(--tier-color,var(--line));display:flex;align-items:center;justify-content:center;cursor:pointer;transition:transform .15s;}
+.mini-stamp:hover{transform:scale(1.08);}
+.mini-stamp .ico{width:26px;height:26px;}
+.breakdown-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:.5rem;margin-top:1.3rem;}
+.bd-item{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:.65rem .3rem;text-align:center;cursor:pointer;transition:all .15s;box-shadow:var(--shadow-sm);}
+.bd-item:hover{transform:translateY(-2px);box-shadow:var(--shadow-md);}
+.bd-num{font-size:.58rem;color:var(--ink-faint);font-weight:700;text-transform:uppercase;}
+.bd-name{font-size:.58rem;color:var(--ink-soft);margin:.15rem 0;line-height:1.3;font-weight:600;}
+.bd-tier{font-size:.62rem;font-weight:700;color:var(--tier-color,var(--ink));}
+.bd-dist{font-size:.6rem;color:var(--ink-faint);margin-top:.1rem;font-weight:600;}
+.final-actions{text-align:center;margin-top:1.8rem;display:flex;justify-content:center;gap:.7rem;flex-wrap:wrap;}
+.all-done-banner{margin-top:1.5rem;padding:1.5rem;border-radius:20px;background:var(--ink);color:#fff;text-align:center;}
+.all-done-banner h3{font-family:var(--font-display);font-weight:600;font-size:1.15rem;margin-bottom:.4rem;color:var(--gold);}
+.all-done-banner .val{font-family:var(--font-display);font-style:italic;font-weight:600;font-size:2.2rem;}
+
+/* ── INFO MODAL ── */
+.modal-overlay{position:fixed;inset:0;background:rgba(28,43,51,.55);display:none;align-items:center;justify-content:center;z-index:2000;padding:1.2rem;backdrop-filter:blur(2px);}
+.modal-overlay.open{display:flex;}
+.modal-card{background:var(--paper);border-radius:24px;box-shadow:0 30px 60px -20px rgba(0,0,0,.35);max-width:460px;width:100%;max-height:85vh;overflow-y:auto;padding:1.9rem 1.7rem 1.7rem;position:relative;}
+.modal-close{position:absolute;top:1rem;right:1rem;width:32px;height:32px;border-radius:50%;background:var(--card);border:1px solid var(--line);color:var(--ink-soft);font-weight:700;font-size:.95rem;cursor:pointer;display:flex;align-items:center;justify-content:center;line-height:1;}
+.modal-card h2{font-family:var(--font-display);font-weight:600;font-size:1.35rem;color:var(--ink);margin-bottom:.3rem;}
+.modal-sub{color:var(--ink-faint);font-weight:600;font-size:.85rem;margin-bottom:1.2rem;}
+.modal-rules{list-style:none;display:flex;flex-direction:column;gap:.75rem;margin-bottom:1.4rem;}
+.modal-rules li{display:flex;gap:.65rem;align-items:flex-start;font-size:.88rem;line-height:1.6;color:var(--ink-soft);}
+.modal-rules .num{flex-shrink:0;width:20px;height:20px;border-radius:50%;background:var(--teal-tint);color:var(--teal);font-size:.7rem;font-weight:700;display:flex;align-items:center;justify-content:center;margin-top:.1rem;}
+.modal-tiers{display:flex;flex-direction:column;gap:.5rem;margin-bottom:1.3rem;}
+.modal-tier-row{display:flex;align-items:center;gap:.6rem;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:.5rem .7rem;}
+.modal-tier-row .icon-badge{width:32px;height:32px;flex-shrink:0;}
+.modal-tier-row .icon-badge .ico{width:16px;height:16px;}
+.modal-tier-row b{font-family:var(--font-display);font-weight:600;font-size:.78rem;}
+.modal-tier-row span{font-size:.72rem;color:var(--ink-faint);font-weight:600;display:block;}
+
+/* ── ROLLOUT SCHEDULE ── */
+.rollout-schedule{max-width:640px;margin:1.6rem auto 0;padding:0 1.2rem;}
+.rollout-title{text-align:center;font-size:.68rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-faint);margin-bottom:.7rem;}
+.rollout-list{display:flex;flex-direction:column;gap:.5rem;}
+.rollout-item{display:flex;align-items:center;gap:.85rem;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:.65rem 1rem;box-shadow:var(--shadow-sm);}
+.rollout-week{font-family:var(--font-display);font-weight:600;font-size:.85rem;color:var(--teal);flex-shrink:0;width:60px;}
+.rollout-date{font-size:.8rem;color:var(--ink-soft);font-weight:600;flex:1;}
+.rollout-cat{font-size:.76rem;font-weight:700;color:var(--coral);text-align:right;}
+
+/* ── FOOTER ── */
+.site-footer{text-align:center;padding:1.8rem 1rem 2.4rem;font-size:.78rem;color:var(--ink-faint);font-weight:600;}
+.site-footer b{color:var(--ink-soft);font-family:var(--font-display);font-weight:600;font-size:.85rem;}
+.footer-cta{margin-top:1.1rem;}
+.footer-cta-text{font-size:.85rem;color:var(--ink-soft);font-weight:600;line-height:1.5;max-width:300px;margin:0 auto .65rem;}
+
+@media(max-width:640px){
+  .location-card{flex-direction:column;}
+  .breakdown-grid{grid-template-columns:repeat(3,1fr);}
+  #leaflet-map{height:340px;}
+  .top-bar{flex-direction:column;align-items:flex-start;}
+  .tab-btn{font-size:.76rem;padding:.45rem .8rem .45rem .45rem;}
+  .stamp-row{gap:.4rem;}
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="brand-block">
+    <div class="logomark ico" id="logomark"></div>
+    <div>
+      <div class="game-title"><span>See</span><span style="color:var(--teal)">Coast</span></div>
+      <div class="tagline">Take Nothing for Granite</div>
+    </div>
+  </div>
+  <button class="info-btn" id="info-btn" title="How to play"></button>
+</div>
+<div class="wave-divider"></div>
+
+<!-- TAB NAV -->
+<div class="tab-nav" id="tab-nav"></div>
+<div class="grand-total"><span class="grand-total-pill" id="grand-total-badge">Total Miles Off <span class="val" id="grand-total-value">0</span></span></div>
+
+<!-- GAME -->
+<div id="screen-game" class="screen active">
+  <div class="round-progress" id="round-progress"></div>
+  <div class="top-bar">
+    <div class="score-block">
+      <div class="eyebrow">Miles Off So Far</div>
+      <div class="score-value" id="score-value-total">0</div>
+    </div>
+    <div class="score-block">
+      <div class="eyebrow">Round</div>
+      <div class="score-value" id="round-num-display">1 / 5</div>
+    </div>
+    <div class="nav-btns">
+      <button class="btn btn-ghost btn-sm" id="btn-prev">← Prev</button>
+      <button class="btn btn-teal btn-sm" id="btn-next">Next →</button>
+    </div>
+  </div>
+
+  <div class="location-card card">
+    <div class="icon-badge" id="loc-badge"><div class="ico" id="loc-badge-icon"></div></div>
+    <div>
+      <div class="loc-title-row">
+        <div class="loc-name" id="loc-name"></div>
+      </div>
+      <div class="loc-teaser" id="loc-teaser"></div>
+    </div>
+  </div>
+
+  <div class="map-instruction" id="map-instruction"></div>
+  <div class="map-wrapper">
+    <div id="leaflet-map"></div>
+    <div class="map-locked-msg" id="map-locked-msg">✓ Guess locked for this round</div>
+  </div>
+
+  <div class="confirm-area">
+    <div class="guess-coords" id="guess-coords"></div>
+    <button class="btn" id="confirm-btn" style="display:none">Confirm My Guess</button>
+  </div>
+
+  <div class="stamp-wrap" id="stamp-wrap">
+    <div class="stamp-card" id="stamp-card">
+      <div class="stamp-icon-badge icon-badge" id="stamp-icon-badge"><div class="ico" id="stamp-icon"></div></div>
+      <div class="stamp-name" id="stamp-name"></div>
+      <div class="stamp-miles" id="stamp-miles"></div>
+    </div>
+    <div class="stamp-quip" id="stamp-quip"></div>
+    <div><span class="correct-tag" id="correct-tag"></span></div>
+  </div>
+
+  <div class="facts-panel card" id="facts-panel">
+    <h3 id="facts-title"></h3>
+    <ul class="facts-list" id="facts-list"></ul>
+    <div class="citations">
+      <h4>Learn More</h4>
+      <ul id="facts-cites"></ul>
+    </div>
+  </div>
+  <div class="next-area" id="result-nav" style="display:none">
+    <button class="btn btn-ghost btn-sm" id="res-prev-btn">← Previous</button>
+    <button class="btn btn-teal" id="res-next-btn">Next Location →</button>
+  </div>
+</div>
+
+<!-- FINAL -->
+<div id="screen-final" class="screen">
+  <div class="final-box card">
+    <div class="final-icon-badge icon-badge" id="final-icon-badge"><div class="ico" id="final-icon"></div></div>
+    <div class="final-cat-label" id="final-cat-label"></div>
+    <div class="final-total"><span id="final-total">0</span><span class="unit">mi off</span></div>
+    <div class="final-out-of">total across 5 rounds</div>
+    <div class="final-verdict-name" id="final-verdict-name"></div>
+    <div class="final-verdict-text" id="final-verdict-text"></div>
+    <div class="stamp-row" id="stamp-row"></div>
+  </div>
+  <div class="breakdown-grid" id="breakdown-grid"></div>
+  <div class="final-actions">
+    <button class="btn btn-ghost" id="review-btn">Review Details</button>
+    <button class="btn" id="restart-btn">Play This Game Again</button>
+    <button class="btn btn-teal" id="next-game-btn" style="display:none"></button>
+  </div>
+  <div class="all-done-banner" id="all-done-banner" style="display:none">
+    <h3>All Three Games Complete</h3>
+    <div style="font-size:.85rem;opacity:.85;">Grand total across all 15 rounds</div>
+    <div class="val" id="grand-total-final">0</div>
+    <div style="margin-top:.3rem;font-size:.85rem;opacity:.85;">miles off — you didn't take it for granite.</div>
+  </div>
+</div>
+
+<!-- INFO MODAL -->
+<div class="modal-overlay" id="info-modal">
+  <div class="modal-card">
+    <button class="modal-close" id="modal-close">✕</button>
+    <h2>How SeeCoast Works</h2>
+    <div class="modal-sub">Three tabs. Five spots each. One map.</div>
+    <ul class="modal-rules">
+      <li><span class="num">1</span><span>Read the quick clue, then tap the map where you think it is.</span></li>
+      <li><span class="num">2</span><span>We measure how far your pin was from the real spot, in miles.</span></li>
+      <li><span class="num">3</span><span>Every guess gets stamped with one of four tiers — see below.</span></li>
+      <li><span class="num">4</span><span>Jump between rounds anytime — a guess locks the moment you confirm it.</span></li>
+      <li><span class="num">5</span><span>Finish all 5 rounds to see your total miles off. Your overall rank uses your middle score, so one wild miss won't sink you.</span></li>
+    </ul>
+    <div class="modal-tiers" id="modal-tiers"></div>
+    <button class="btn" id="modal-play-btn" style="width:100%;justify-content:center;">Let's Play</button>
+  </div>
+</div>
+
+<!-- ROLLOUT SCHEDULE -->
+<div class="rollout-schedule">
+  <div class="rollout-list">
+    <div class="rollout-item"><span class="rollout-week">Week 1</span><span class="rollout-date">September 6th</span><span class="rollout-cat">Parks</span></div>
+    <div class="rollout-item"><span class="rollout-week">Week 2</span><span class="rollout-date">September 13th</span><span class="rollout-cat">Coffee Shops</span></div>
+    <div class="rollout-item"><span class="rollout-week">Week 3</span><span class="rollout-date">September 20th</span><span class="rollout-cat">Theatre & Concerts</span></div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div class="site-footer">
+  <b>Blue Marble Games</b><br>created by Ian Lever
+  <div class="footer-cta">
+    <div class="footer-cta-text">Like the game? Give some granit-tude and treat me to coffee!</div>
+    <a class="btn btn-teal btn-sm" href="https://account.venmo.com/u/Ian-Lever" target="_blank" rel="noopener noreferrer">
+      <span class="ico" style="width:16px;height:16px;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 9h11v5.5A4.5 4.5 0 0 1 11.5 19H9.5A4.5 4.5 0 0 1 5 14.5Z"/><path d="M16 10h1.3a2.1 2.1 0 0 1 0 4.2H16"/><path d="M8 5.2c0 .9-.9 1-.9 1.9M12 5.2c0 .9-.9 1-.9 1.9"/></svg></span>
+      Treat Me To Coffee
+    </a>
+  </div>
+</div>
+
+<script>const ICONS = {
+logomark: `<svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 3.5C10.2 3.5 5.5 8.2 5.5 14c0 8.3 10.5 14.5 10.5 14.5S26.5 22.3 26.5 14c0-5.8-4.7-10.5-10.5-10.5Z"/><path d="M9.6 14c1.4-1.7 3-1.7 4.4 0s3 1.7 4.4 0 3-1.7 4.4 0"/></svg>`,
+parks: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 6 12h3l-4 7h14l-4-7h3Z"/><path d="M12 19v2.3"/></svg>`,
+coffee: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 9h11v5.5A4.5 4.5 0 0 1 11.5 19H9.5A4.5 4.5 0 0 1 5 14.5Z"/><path d="M16 10h1.3a2.1 2.1 0 0 1 0 4.2H16"/><path d="M8 5.2c0 .9-.9 1-.9 1.9M12 5.2c0 .9-.9 1-.9 1.9"/></svg>`,
+theatre: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2 1.6 1.6 0 0 0 0 3.2A2 2 0 0 1 19 16H5a2 2 0 0 1-2-2 1.6 1.6 0 0 0 0-3.2A2 2 0 0 1 3 8Z"/><path d="M12 6v10" stroke-dasharray="1.8 2.2"/></svg>`,
+star: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><path d="M12 3.5 14.5 9.3 20.8 10 16.2 14.2 17.5 20.5 12 17.2 6.5 20.5 7.8 14.2 3.2 10 9.5 9.3Z"/></svg>`,
+compass: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M15 9 13 13 9 15 11 11Z"/></svg>`,
+sun: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.3M12 19.2v2.3M4.4 4.4l1.6 1.6M18 18l1.6 1.6M2.5 12h2.3M19.2 12h2.3M4.4 19.6 6 18M18 6l1.6-1.6"/></svg>`,
+car: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 15 4.8 10.8A2 2 0 0 1 6.7 9.5h10.6a2 2 0 0 1 1.9 1.3L20.5 15"/><rect x="2.7" y="15" width="18.6" height="3.4" rx="1.4"/><circle cx="7" cy="18.6" r="1.3"/><circle cx="17" cy="18.6" r="1.3"/></svg>`,
+info: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="7.8" r=".9" fill="currentColor" stroke="none"/><path d="M12 11v6" stroke-linecap="round"/></svg>`
+};
+
+// ── CATEGORY STYLE ───────────────────────────────────────────────────────
+const CAT_STYLE = {
+  parks:   {icon:'parks',   color:'#0F6D66', tint:'#DFEEEB'},
+  coffee:  {icon:'coffee',  color:'#E8734A', tint:'#FBE6DA'},
+  theatre: {icon:'theatre', color:'#7A4B6D', tint:'#F1E1EC'}
+};
+
+// ── TIERS (mile-based) ───────────────────────────────────────────────────
+const TIERS = [
+  {key:'star',  max:1,         name:`Seacoast Star`,             text:`Congrats! That's the top prize. You know this place so well, even John Stark shed a tear.`, color:'#DFA435', tint:'#FAF0DC', icon:'star'},
+  {key:'oldnh', max:10,        name:`Ole New Hampshirite`,       text:`You know this place pretty damn well.`, color:'#0F6D66', tint:'#DFEEEB', icon:'compass'},
+  {key:'summer',max:30,        name:`Summer Visitor`,            text:`Not too shabby. You must spend ONLY the summers around these parts of town!`, color:'#E8734A', tint:'#FBE6DA', icon:'sun'},
+  {key:'boston',max:Infinity,  name:`Oh, You're From Boston!`,   text:`Are you sure you're from around here? With map skills like that, you must be from out of town.`, color:'#7C8B93', tint:'#EEF1F2', icon:'car'}
+];
+function getTier(mi){ for(const t of TIERS) if(mi < t.max) return t; return TIERS[TIERS.length-1]; }
+// Median distance across a round set — forgives a single outlier miss.
+function medianMiles(arr){
+  const s=[...arr].sort((a,b)=>a-b);
+  const n=s.length; if(!n) return 0;
+  return n%2 ? s[(n-1)/2] : (s[n/2-1]+s[n/2])/2;
+}
+
+// ── DATA (locations) ─────────────────────────────────────────────────────
+const DATA = {
+parks: {
+  label:`State Parks`, tagline:`Five Parks, One Granite State`,
+  intro:`From a windswept headland to a mountain notch, these five state parks hold some of New Hampshire's best stories — a colonial fort, a fallen mountain face, and glacial boulders the size of houses. Read up, then pin them on the map.`,
+  locations:[
+    {name:`Odiorne Point State Park`, town:`Rye, NH`, lat:43.0440129, lon:-70.7162369,
+      teaser:`New Hampshire's largest stretch of undeveloped coastline sits at the tip of this seacoast town — 330 acres of rocky headland, salt marsh, and tide pool that outlasted hotels, cottages, and a wartime army base.`,
+      facts:[
+        `In 1623, David Thomson landed here to found Pannaway Plantation — the first European settlement in New Hampshire, two years before the Pilgrims were fully settled at Plymouth.`,
+        `The Odiorne family farmed this land for roughly 280 years after buying it in the 1660s, giving the point its name.`,
+        `The U.S. Army seized the land in 1942, tore down a 40-cottage summer resort, and built Fort Dearborn's coastal gun batteries — bunkers you can still walk through today.`,
+        `The state bought the land back for $91,000 in 1961, and the park, now home to the Seacoast Science Center, finally opened to the public in 1972.`
+      ],
+      cites:[{label:`Wikipedia — Odiorne Point State Park`, url:`https://en.wikipedia.org/wiki/Odiorne_Point_State_Park`},{label:`NHPR — How a World War Created a State Park`, url:`https://www.nhpr.org/nh-news/2016-09-01/how-a-world-war-created-a-state-park-on-n-h-s-seacoast`}],
+      anchors:[[43.0440129,-70.7162369],[43.04535,-70.713973]], radiusMi:0.45
+    },
+    {name:`Franconia Notch State Park`, town:`Franconia / Lincoln, NH`, lat:44.1430035, lon:-71.6896299,
+      teaser:`An eight-mile mountain pass through the White Mountains, threaded by a two-lane parkway that needed its own act of Congress — home to Cannon Mountain, the Flume Gorge, and New Hampshire's most famous face.`,
+      facts:[
+        `The notch was home to the Old Man of the Mountain, the granite profile that once appeared on the state quarter — until the ledges collapsed overnight in May 2003.`,
+        `The Flume Gorge, discovered in 1808, is an 800-foot natural granite chasm visitors can walk straight through, capped by the 45-foot Avalanche Falls.`,
+        `Interstate 93 narrows to one lane each way here — one of the only places in the country where the interstate standard was waived to protect the landscape.`,
+        `The Basin, a 20-foot granite pothole at the base of a waterfall, was smoothed by swirling glacial meltwater and pebbles over roughly 15,000 years.`
+      ],
+      cites:[{label:`Wikipedia — Franconia Notch State Park`, url:`https://en.wikipedia.org/wiki/Franconia_Notch_State_Park`},{label:`Old Man of the Mountain Legacy Fund`, url:`https://www.oldmannh.org/franconianotchstatepark.php`}],
+      anchors:[[44.0981109,-71.6659212],[44.1195013,-71.6808694],[44.1431453,-71.6843914],[44.1702871,-71.688864],[44.1779677,-71.6946402]], radiusMi:0.9
+    },
+    {name:`Fort Constitution Historic Site`, town:`New Castle, NH`, lat:43.0714444, lon:-70.7096238,
+      teaser:`Guarding the mouth of the Piscataqua River since the 1630s, this fort saw the first armed uprising of the American Revolution — four months before Lexington and Concord, and Paul Revere had a hand in it.`,
+      facts:[
+        `On December 14, 1774, roughly 400 Patriots stormed the fort and made off with nearly 100 barrels of British gunpowder — many historians call it the first overt act of armed rebellion in the Revolution.`,
+        `Paul Revere rode from Boston to Portsmouth on December 13, 1774 — four months before his more famous midnight ride — to warn colonists that British reinforcements were coming.`,
+        `Some of the seized gunpowder is believed to have later been used by colonial forces at the Battle of Bunker Hill.`,
+        `The fort has worn three names across four centuries — "The Castle," then "Fort William and Mary," then "Fort Constitution" — and its grounds still hold the working Portsmouth Harbor Light.`
+      ],
+      cites:[{label:`NH Sons of the American Revolution — The 1774 Raid`, url:`https://nhsar.org/the-raid-on-fort-william-and-mary-in-1774/`},{label:`NH Magazine — Stealing the King's Powder`, url:`https://www.nhmagazine.com/stealing-the-kings-powder-did-the-american-revolution-start-here/`}],
+      anchors:[[43.0714444,-70.7096238],[43.0710926,-70.708668]], radiusMi:0.15
+    },
+    {name:`Pawtuckaway State Park`, town:`Nottingham, NH`, lat:43.0773127, lon:-71.1714557,
+      teaser:`Fifty-five hundred acres built on the bones of an ancient volcano, where glacial boulders the size of houses draw climbers from across New England.`,
+      facts:[
+        `The park's three mountains — South, Middle, and North Pawtuckaway — are the eroded remains of an ancient volcanic ring dike from the Cretaceous period.`,
+        `The Boulder Field's glacial erratics, some weighing hundreds of tons, were carried here and dropped by retreating Ice Age glaciers roughly 12,000 years ago.`,
+        `A 2.4-mile hike to the fire tower atop the 908-foot South Mountain rewards climbers with views stretching from the White Mountains to the Atlantic and, on a clear day, the Boston skyline.`,
+        `"Pawtuckaway" comes from an Algonquian word roughly meaning "land of the big buck," reflecting the Pennacook people who hunted here long before European settlement.`
+      ],
+      cites:[{label:`America's State Parks — Pawtuckaway`, url:`https://www.americasstateparks.org/state-park/pawtuckaway/`},{label:`Curiouser Maine — Boulders, Fire Tower & Volcanic History`, url:`https://curiousermaine.com/pawtuckaway-state-park-nottingham-new-hampshire/`}],
+      anchors:[[43.0773127,-71.1714557],[43.1019638,-71.1810161],[43.1190652,-71.1836801]], radiusMi:1.0
+    },
+    {name:`Jenness State Beach`, town:`Rye, NH`, lat:42.9857828, lon:-70.7622864,
+      teaser:`A half-mile of golden sand on this town's Route 1A — small enough to fill up fast on a summer weekend, but beloved by early-morning surfers and sunrise photographers.`,
+      facts:[
+        `The beach is named for the Jenness family, early settlers who immigrated from Rye, East Sussex, England — the same family that gave the town of Rye its name.`,
+        `It's a protected nesting site for piping plovers, a threatened shorebird species that returns to this stretch of coast each spring.`,
+        `The beach's steady, gentle breaks have made it one of the Seacoast's most popular longboard surf spots.`,
+        `Jenness sits just south of Odiorne Point, along the same coastline that Rye has protected through its network of state beaches since the mid-20th century.`
+      ],
+      cites:[{label:`Wikipedia — Jenness State Beach`, url:`https://en.wikipedia.org/wiki/Jenness_State_Beach`},{label:`Rye NH Historical Society — A Short History of Rye`, url:`https://www.ryenhhistoricalsociety.org/history-of-rye`}],
+      anchors:[[42.9857828,-70.7622864]], radiusMi:0.3
+    }
+  ]
+},
+coffee: {
+  label:`Coffee Shops`, tagline:`Five Cups, One Seacoast`,
+  intro:`Five local coffee shops fueling mornings from Kittery to Dover. Read a bit about each one, then guess where you'd find your cup.`,
+  locations:[
+    {name:`Wild Valentine`, town:`Portsmouth, NH`, lat:43.0697701, lon:-70.7530641,
+      teaser:`Part flower shop, part café, tucked into this city's South End — order a Lavender Vanilla latte and walk out with a bouquet in the same breath.`,
+      facts:[
+        `Wild Valentine pours beans from La Mulita, a roaster based just down the coast in Rye, NH.`,
+        `Its signature drinks — Lavender Vanilla and Cardamom Rose lattes — lean into the shop's identity as a florist as much as a café.`,
+        `The shop is a genuine hybrid business: fresh-cut, garden-style flower arrangements are sold alongside oat bowls, toast, and espresso in the same bright, minimalist space.`
+      ],
+      cites:[{label:`Wild Valentine — Our Story`, url:`https://www.wildvalentine.co/pages/our-story`}]
+    },
+    {name:`The Islander Cafe`, town:`New Castle, NH`, lat:43.0714664, lon:-70.7157812,
+      teaser:`A tiny, cherished breakfast spot on a small island, just up the road from Fort Constitution — known for its Dutch Baby pancake and a line that's worth the wait.`,
+      facts:[
+        `New Castle is New Hampshire's only town located entirely on islands, and its smallest by area.`,
+        `The café's pastries, including its famous crullers, arrive fresh each morning from its sister bakery, Lil's Café, across the river in Kittery, Maine.`,
+        `Owners Deb and Michael McCluskey, a mother-son team, took over the café at the start of 2023 and have since grown the family's small café group to five Seacoast locations.`
+      ],
+      cites:[{label:`The Islander Cafe — About Us`, url:`https://theislandercafe.com/about-us/`},{label:`Union Leader — Islander Cafe Sizzles in the Summer`, url:`https://www.unionleader.com/nh/food/our_gourmet/our-gourmet-new-castles-islander-cafe-sizzles-in-the-summer/article_ea90cb10-b149-4874-a6a3-d2465516478b.html`}]
+    },
+    {name:`Lil's Cafe`, town:`Kittery, ME`, lat:43.0858275, lon:-70.7437167,
+      teaser:`A neighborhood bakery-café in a converted bank building in a small coastal downtown — famous for a maple cruller worth the line, with a crate of used vinyl to dig through while you wait.`,
+      facts:[
+        `Lil's opened in November 2013 inside a former bank building — the old vault door still stands near a small room stocked with used vinyl records for sale.`,
+        `The café is named for Lilian Mangos, who worked the register at nearby Bob's Clam Hut for more than 20 years.`,
+        `It brews Tandem Coffee Roasters and its bakers make every pastry, loaf, and cruller in-house daily.`,
+        `Geography note: Lil's home base is technically across the Piscataqua River in Kittery, Maine — one bridge over from New Castle, and part of the same little café family as the Islander Cafe.`
+      ],
+      cites:[{label:`The Maine Mag — Lil's Cafe`, url:`https://www.themainemag.com/2907-lils-cafe/`},{label:`Lil's Cafe`, url:`https://www.lilscafe.com/`}]
+    },
+    {name:`Flamingo's Coffee Bar`, town:`Exeter, NH`, lat:42.9812796, lon:-70.9579707,
+      teaser:`A pink-accented coffee shop that started as a Hampton Beach cart, then carried the beach vibes inland to a riverside downtown — a prep-school town that served as New Hampshire's capital during the Revolution.`,
+      facts:[
+        `Flamingo's got its start on Hampton Beach before opening its second location in downtown Exeter — its founder calls the loyal customer base "the flock."`,
+        `The shop roasts with Flight Coffee Co. out of Bedford, NH, and is proud to be a women-led local business.`,
+        `Monthly themed coffee flights — mini-latte samplers — rotate seasonally, with dairy-free and gluten-free versions of nearly everything on the menu.`
+      ],
+      cites:[{label:`Flamingo's Coffee Bar — About`, url:`https://www.flamingoscoffeebar.com/about`}]
+    },
+    {name:`Two Bees Cafe + Patisserie`, town:`Dover, NH`, lat:43.1970478, lon:-70.8758301,
+      teaser:`A French-inspired café on the banks of the Cocheco River in this downtown — the kouign amann might be the best reason to get out of bed.`,
+      facts:[
+        `The café's menu draws on French and Mediterranean technique, changing seasonally with produce from local farms.`,
+        `Its patio looks out over the Cocheco River, historically the industrial heart of Dover's 19th-century mill economy.`,
+        `Two Bees roasts and sells its own house coffee blends alongside a full case of handmade pastries, tartines, and salads.`
+      ],
+      cites:[{label:`Two Bees Cafe + Patisserie`, url:`https://www.twobeespatisserie.com/`},{label:`Greater Dover Chamber of Commerce`, url:`https://www.dovernh.org/list/member/two-bees-cafe-patisserie-4856`}]
+    }
+  ]
+},
+theatre: {
+  label:`Theatre & Concert Halls`, tagline:`Five Stages, One Seacoast`,
+  intro:`Five stages where the Seacoast comes to watch, listen, and clap — from a converted stone church to a Lake Winnipesaukee amphitheater. Find them on the map.`,
+  locations:[
+    {name:`Ogunquit Playhouse`, town:`Ogunquit, ME`, lat:43.2388638, lon:-70.6004334,
+      teaser:`"America's Foremost Summer Theatre" has staged Broadway-caliber musicals in this seaside Maine village since 1933 — nearly a century of curtain calls a few blocks from the beach.`,
+      facts:[
+        `Founded by Walter and Maude Hartwig in 1933 in a converted garage, the Playhouse moved into its current Colonial Revival building in 1937.`,
+        `It's one of the last surviving summer stock theatres still producing musical theatre in its original building, and was added to the National Register of Historic Places in 1995.`,
+        `The Playhouse welcomes more than 100,000 guests each season and has hosted stars including Bette Davis over its long history.`
+      ],
+      cites:[{label:`Wikipedia — Ogunquit Playhouse`, url:`https://en.wikipedia.org/wiki/Ogunquit_Playhouse`},{label:`Ogunquit Playhouse — About Us`, url:`https://www.ogunquitplayhouse.org/about-us/`}]
+    },
+    {name:`The Music Hall`, town:`Portsmouth, NH`, lat:43.0758048, lon:-70.7594444,
+      teaser:`New Hampshire's oldest operating theater, built in 1878 after its predecessor burned down — the Peirce family funded a Victorian showpiece that's still this city's cultural anchor today.`,
+      facts:[
+        `The Music Hall opened January 30, 1878, funded by the prominent Peirce family after Portsmouth's previous venue, The Temple, burned down on Christmas Eve 1876.`,
+        `In 1901, "ale tycoon" and local politician Frank Jones bought and remodeled the theater, adding the proscenium arch and opera boxes still visible today.`,
+        `It claims to be the 14th-oldest operating theater in the entire United States, and now draws roughly 130,000 visitors a year across its two stages.`
+      ],
+      cites:[{label:`Wikipedia — The Music Hall (Portsmouth)`, url:`https://en.wikipedia.org/wiki/The_Music_Hall_(Portsmouth)`},{label:`The Music Hall — Our History`, url:`https://www.themusichall.org/about/history/`}]
+    },
+    {name:`BankNH Pavilion`, town:`Gilford, NH`, lat:43.5795043, lon:-71.4212052,
+      teaser:`An outdoor amphitheater on the shores of Lake Winnipesaukee that grew out of one family's backyard concerts — Johnny Cash opened it on Labor Day weekend, 1996.`,
+      facts:[
+        `The venue sits on what was once Meadowbrook Farm, owned for generations by the musical Miller family, who hosted informal concerts on their own property.`,
+        `Johnny Cash played the venue's opening show over Labor Day weekend in 1996, when it held just 2,500 seats.`,
+        `It's been renamed five times since — Meadowbrook Farm, Meadowbrook Musical Arts Center, Meadowbrook U.S. Cellular Pavilion, Bank of New Hampshire Pavilion, and today's BankNH Pavilion — while growing to a 9,000-person capacity.`
+      ],
+      cites:[{label:`Wikipedia — BankNH Pavilion`, url:`https://en.wikipedia.org/wiki/BankNH_Pavilion`},{label:`BankNH Pavilion — Our History`, url:`https://banknhpavilion.com/?d=about&page=history`}]
+    },
+    {name:`3S Artspace`, town:`Portsmouth, NH`, lat:43.0798589, lon:-70.7629842,
+      teaser:`A converted storage building in this city's West End holding a performance stage, a contemporary art gallery, and a restaurant, all under one roof — hence the name.`,
+      facts:[
+        `Founded in 2011, 3S opened its current 20,000-square-foot home, a converted storage facility, in March 2014.`,
+        `The "3S" stands for the three spaces combined under one roof: Stage, art Space, and restaurant.`,
+        `The nonprofit's gallery mounts five to eight self-curated contemporary exhibitions a year, free and open to the public.`
+      ],
+      cites:[{label:`3S Artspace`, url:`https://www.3sarts.org/`},{label:`Art New England — 3S Artspace: The Voyage Out`, url:`https://artnewengland.com/ed_columns/3s-artspace-the-voyage-out/`}]
+    },
+    {name:`Stone Church Music Club`, town:`Newmarket, NH`, lat:43.0788559, lon:-70.9381265,
+      teaser:`A live-music venue inside an actual 1832 church atop this town's Zion Hill — exterior murals of Bob Marley and Jerry Garcia announce exactly what kind of congregation gathers here now.`,
+      facts:[
+        `Built in 1832 as a Universalist meetinghouse, the building later served as a Unitarian church, a Catholic church and school, a roller-skating rink, and a VFW hall before becoming a music venue in 1970.`,
+        `A 1968 fire damaged the building — the original charred beams are still visible in the main room and upstairs ballroom today.`,
+        `More than 15,000 shows have been played here since 1970, with a bill that's included Aerosmith, Bonnie Raitt, and Phish.`
+      ],
+      cites:[{label:`Wikipedia — The Stone Church`, url:`https://en.wikipedia.org/wiki/The_Stone_Church`},{label:`NH Magazine — Chapel of Rock`, url:`https://www.nhmagazine.com/chapel-of-rock/`}]
+    }
+  ]
+}
+};
+
+const CATS = ['parks','coffee','theatre'];
+
+// ── STATE ─────────────────────────────────────────────────────────────────
+let activeCat = 'parks';
+let lmap=null, guessMarker=null, correctMarker=null, styleReadyPromise=null;
+const STATE = {};
+CATS.forEach(c=>STATE[c]={round:0,totalMiles:0,states:[null,null,null,null,null],done:false});
+
+// ── DISTANCE (miles) ─────────────────────────────────────────────────────
+function haversineMiles(a,b,c,d){
+  const R=3958.8,r=Math.PI/180,dLat=(c-a)*r,dLon=(d-b)*r;
+  const x=Math.sin(dLat/2)**2+Math.cos(a*r)*Math.cos(c*r)*Math.sin(dLon/2)**2;
+  return R*2*Math.atan2(Math.sqrt(x),Math.sqrt(1-x));
+}
+
+// ── PARK EXTENT SCORING (verified anchor landmarks + documented-size radius) ─
+// Large sites are represented by several real, geocoded landmarks inside the park
+// plus a radius derived from the park's published acreage. A guess is "inside"
+// when it falls within radiusMi of any anchor; otherwise distance is measured
+// from the nearest edge of that footprint, never from an arbitrary centre point.
+function distToAnchorsMiles(lat,lon,anchors,radiusMi){
+  let best=null;
+  for(const a of anchors){
+    const d=haversineMiles(lat,lon,a[0],a[1]);
+    if(best===null||d<best.raw) best={raw:d,aLat:a[0],aLon:a[1]};
+  }
+  const dist=Math.max(0,best.raw-radiusMi);
+  return {distMiles:dist, inside:dist<=0, anchorLat:best.aLat, anchorLon:best.aLon, raw:best.raw};
+}
+function computeResult(cat, idx, lat, lng){
+  const loc = DATA[cat].locations[idx];
+  if(loc.anchors && loc.anchors.length){
+    const r = distToAnchorsMiles(lat,lng,loc.anchors,loc.radiusMi);
+    return {mi:r.distMiles, inside:r.inside};
+  }
+  return {mi:haversineMiles(lat,lng,loc.lat,loc.lon), inside:false};
+}
+// ── MAP (MapLibre GL + CARTO Voyager vector style, minus place-identifying labels) ─
+const HIDDEN_LAYER_IDS = new Set([
+  // points of interest / landmarks — the whole point of the game is finding these yourself
+  'poi_park','poi_stadium',
+  // town / city / village / hamlet / suburb name labels — would give away the answer outright
+  'place_hamlet','place_suburbs','place_villages','place_town',
+  'place_city_r6','place_city_r5','place_city_dot_r7','place_city_dot_r4','place_city_dot_r2',
+  'place_city_dot_z7','place_capital_dot_z7'
+]);
+function emptyFC(){ return {type:'FeatureCollection', features:[]}; }
+function pinHtml(color){
+  return `<svg width="28" height="37" viewBox="0 0 30 40"><path d="M15 1C7.8 1 2 6.8 2 14c0 9.5 13 24 13 24s13-14.5 13-24C28 6.8 22.2 1 15 1Z" fill="${color}" stroke="#1C2B33" stroke-width="1.6"/><circle cx="15" cy="14.5" r="5.4" fill="#FFFEFB"/></svg>`;
+}
+function makeMarkerEl(color){
+  const el=document.createElement('div');
+  el.innerHTML=pinHtml(color);
+  return el;
+}
+function ensureMap(){
+  if(styleReadyPromise) return styleReadyPromise;
+  styleReadyPromise = fetch('https://basemaps.cartocdn.com/gl/voyager-gl-style/style.json')
+    .then(r=>r.json())
+    .then(style=>{
+      style.layers = style.layers.filter(l=>!HIDDEN_LAYER_IDS.has(l.id));
+      return new Promise(resolve=>{
+        lmap = new maplibregl.Map({
+          container:'leaflet-map',
+          style,
+          center:[-71.3,43.6],
+          zoom:7,
+          minZoom:2,
+          maxZoom:18
+        });
+        lmap.addControl(new maplibregl.NavigationControl({showCompass:false}), 'top-right');
+        lmap.on('load', ()=>{
+          lmap.addSource('connector', {type:'geojson', data:emptyFC()});
+          lmap.addLayer({id:'connector-line', type:'line', source:'connector',
+            paint:{'line-color':'#1C2B33','line-width':2,'line-dasharray':[1,2],'line-opacity':.8}});
+          lmap.addSource('park-area', {type:'geojson', data:emptyFC()});
+          lmap.addLayer({id:'park-area-line', type:'line', source:'park-area',
+            paint:{'line-color':'#0F6D66','line-width':1.8,'line-opacity':.75}});
+          lmap.on('click', onMapClick);
+          resolve();
+        });
+      });
+    });
+  return styleReadyPromise;
+}
+function onMapClick(e){
+  const s=STATE[activeCat];
+  if(s.states[s.round]) return;
+  const {lat,lng}=e.lngLat;
+  placeGuessMarker(lat,lng);
+  lmap._pendingLat=lat; lmap._pendingLng=lng;
+  document.getElementById('guess-coords').textContent =
+    `${Math.abs(lat).toFixed(3)}°${lat>=0?'N':'S'}, ${Math.abs(lng).toFixed(3)}°${lng>=0?'E':'W'}`;
+  document.getElementById('confirm-btn').style.display='inline-flex';
+}
+function placeGuessMarker(lat,lng){
+  if(guessMarker){guessMarker.remove();guessMarker=null;}
+  guessMarker=new maplibregl.Marker({element:makeMarkerEl('#E8734A'),anchor:'bottom'}).setLngLat([lng,lat]).addTo(lmap);
+}
+function setGuessMarkerColor(color){
+  if(guessMarker) guessMarker.getElement().innerHTML=pinHtml(color);
+}
+function placeCorrectMarker(lat,lon){
+  if(correctMarker){correctMarker.remove();correctMarker=null;}
+  correctMarker=new maplibregl.Marker({element:makeMarkerEl('#0F6D66'),anchor:'bottom'}).setLngLat([lon,lat]).addTo(lmap);
+}
+function setConnector(coords){
+  if(!lmap.getSource('connector')) return;
+  if(!coords){ lmap.getSource('connector').setData(emptyFC()); return; }
+  lmap.getSource('connector').setData({type:'FeatureCollection',features:[{type:'Feature',geometry:{type:'LineString',coordinates:coords}}]});
+}
+// Merge the equal-radius anchor circles into ONE outline so overlapping
+// arcs don't show. Works in a local flat-earth frame (miles), then converts
+// back to lon/lat. Returns an array of closed rings.
+function unionCircleRings(anchors, radiusMi){
+  if(!anchors || !anchors.length) return [];
+  const lat0=anchors[0][0], lon0=anchors[0][1];
+  const kLat=69.0, kLon=69.0*Math.cos(lat0*Math.PI/180);
+  const C=anchors.map(a=>({x:(a[1]-lon0)*kLon, y:(a[0]-lat0)*kLat}));
+  const R=radiusMi, TAU=Math.PI*2;
+  const toLL=p=>[lon0+p.x/kLon, lat0+p.y/kLat];
+  const at=(i,ang)=>({x:C[i].x+R*Math.cos(ang), y:C[i].y+R*Math.sin(ang)});
+  // A point is interior to the union if it sits strictly inside any OTHER circle.
+  const covered=(p,skip)=>{
+    for(let j=0;j<C.length;j++){
+      if(j===skip) continue;
+      if(Math.hypot(p.x-C[j].x,p.y-C[j].y) < R-1e-7) return true;
+    }
+    return false;
+  };
+
+  const rings=[], arcs=[];
+  for(let i=0;i<C.length;i++){
+    let angs=[];
+    for(let j=0;j<C.length;j++){
+      if(j===i) continue;
+      const dx=C[j].x-C[i].x, dy=C[j].y-C[i].y, dd=Math.hypot(dx,dy);
+      if(dd<1e-9 || dd>=2*R) continue;               // identical or disjoint
+      const base=Math.atan2(dy,dx);
+      const half=Math.acos(Math.max(-1,Math.min(1, dd/(2*R))));
+      angs.push(base-half, base+half);
+    }
+    if(!angs.length){
+      // Untouched by any neighbour — emit the whole circle as its own ring.
+      if(!covered(at(i,0),i)){
+        const ring=[];
+        for(let s=0;s<=64;s++) ring.push(toLL(at(i, s/64*TAU)));
+        rings.push(ring);
+      }
+      continue;
+    }
+    angs=angs.map(a=>((a%TAU)+TAU)%TAU).sort((a,b)=>a-b);
+    for(let k=0;k<angs.length;k++){
+      const a0=angs[k];
+      const a1=(k===angs.length-1)? angs[0]+TAU : angs[k+1];
+      if(a1-a0<1e-9) continue;
+      if(covered(at(i,(a0+a1)/2), i)) continue;      // this arc is inside the blob
+      const steps=Math.max(4, Math.ceil((a1-a0)/(Math.PI/48)));
+      const pts=[];
+      for(let s=0;s<=steps;s++) pts.push(at(i, a0+(a1-a0)*s/steps));
+      arcs.push({pts, used:false});
+    }
+  }
+
+  // Stitch the surviving arcs end-to-start into closed rings.
+  const TOL=Math.max(1e-7, R*1e-4);
+  for(let s=0;s<arcs.length;s++){
+    if(arcs[s].used) continue;
+    arcs[s].used=true;
+    let ring=arcs[s].pts.slice();
+    for(let guard=0; guard<arcs.length+2; guard++){
+      const tail=ring[ring.length-1];
+      let nxt=-1;
+      for(let t=0;t<arcs.length;t++){
+        if(arcs[t].used) continue;
+        const h=arcs[t].pts[0];
+        if(Math.hypot(h.x-tail.x,h.y-tail.y)<TOL){ nxt=t; break; }
+      }
+      if(nxt<0) break;
+      arcs[nxt].used=true;
+      ring=ring.concat(arcs[nxt].pts.slice(1));
+    }
+    ring.push(ring[0]);
+    rings.push(ring.map(toLL));
+  }
+  return rings;
+}
+function setParkArea(loc){
+  if(!lmap.getSource('park-area')) return;
+  if(!loc || !loc.anchors){ lmap.getSource('park-area').setData(emptyFC()); return; }
+  const rings=unionCircleRings(loc.anchors, loc.radiusMi);
+  const feats=rings.map(r=>({type:'Feature',geometry:{type:'Polygon',coordinates:[r]}}));
+  lmap.getSource('park-area').setData({type:'FeatureCollection',features:feats});
+}
+// Point on the area's edge closest to the guess — this is the spot the
+// score is actually measured to, so the connector must end here.
+function edgePointToward(anchorLat, anchorLon, gLat, gLon, radiusMi){
+  const kLat=69.0, kLon=69.0*Math.cos(anchorLat*Math.PI/180);
+  const dx=(gLon-anchorLon)*kLon, dy=(gLat-anchorLat)*kLat;
+  const d=Math.hypot(dx,dy);
+  if(d<1e-9) return {lat:anchorLat, lon:anchorLon};
+  return {lat:anchorLat+(dy/d)*radiusMi/kLat, lon:anchorLon+(dx/d)*radiusMi/kLon};
+}
+function clearMarkers(){
+  if(guessMarker){guessMarker.remove();guessMarker=null;}
+  if(correctMarker){correctMarker.remove();correctMarker=null;}
+  setConnector(null);
+  setParkArea(null);
+}
+function fitBoundsTwoPoints(lat1,lng1,lat2,lng2){
+  const b=new maplibregl.LngLatBounds([lng1,lat1],[lng1,lat1]);
+  b.extend([lng2,lat2]);
+  lmap.fitBounds(b,{padding:60,maxZoom:15});
+}
+function fitToExtentAndGuess(loc,gLat,gLng){
+  const b=new maplibregl.LngLatBounds([gLng,gLat],[gLng,gLat]);
+  const latPad=loc.radiusMi/69.0;
+  loc.anchors.forEach(a=>{
+    const lonPad=loc.radiusMi/(69.0*Math.cos(a[0]*Math.PI/180));
+    b.extend([a[1]-lonPad,a[0]-latPad]); b.extend([a[1]+lonPad,a[0]+latPad]);
+  });
+  lmap.fitBounds(b,{padding:60,maxZoom:15});
+}
+function visualizeAnswer(cat, idx, rs){
+  const loc=DATA[cat].locations[idx];
+  if(loc.anchors && loc.anchors.length){
+    setParkArea(loc);
+    if(rs.inside){
+      // Nailed it — the guess pin itself goes green, nothing else needed.
+      setGuessMarkerColor('#0F6D66');
+      setConnector(null);
+    }else{
+      setGuessMarkerColor('#E8734A');
+      const r=distToAnchorsMiles(rs.lat,rs.lon,loc.anchors,loc.radiusMi);
+      const edge=edgePointToward(r.anchorLat,r.anchorLon,rs.lat,rs.lon,loc.radiusMi);
+      placeCorrectMarker(loc.lat, loc.lon);
+      setConnector([[rs.lon,rs.lat],[edge.lon,edge.lat]]);
+    }
+    fitToExtentAndGuess(loc, rs.lat, rs.lon);
+  }else{
+    // Single-point answer (coffee shops, theatres): exact hit is within ~260 ft.
+    if(rs.mi<0.05){
+      setGuessMarkerColor('#0F6D66');
+      setConnector(null);
+      lmap.easeTo({center:[rs.lon,rs.lat], zoom:Math.max(lmap.getZoom(),14), duration:600});
+    }else{
+      setGuessMarkerColor('#E8734A');
+      placeCorrectMarker(loc.lat, loc.lon);
+      setConnector([[rs.lon,rs.lat],[loc.lon,loc.lat]]);
+      fitBoundsTwoPoints(rs.lat, rs.lon, loc.lat, loc.lon);
+    }
+  }
+}
+
+// ── CONFIRM ───────────────────────────────────────────────────────────────
+function confirmGuess(){
+  const s=STATE[activeCat];
+  const lat=lmap._pendingLat,lng=lmap._pendingLng;
+  if(lat===undefined)return;
+  const {mi,inside}=computeResult(activeCat, s.round, lat, lng);
+  s.states[s.round]={lat,lon:lng,mi,inside};
+  s.totalMiles=s.states.reduce((sum,r)=>sum+(r?r.mi:0),0);
+  document.getElementById('score-value-total').textContent=s.totalMiles.toFixed(1);
+  document.getElementById('confirm-btn').style.display='none';
+  document.getElementById('guess-coords').textContent='';
+  document.getElementById('map-locked-msg').style.display='block';
+  document.getElementById('map-instruction').textContent='';
+  visualizeAnswer(activeCat, s.round, s.states[s.round]);
+  showResult(s.round,true);
+  updateProgress();updateNav();updateTabStatus(activeCat);updateGrandTotal();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function showResult(idx,animate){
+  const s=STATE[activeCat],rs=s.states[idx];
+  if(!rs)return;
+  const loc=DATA[activeCat].locations[idx];
+  const tier=getTier(rs.mi);
+  const card=document.getElementById('stamp-card');
+  if(animate){card.style.animation='none';card.offsetHeight;card.style.animation='';}
+  const badge=document.getElementById('stamp-icon-badge');
+  badge.style.background=tier.tint; badge.style.color=tier.color;
+  document.getElementById('stamp-icon').innerHTML=ICONS[tier.icon];
+  document.getElementById('stamp-name').textContent=tier.name;
+  document.getElementById('stamp-name').style.color=tier.color;
+  if(rs.inside){
+    document.getElementById('stamp-miles').innerHTML=`<strong>Right in the park!</strong> (0 mi off)`;
+  }else{
+    const label = (loc.anchors && loc.anchors.length) ? `from the edge of ${loc.name}` : `from ${loc.name}`;
+    document.getElementById('stamp-miles').innerHTML=`<strong>${rs.mi.toFixed(1)} mi</strong> ${label}`;
+  }
+  document.getElementById('stamp-quip').textContent=tier.text;
+  document.getElementById('correct-tag').textContent=`${loc.name} · ${loc.town}`;
+  document.getElementById('stamp-wrap').style.display='block';
+
+  document.getElementById('facts-title').textContent=`${loc.name} — The Real Story`;
+  document.getElementById('facts-list').innerHTML=loc.facts.map(f=>`<li>${f}</li>`).join('');
+  document.getElementById('facts-cites').innerHTML=loc.cites.map(c=>`<li><a href="${c.url}" target="_blank" rel="noopener">${c.label}</a></li>`).join('');
+  document.getElementById('facts-panel').style.display='block';
+  document.getElementById('result-nav').style.display='flex';
+  updateResultNav(idx);
+}
+
+// ── RENDER ROUND ──────────────────────────────────────────────────────────
+function renderRound(cat,idx){
+  activeCat=cat;
+  const s=STATE[cat]; s.round=idx;
+  const loc=DATA[cat].locations[idx];
+  const cs=CAT_STYLE[cat];
+  const badge=document.getElementById('loc-badge');
+  badge.style.background=cs.tint; badge.style.color=cs.color;
+  document.getElementById('loc-badge-icon').innerHTML=ICONS[cs.icon];
+  document.getElementById('loc-name').textContent=loc.name;
+  document.getElementById('loc-teaser').textContent=loc.teaser;
+  document.getElementById('round-num-display').textContent=`${idx+1} / 5`;
+  document.getElementById('score-value-total').textContent=s.totalMiles.toFixed(1);
+
+  clearMarkers();
+  lmap._pendingLat=undefined;lmap._pendingLng=undefined;
+  document.getElementById('map-locked-msg').style.display='none';
+  document.getElementById('stamp-wrap').style.display='none';
+  document.getElementById('facts-panel').style.display='none';
+  document.getElementById('result-nav').style.display='none';
+
+  const rs=s.states[idx];
+  if(rs){
+    placeGuessMarker(rs.lat,rs.lon);
+    visualizeAnswer(cat, idx, rs);
+    document.getElementById('map-locked-msg').style.display='block';
+    document.getElementById('confirm-btn').style.display='none';
+    document.getElementById('guess-coords').textContent='';
+    document.getElementById('map-instruction').textContent='';
+    showResult(idx,false);
+  }else{
+    lmap.jumpTo({center:[-71.3,43.6],zoom:7});
+    document.getElementById('confirm-btn').style.display='none';
+    document.getElementById('guess-coords').textContent='';
+    document.getElementById('map-instruction').textContent=`Tap the map where you think ${loc.name} is located.`;
+  }
+  updateProgress();updateNav();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function updateResultNav(idx){
+  const s=STATE[activeCat];
+  document.getElementById('res-prev-btn').style.display=idx>0?'inline-flex':'none';
+  const nb=document.getElementById('res-next-btn');
+  const allDone=s.states.every(r=>r!==null);
+  if(idx===4&&allDone){nb.textContent='See Final Result';nb.onclick=renderFinal;}
+  else if(idx<4){nb.textContent='Next Location →';nb.onclick=()=>goRound(idx+1);}
+  else{nb.textContent='Finish →';nb.onclick=renderFinal;}
+}
+document.getElementById('res-prev-btn').onclick=()=>goRound(STATE[activeCat].round-1);
+
+function goRound(idx){if(idx>=0&&idx<5)renderRound(activeCat,idx);}
+function goNextOrFinal(){
+  const s=STATE[activeCat];
+  const allDone=s.states.every(r=>r!==null);
+  if(s.round===4&&allDone)renderFinal();
+  else goRound(s.round+1);
+}
+function updateNav(){
+  const s=STATE[activeCat];
+  const prev=document.getElementById('btn-prev'),next=document.getElementById('btn-next');
+  prev.disabled=s.round===0;
+  const allDone=s.states.every(r=>r!==null);
+  next.textContent=(s.round===4&&allDone)?'Final Result':'Next →';
+}
+document.getElementById('btn-prev').onclick=()=>goRound(STATE[activeCat].round-1);
+document.getElementById('btn-next').onclick=goNextOrFinal;
+
+function updateProgress(){
+  const s=STATE[activeCat];
+  const prog=document.getElementById('round-progress');prog.innerHTML='';
+  for(let i=0;i<5;i++){
+    const d=document.createElement('div');
+    const rs=s.states[i];
+    d.className='round-dot'+(i===s.round?' active':'');
+    if(rs){const t=getTier(rs.mi); d.style.borderColor=t.color; d.style.color=t.color; d.style.background=t.tint;}
+    d.textContent=i+1;d.title=DATA[activeCat].locations[i].name;
+    d.onclick=()=>goRound(i);
+    prog.appendChild(d);
+  }
+}
+
+// ── FINAL ─────────────────────────────────────────────────────────────────
+function renderFinal(){
+  const cat=activeCat,s=STATE[cat];
+  const allDone=s.states.every(r=>r!==null);
+  if(!allDone){goRound(s.states.findIndex(r=>r===null));return;}
+  s.done=true;
+  // GA4: fire once per completed category (resets on Play Again).
+  if(!s.tracked){
+    s.tracked=true;
+    const medFired=medianMiles(s.states.map(r=>r.mi));
+    if(typeof gtag==='function'){
+      gtag('event','game_complete',{
+        category_played: cat,
+        total_miles: Number(s.totalMiles.toFixed(1)),
+        median_miles: Number(medFired.toFixed(1)),
+        rank_earned: getTier(medFired).name
+      });
+      // Fires only when someone finishes all three categories.
+      if(CATS.every(c=>STATE[c].done)){
+        gtag('event','all_games_complete',{
+          grand_total_miles: Number(CATS.reduce((sum,c)=>sum+STATE[c].totalMiles,0).toFixed(1))
+        });
+      }
+    }
+  }
+  showScreen('final');
+  const d=DATA[cat],cs=CAT_STYLE[cat];
+  const fBadge=document.getElementById('final-icon-badge');
+  fBadge.style.background=cs.tint; fBadge.style.color=cs.color;
+  document.getElementById('final-icon').innerHTML=ICONS[cs.icon];
+  document.getElementById('final-cat-label').textContent=d.label;
+  document.getElementById('final-total').textContent=s.totalMiles.toFixed(1);
+  const med=medianMiles(s.states.map(r=>r.mi));
+  const overallTier=getTier(med);
+  document.getElementById('final-verdict-name').textContent=`Overall: ${overallTier.name}`;
+  document.getElementById('final-verdict-name').style.color=overallTier.color;
+  document.getElementById('final-verdict-text').textContent=overallTier.text;
+
+  const stampRow=document.getElementById('stamp-row');stampRow.innerHTML='';
+  s.states.forEach((r,i)=>{
+    const t=getTier(r.mi);
+    const el=document.createElement('div');el.className='mini-stamp';
+    el.style.borderColor=t.color; el.style.color=t.color; el.style.background=t.tint;
+    el.innerHTML=`<div class="ico">${ICONS[t.icon]}</div>`;
+    el.title=`${DATA[cat].locations[i].name} — ${t.name} (${r.inside?'inside the park':r.mi.toFixed(1)+' mi'})`;
+    el.onclick=()=>reviewRound(i);
+    stampRow.appendChild(el);
+  });
+
+  const grid=document.getElementById('breakdown-grid');grid.innerHTML='';
+  s.states.forEach((r,i)=>{
+    const loc=d.locations[i],t=getTier(r.mi);
+    const distLabel = r.inside ? 'inside' : `${r.mi.toFixed(1)} mi`;
+    const el=document.createElement('div');el.className='bd-item';
+    el.innerHTML=`<div class="bd-num">R${i+1}</div><div class="bd-name">${loc.name}</div><div class="bd-tier" style="color:${t.color}">${t.name}</div><div class="bd-dist">${distLabel}</div>`;
+    el.onclick=()=>reviewRound(i);
+    grid.appendChild(el);
+  });
+  updateTabStatus(cat);updateGrandTotal();
+  const nextCat=CATS.find(c=>!STATE[c].done);
+  const nextBtn=document.getElementById('next-game-btn');
+  const banner=document.getElementById('all-done-banner');
+  if(nextCat){
+    nextBtn.style.display='inline-flex';
+    nextBtn.textContent=`Try ${DATA[nextCat].label} →`;
+    nextBtn.onclick=()=>setTab(nextCat);
+    banner.style.display='none';
+  }else{
+    nextBtn.style.display='none';
+    banner.style.display='block';
+    document.getElementById('grand-total-final').textContent=
+      CATS.reduce((sum,c)=>sum+STATE[c].totalMiles,0).toFixed(1);
+  }
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+document.getElementById('review-btn').onclick=()=>reviewRound(0);
+document.getElementById('restart-btn').onclick=restartGame;
+
+function reviewRound(idx){
+  showScreen('game');
+  ensureMap().then(()=>{ setTimeout(()=>{ lmap.resize(); renderRound(activeCat,idx); },50); });
+}
+function restartGame(){
+  const cat=activeCat;
+  STATE[cat]={round:0,totalMiles:0,states:[null,null,null,null,null],done:false};
+  updateTabStatus(cat);updateGrandTotal();
+  showScreen('game');
+  ensureMap().then(()=>{ setTimeout(()=>{ lmap.resize(); renderRound(cat,0); },50); });
+}
+
+// ── TABS ──────────────────────────────────────────────────────────────────
+function showScreen(name){
+  document.getElementById('screen-game').classList.toggle('active',name==='game');
+  document.getElementById('screen-final').classList.toggle('active',name==='final');
+}
+function setTab(cat){
+  activeCat=cat;
+  document.querySelectorAll('.tab-btn').forEach(b=>{
+    const on=b.dataset.cat===cat;
+    b.classList.toggle('active',on);
+    b.style.background=on?CAT_STYLE[cat].color:'';
+    b.style.borderColor=on?CAT_STYLE[cat].color:'';
+  });
+  const s=STATE[cat];
+  if(s.done){
+    renderFinal();
+  }else{
+    showScreen('game');
+    ensureMap().then(()=>{ setTimeout(()=>{ lmap.resize(); renderRound(cat,s.round); },50); });
+  }
+}
+function updateTabStatus(cat){
+  const el=document.getElementById('tab-status-'+cat);
+  if(!el)return;
+  const s=STATE[cat];
+  if(s.done)el.textContent=`✓ ${s.totalMiles.toFixed(1)}mi`;
+  else{
+    const answered=s.states.filter(r=>r!==null).length;
+    el.textContent=answered>0?`${answered}/5`:'';
+  }
+}
+function updateGrandTotal(){
+  const total=CATS.reduce((sum,c)=>sum+STATE[c].totalMiles,0);
+  document.getElementById('grand-total-value').textContent=total.toFixed(1);
+  const doneCount=CATS.filter(c=>STATE[c].done).length;
+  document.getElementById('grand-total-badge').classList.toggle('complete',doneCount===3);
+}
+
+// ── INFO MODAL ────────────────────────────────────────────────────────────
+function openModal(){document.getElementById('info-modal').classList.add('open');}
+function closeModal(){document.getElementById('info-modal').classList.remove('open');}
+document.getElementById('info-btn').onclick=openModal;
+document.getElementById('modal-close').onclick=closeModal;
+document.getElementById('modal-play-btn').onclick=closeModal;
+document.getElementById('info-modal').addEventListener('click',e=>{if(e.target.id==='info-modal')closeModal();});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal();});
+
+function buildModalTiers(){
+  document.getElementById('modal-tiers').innerHTML=TIERS.map(t=>{
+    const range=t.key==='star'?'Under 1':(t.key==='oldnh'?'1–10':(t.key==='summer'?'10–30':'30+'));
+    return `<div class="modal-tier-row"><div class="icon-badge" style="background:${t.tint};color:${t.color}"><div class="ico">${ICONS[t.icon]}</div></div><div><b style="color:${t.color}">${t.name}</b><span>${range} miles off</span></div></div>`;
+  }).join('');
+}
+
+// ── INIT ──────────────────────────────────────────────────────────────────
+function buildTabNav(){
+  const nav=document.getElementById('tab-nav');
+  nav.innerHTML=CATS.map(c=>{
+    const d=DATA[c],cs=CAT_STYLE[c];
+    const active=c==='parks';
+    return `<button class="tab-btn${active?' active':''}" data-cat="${c}" style="${active?`background:${cs.color};border-color:${cs.color}`:''}">`+
+      `<span class="icon-badge" style="background:${active?'rgba(255,255,255,.22)':cs.tint};color:${active?'#fff':cs.color}"><span class="ico">${ICONS[cs.icon]}</span></span><span>${d.label}</span>`+
+      `<span class="tab-status" id="tab-status-${c}"></span></button>`;
+  }).join('');
+  nav.querySelectorAll('.tab-btn').forEach(btn=>{
+    btn.addEventListener('click',()=>setTab(btn.dataset.cat));
+  });
+}
+document.getElementById('info-btn').innerHTML=`<span class="ico">${ICONS.info}</span>`;
+document.getElementById('logomark').innerHTML=ICONS.logomark;
+document.getElementById('confirm-btn').onclick=confirmGuess;
+
+buildTabNav();
+buildModalTiers();
+CATS.forEach(updateTabStatus);
+updateGrandTotal();
+ensureMap().then(()=>{ renderRound('parks',0); });
+</script>
+</body>
+</html>
