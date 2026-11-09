@@ -8,37 +8,35 @@
 
 <!-- ===================================================================== -->
 <!-- SOCIAL SHARING / OPEN GRAPH                                           -->
-<!-- ⚠️  AFTER DEPLOYING: find-and-replace https://seecoast.pages.dev       -->
-<!--     with your real URL (appears 4 times below). Scrapers need          -->
-<!--     absolute URLs — they do not run JavaScript.                        -->
+<!-- URLs point at the live GitHub Pages site. og-image.png still needs  -->
+<!-- to be added to the seecoast/ folder for link previews to show art.   -->
 <!-- ===================================================================== -->
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Blue Marble Games">
 <meta property="og:title" content="SeeCoast — How well do you know the Seacoast?">
 <meta property="og:description" content="Read the clue, drop your pin, see how close you got. Can you earn Seacoast Star, or are you just from Boston?">
-<meta property="og:url" content="https://seecoast.pages.dev">
-<meta property="og:image" content="https://seecoast.pages.dev/og-image.png">
+<meta property="og:url" content="https://ianmlever-143.github.io/bluemarble/seecoast/">
+<meta property="og:image" content="https://ianmlever-143.github.io/bluemarble/seecoast/og-image.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="SeeCoast — a geography guessing game about New Hampshire's Seacoast.">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="SeeCoast — How well do you know the Seacoast?">
 <meta name="twitter:description" content="Read the clue, drop your pin, see how close you got. Can you earn Seacoast Star, or are you just from Boston?">
-<meta name="twitter:image" content="https://seecoast.pages.dev/og-image.png">
+<meta name="twitter:image" content="https://ianmlever-143.github.io/bluemarble/seecoast/og-image.png">
 <meta name="theme-color" content="#0F6D66">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🗺️</text></svg>">
 
 <!-- ===================================================================== -->
 <!-- GOOGLE ANALYTICS 4                                                    -->
-<!-- ⚠️  Replace G-XXXXXXXXXX below (2 places) with your Measurement ID.    -->
-<!--     Until then this is inert and safely does nothing.                  -->
+<!-- Measurement ID comes from the SeeCoast Firebase project.            -->
 <!-- ===================================================================== -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-70Z1E5G41J"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
-  gtag('config', 'G-XXXXXXXXXX');
+  gtag('config', 'G-70Z1E5G41J');
 </script>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,500;0,600;0,700;0,900;1,500&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css"/>
@@ -227,6 +225,47 @@ a.btn{text-decoration:none;}
 .footer-cta{margin-top:1.1rem;}
 .footer-cta-text{font-size:.85rem;color:var(--ink-soft);font-weight:600;line-height:1.5;max-width:300px;margin:0 auto .65rem;}
 
+
+/* ── ACCOUNT / LEADERBOARD / SHARE ── */
+.header-actions{display:flex;align-items:center;gap:.5rem;flex-shrink:0;}
+.acct-btn{height:38px;display:inline-flex;align-items:center;gap:.45rem;padding:0 .9rem 0 .4rem;border-radius:50px;background:var(--card);border:1px solid var(--line);color:var(--ink);font-family:var(--font-body);font-weight:700;font-size:.8rem;cursor:pointer;box-shadow:var(--shadow-sm);transition:all .15s;}
+.acct-btn:hover{border-color:var(--teal);transform:translateY(-1px);}
+.acct-btn.signed-out{padding:0 .95rem;}
+.acct-avatar{width:28px;height:28px;border-radius:50%;background:var(--teal);color:#fff;display:flex;align-items:center;justify-content:center;font-size:.78rem;font-weight:800;}
+.lb-card{padding:1.4rem 1.3rem 1.2rem;margin-top:1.3rem;}
+.lb-head{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:.8rem;margin-bottom:.9rem;padding-bottom:.7rem;border-bottom:1px solid var(--line);}
+.lb-head h3{font-family:var(--font-display);font-weight:600;font-size:1.15rem;color:var(--ink);margin-top:.15rem;}
+.lb-reset{font-size:.72rem;color:var(--ink-faint);font-weight:600;text-align:right;}
+.lb-list{list-style:none;display:flex;flex-direction:column;gap:.35rem;}
+.lb-row{display:grid;grid-template-columns:2rem 1fr auto;align-items:center;gap:.6rem;padding:.5rem .7rem;border-radius:12px;background:var(--paper);font-size:.88rem;}
+.lb-row.me{background:var(--teal-tint);box-shadow:inset 0 0 0 1.5px var(--teal);}
+.lb-rank{font-family:var(--font-display);font-weight:600;color:var(--ink-faint);text-align:center;}
+.lb-row:nth-child(1) .lb-rank{color:var(--gold);}
+.lb-name{font-weight:700;color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.lb-mi{font-family:var(--font-display);font-weight:600;color:var(--coral);}
+.lb-mi small{font-family:var(--font-body);font-size:.68rem;color:var(--ink-faint);font-weight:700;margin-left:.15rem;}
+.lb-empty{color:var(--ink-faint);font-size:.88rem;text-align:center;padding:.9rem 0;}
+.lb-status{margin-top:.9rem;font-size:.86rem;color:var(--ink-soft);line-height:1.55;text-align:center;}
+.lb-status .btn{margin-top:.6rem;}
+.lb-dots{letter-spacing:.3em;color:var(--ink-faint);text-align:center;margin:.2rem 0;}
+.text-input{width:100%;padding:.75rem .95rem;border:1.5px solid var(--line);border-radius:14px;font-family:var(--font-body);font-size:1rem;font-weight:600;color:var(--ink);background:var(--card);outline:none;}
+.text-input:focus{border-color:var(--teal);box-shadow:0 0 0 3px var(--teal-tint);}
+.field-error{color:var(--coral);font-size:.78rem;font-weight:600;min-height:1.2em;margin:.4rem 0 .8rem;}
+.link-btn{background:none;border:none;color:var(--ink-soft);font-family:var(--font-body);font-weight:600;font-size:.8rem;cursor:pointer;text-decoration:underline;margin-top:.9rem;}
+.pg-row{display:flex;align-items:center;gap:.75rem;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:.8rem .9rem;margin-bottom:.55rem;}
+.pg-row .icon-badge{width:40px;height:40px;}
+.pg-row .icon-badge .ico{width:20px;height:20px;}
+.pg-main{flex:1;min-width:0;}
+.pg-title{font-family:var(--font-display);font-weight:600;font-size:.98rem;color:var(--ink);}
+.pg-meta{font-size:.74rem;color:var(--ink-faint);font-weight:600;line-height:1.45;margin-top:.1rem;}
+.pg-meta b{color:var(--teal);}
+.pg-score{text-align:right;flex-shrink:0;}
+.pg-score .lb-mi{font-size:1.05rem;}
+.pg-share{margin-top:.3rem;padding:.35rem .75rem;font-size:.72rem;}
+.toast{position:fixed;left:50%;bottom:1.4rem;transform:translate(-50%,20px);background:var(--ink);color:#fff;padding:.7rem 1.2rem;border-radius:50px;font-size:.85rem;font-weight:600;box-shadow:var(--shadow-md);opacity:0;pointer-events:none;transition:all .25s;z-index:3000;max-width:calc(100% - 2rem);text-align:center;}
+.toast.show{opacity:1;transform:translate(-50%,0);}
+@media(max-width:640px){ .lb-reset{text-align:left;} .acct-label{display:none;} .acct-btn{padding:0 .4rem;} .acct-btn.signed-out .acct-label{display:inline;} }
+
 @media(max-width:640px){
   .location-card{flex-direction:column;}
   .breakdown-grid{grid-template-columns:repeat(3,1fr);}
@@ -248,7 +287,11 @@ a.btn{text-decoration:none;}
       <div class="tagline">Take Nothing for Granite</div>
     </div>
   </div>
-  <button class="info-btn" id="info-btn" title="How to play"></button>
+  <div class="header-actions">
+    <button class="acct-btn signed-out" id="acct-btn" title="Sign in to save your progress"><span class="acct-label">Sign in</span></button>
+    <button class="info-btn" id="lb-btn" title="Leaderboard" aria-label="Leaderboard"></button>
+    <button class="info-btn" id="info-btn" title="How to play"></button>
+  </div>
 </div>
 <div class="wave-divider"></div>
 
@@ -332,13 +375,15 @@ a.btn{text-decoration:none;}
   </div>
   <div class="breakdown-grid" id="breakdown-grid"></div>
   <div class="final-actions">
+    <button class="btn" id="share-btn" style="display:none">Share My Score</button>
     <button class="btn btn-ghost" id="review-btn">Review Details</button>
-    <button class="btn" id="restart-btn">Play This Game Again</button>
+    <button class="btn btn-ghost" id="restart-btn">Play This Game Again</button>
     <button class="btn btn-teal" id="next-game-btn" style="display:none"></button>
   </div>
+  <div class="lb-card card" id="lb-card-final"></div>
   <div class="all-done-banner" id="all-done-banner" style="display:none">
-    <h3>All Three Games Complete</h3>
-    <div style="font-size:.85rem;opacity:.85;">Grand total across all 15 rounds</div>
+    <h3 id="all-done-title">All Games Complete</h3>
+    <div style="font-size:.85rem;opacity:.85;" id="all-done-sub">Grand total across every round</div>
     <div class="val" id="grand-total-final">0</div>
     <div style="margin-top:.3rem;font-size:.85rem;opacity:.85;">miles off — you didn't take it for granite.</div>
   </div>
@@ -349,7 +394,7 @@ a.btn{text-decoration:none;}
   <div class="modal-card">
     <button class="modal-close" id="modal-close">✕</button>
     <h2>How SeeCoast Works</h2>
-    <div class="modal-sub">Three tabs. Five spots each. One map.</div>
+    <div class="modal-sub">A new game every so often. Five spots each. One map.</div>
     <ul class="modal-rules">
       <li><span class="num">1</span><span>Read the quick clue, then tap the map where you think it is.</span></li>
       <li><span class="num">2</span><span>We measure how far your pin was from the real spot, in miles.</span></li>
@@ -361,6 +406,37 @@ a.btn{text-decoration:none;}
     <button class="btn" id="modal-play-btn" style="width:100%;justify-content:center;">Let's Play</button>
   </div>
 </div>
+
+<!-- LEADERBOARD MODAL -->
+<div class="modal-overlay" id="lb-modal">
+  <div class="modal-card">
+    <button class="modal-close" data-close="lb-modal">✕</button>
+    <div id="lb-card-modal"></div>
+  </div>
+</div>
+
+<!-- NAME / ACCOUNT MODAL -->
+<div class="modal-overlay" id="name-modal">
+  <div class="modal-card">
+    <button class="modal-close" data-close="name-modal">✕</button>
+    <h2>Your leaderboard name</h2>
+    <div class="modal-sub">Use a nickname or your first name plus last initial, like "Ian L." Full names aren't allowed, for everyone's privacy.</div>
+    <input class="text-input" id="name-input" maxlength="19" autocomplete="nickname" placeholder="e.g. Ian L. or SeacoastSam">
+    <div class="field-error" id="name-error"></div>
+    <button class="btn" id="name-save" style="width:100%;justify-content:center;">Save Name</button>
+  </div>
+</div>
+<!-- PROFILE MODAL -->
+<div class="modal-overlay" id="profile-modal">
+  <div class="modal-card">
+    <button class="modal-close" data-close="profile-modal">✕</button>
+    <h2>Your SeeCoast</h2>
+    <div class="modal-sub" id="profile-sub"></div>
+    <div id="profile-games"></div>
+    <div style="text-align:center"><button class="link-btn" id="signout-btn">Sign out</button></div>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
 
 <!-- FOOTER -->
 <div class="site-footer">
@@ -576,13 +652,22 @@ theatre: {
 }
 };
 
-// Only categories listed here show up as tabs. Add 'parks' / 'theatre' back
-// in on their release weeks — their data below is already complete and
-// waiting, nothing else needs to change.
-const CATS = ['coffee'];
+// ════════════════════════════════════════════════════════════════════════
+// LAUNCHING A NEW GAME: add ONE line to the bottom of GAMES, nothing else.
+//   gameId = a new name every launch (e.g. 'parks-1'). New name = fresh board.
+//   cat    = which locations to use: 'coffee', 'parks' or 'theatre'.
+// The last game in the list is the one people play and the leaderboard tracks.
+// Earlier games stay listed so players' profiles still show those scores.
+// ════════════════════════════════════════════════════════════════════════
+const GAMES = [
+  { gameId:'coffee-1', cat:'coffee' },
+];
+const LEADERBOARD = GAMES[GAMES.length-1];
+const CATS = [LEADERBOARD.cat];
+const GAME_URL = 'https://ianmlever-143.github.io/bluemarble/seecoast/';
 
 // ── STATE ─────────────────────────────────────────────────────────────────
-let activeCat = CATS[0];
+let activeCat = LEADERBOARD.cat;   // open on the newest game
 let lmap=null, guessMarker=null, correctMarker=null, styleReadyPromise=null;
 const STATE = {};
 CATS.forEach(c=>STATE[c]={round:0,totalMiles:0,states:[null,null,null,null,null],done:false});
@@ -625,6 +710,29 @@ const HIDDEN_LAYER_IDS = new Set([
   'place_city_r6','place_city_r5','place_city_dot_r7','place_city_dot_r4','place_city_dot_r2',
   'place_city_dot_z7','place_capital_dot_z7'
 ]);
+// Curated town labels — orientation help that appears as you zoom in.
+// [name, lat, lon, minZoom]  tier 1 = always on, tier 2 = zoom 9+, tier 3 = zoom 10.5+
+const TOWN_LABELS = [
+  ['Portsmouth',43.0718,-70.7626,6.5],['Boston',42.3601,-71.0589,6.5],['Manchester',42.9956,-71.4548,6.5],
+  ['Concord',43.2081,-71.5376,6.5],['Portland',43.6591,-70.2568,6.5],
+  ['Exeter',42.9814,-70.9478,9],['Dover',43.1979,-70.8737,9],['Newburyport',42.8126,-70.8773,9],
+  ['Kittery',43.0881,-70.7362,9],['Hampton',42.9376,-70.8389,9],['Rochester',43.3045,-70.9756,9],
+  ['Durham',43.1340,-70.9264,9],['York',43.1617,-70.6484,9],['Nashua',42.7654,-71.4676,9],
+  ['Lowell',42.6334,-71.3162,9],['Haverhill',42.7762,-71.0773,9],['Ogunquit',43.2490,-70.5989,9],
+  ['Laconia',43.5279,-71.4703,9],['Lincoln',44.0459,-71.6701,9],['North Conway',44.0537,-71.1284,9],
+  ['Rye',43.0134,-70.7709,10.5],['New Castle',43.0723,-70.7162,10.5],['Stratham',43.0287,-70.9178,10.5],
+  ['Greenland',43.0362,-70.8331,10.5],['Newmarket',43.0829,-70.9351,10.5],['Seabrook',42.8948,-70.8712,10.5],
+  ['North Hampton',42.9726,-70.8298,10.5],['Hampton Falls',42.9162,-70.8637,10.5],['Eliot',43.1531,-70.8001,10.5],
+  ['South Berwick',43.2348,-70.8095,10.5],['Somersworth',43.2618,-70.8653,10.5],['Amesbury',42.8584,-70.9300,10.5],
+  ['Salisbury',42.8417,-70.8606,10.5],['Epping',43.0334,-71.0742,10.5],['Raymond',43.0362,-71.1834,10.5],
+  ['Nottingham',43.1145,-71.0992,10.5],['Lee',43.1231,-71.0114,10.5],['Barrington',43.2229,-71.0470,10.5],
+  ['Wells',43.3220,-70.5806,10.5],['Kennebunk',43.3840,-70.5445,10.5],['Gilford',43.5476,-71.4067,10.5]
+];
+function townLabelsFC(){
+  return {type:'FeatureCollection', features:TOWN_LABELS.map(([name,lat,lon,mz])=>({
+    type:'Feature', properties:{name, mz}, geometry:{type:'Point', coordinates:[lon,lat]}
+  }))};
+}
 function emptyFC(){ return {type:'FeatureCollection', features:[]}; }
 function pinHtml(color){
   return `<svg width="28" height="37" viewBox="0 0 30 40"><path d="M15 1C7.8 1 2 6.8 2 14c0 9.5 13 24 13 24s13-14.5 13-24C28 6.8 22.2 1 15 1Z" fill="${color}" stroke="#1C2B33" stroke-width="1.6"/><circle cx="15" cy="14.5" r="5.4" fill="#FFFEFB"/></svg>`;
@@ -639,6 +747,8 @@ function ensureMap(){
   styleReadyPromise = fetch('https://basemaps.cartocdn.com/gl/voyager-gl-style/style.json')
     .then(r=>r.json())
     .then(style=>{
+      const fontSrc = style.layers.find(l=>l.id==='place_town') || style.layers.find(l=>l.layout && l.layout['text-font']);
+      const labelFont = (fontSrc && fontSrc.layout && fontSrc.layout['text-font']) || ['Montserrat Medium'];
       style.layers = style.layers.filter(l=>!HIDDEN_LAYER_IDS.has(l.id));
       return new Promise(resolve=>{
         lmap = new maplibregl.Map({
@@ -657,6 +767,14 @@ function ensureMap(){
           lmap.addSource('park-area', {type:'geojson', data:emptyFC()});
           lmap.addLayer({id:'park-area-line', type:'line', source:'park-area',
             paint:{'line-color':'#0F6D66','line-width':1.8,'line-opacity':.75}});
+          lmap.addSource('town-labels', {type:'geojson', data:townLabelsFC()});
+          [6.5, 9, 10.5].forEach((mz,i)=>{
+            lmap.addLayer({id:'town-labels-'+i, type:'symbol', source:'town-labels', minzoom:mz,
+              filter:['==',['get','mz'],mz],
+              layout:{'text-field':['get','name'],'text-font':labelFont,
+                'text-size':i===0?13:(i===1?12:11),'text-allow-overlap':false,'text-padding':4},
+              paint:{'text-color':'#2E4450','text-halo-color':'rgba(255,254,251,.92)','text-halo-width':1.6}});
+          });
           lmap.on('click', onMapClick);
           resolve();
         });
@@ -849,6 +967,7 @@ function confirmGuess(){
   visualizeAnswer(activeCat, s.round, s.states[s.round]);
   showResult(s.round,true);
   updateProgress();updateNav();updateTabStatus(activeCat);updateGrandTotal();
+  scHook('saveProgress');
   window.scrollTo({top:0,behavior:'smooth'});
 }
 
@@ -1035,9 +1154,14 @@ function renderFinal(){
   }else{
     nextBtn.style.display='none';
     banner.style.display='block';
+    document.getElementById('all-done-title').textContent=CATS.length===1?'Game Complete':`All ${CATS.length} Games Complete`;
+    document.getElementById('all-done-sub').textContent=`Grand total across all ${CATS.length*5} rounds`;
     document.getElementById('grand-total-final').textContent=
       CATS.reduce((sum,c)=>sum+STATE[c].totalMiles,0).toFixed(1);
   }
+  document.getElementById('share-btn').style.display='inline-flex';
+  renderBoards();
+  scHook('onFinal');
   window.scrollTo({top:0,behavior:'smooth'});
 }
 document.getElementById('review-btn').onclick=()=>reviewRound(0);
@@ -1100,7 +1224,9 @@ document.getElementById('info-btn').onclick=openModal;
 document.getElementById('modal-close').onclick=closeModal;
 document.getElementById('modal-play-btn').onclick=closeModal;
 document.getElementById('info-modal').addEventListener('click',e=>{if(e.target.id==='info-modal')closeModal();});
-document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal();});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeModal();document.querySelectorAll('.modal-overlay.open').forEach(m=>m.classList.remove('open'));}});
+document.querySelectorAll('[data-close]').forEach(b=>b.onclick=()=>document.getElementById(b.dataset.close).classList.remove('open'));
+['lb-modal','name-modal','profile-modal'].forEach(id=>document.getElementById(id).addEventListener('click',e=>{if(e.target.id===id)e.target.classList.remove('open');}));
 
 function buildModalTiers(){
   document.getElementById('modal-tiers').innerHTML=TIERS.map(t=>{
@@ -1127,11 +1253,444 @@ document.getElementById('info-btn').innerHTML=`<span class="ico">${ICONS.info}</
 document.getElementById('logomark').innerHTML=ICONS.logomark;
 document.getElementById('confirm-btn').onclick=confirmGuess;
 
+// ── ACCOUNT, LEADERBOARD & SHARE (UI side) ─────────────────────────────────
+// The Firebase module at the bottom of the page fills window.SCFB. If it fails
+// to load (offline, blocked), the game still works — these just do nothing.
+function scHook(name,...args){
+  try{ if(window.SCFB && typeof window.SCFB[name]==='function') return window.SCFB[name](...args); }
+  catch(e){ console.warn('SeeCoast hook',name,e); }
+}
+const TROPHY_SVG=`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M8 4h8v5a4 4 0 0 1-8 0Z"/><path d="M8 5.5H5.3a2.6 2.6 0 0 0 3 3.6M16 5.5h2.7a2.6 2.6 0 0 1-3 3.6"/><path d="M12 13v3.5M9 20.5h6M10 16.5h4"/></svg>`;
+const NAME_RE=/^[A-Za-z0-9_'-]{2,16}( [A-Za-z]\.?)?$/;
+const TIER_EMOJI={star:'🟨',oldnh:'🟩',summer:'🟧',boston:'⬜'};
+const CAT_EMOJI={coffee:'☕',parks:'🌲',theatre:'🎭'};
+window.suggestName=suggestName;
+let ACCOUNT=null;      // {name, suggested} when signed in
+let BOARD={loading:true, rows:[], entry:null, rank:null};
+
+function escHtml(t){ return String(t).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+function toast(msg){
+  const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show');
+  clearTimeout(toast._t); toast._t=setTimeout(()=>t.classList.remove('show'),3800);
+}
+function suggestName(full){
+  if(!full) return '';
+  const parts=full.normalize('NFD').replace(/[̀-ͯ]/g,'').trim().split(/\s+/);
+  const first=(parts[0]||'').replace(/[^A-Za-z0-9_'-]/g,'').slice(0,16);
+  const last=parts.length>1?parts[parts.length-1].replace(/[^A-Za-z]/g,''):'';
+  const out=last?`${first} ${last[0].toUpperCase()}.`:first;
+  return NAME_RE.test(out)?out:'';
+}
+
+// Header account button
+function renderAccountBtn(){
+  const b=document.getElementById('acct-btn');
+  if(!ACCOUNT){
+    b.className='acct-btn signed-out'; b.title='Sign in to save your progress';
+    b.innerHTML=`<span class="acct-label">Sign in</span>`;
+  }else{
+    const nm=ACCOUNT.name||'Set name';
+    b.className='acct-btn'; b.title='Your account';
+    b.innerHTML=`<span class="acct-avatar">${escHtml((ACCOUNT.name||ACCOUNT.suggested||'?')[0].toUpperCase())}</span><span class="acct-label">${escHtml(nm)}</span>`;
+  }
+}
+document.getElementById('acct-btn').onclick=()=>{
+  if(!ACCOUNT){ if(window.SCFB) scHook('signIn'); else toast('Sign-in is still loading — try again in a moment.'); }
+  else openProfile();
+};
+document.getElementById('lb-btn').innerHTML=`<span class="ico">${TROPHY_SVG}</span>`;
+document.getElementById('lb-btn').onclick=()=>{ renderBoards(); scHook('refreshBoard'); document.getElementById('lb-modal').classList.add('open'); };
+
+// Name modal
+let nameModalCb=null;
+function openNameModal(cb){
+  nameModalCb=cb;
+  const inp=document.getElementById('name-input');
+  inp.value=(ACCOUNT&&(ACCOUNT.name||ACCOUNT.suggested))||'';
+  document.getElementById('name-error').textContent='';
+  document.getElementById('name-modal').classList.add('open');
+  setTimeout(()=>inp.focus(),50);
+}
+async function submitName(){
+  const v=document.getElementById('name-input').value.trim().replace(/\s+/g,' ');
+  const err=document.getElementById('name-error');
+  if(!NAME_RE.test(v)){
+    err.textContent=v.includes(' ')
+      ? 'Use a first name plus one last initial (like "Ian L."), or a one-word nickname.'
+      : 'Use 2–16 letters or numbers, no spaces.';
+    return;
+  }
+  const ok=await scHook('saveName',v);
+  if(ok===false){ err.textContent="Couldn't save that — please try again."; return; }
+  document.getElementById('name-modal').classList.remove('open');
+  const cb=nameModalCb; nameModalCb=null;
+  if(cb) cb(v); else { toast('Name saved.'); if(document.getElementById('profile-modal').classList.contains('open')) renderProfile(); }
+}
+document.getElementById('name-save').onclick=submitName;
+document.getElementById('name-input').addEventListener('keydown',e=>{ if(e.key==='Enter') submitName(); });
+document.getElementById('signout-btn').onclick=()=>{ document.getElementById('profile-modal').classList.remove('open'); scHook('signOut'); toast('Signed out.'); };
+
+// Leaderboard rendering (final screen card + header modal)
+function boardHtml(){
+  const cat=LEADERBOARD.cat, label=DATA[cat].label, s=STATE[cat];
+  const done=s && s.done && s.states.every(Boolean);
+  let list;
+  if(BOARD.loading) list=`<div class="lb-empty">Loading scores…</div>`;
+  else if(BOARD.error) list=`<div class="lb-empty">The leaderboard couldn't load right now.</div>`;
+  else if(!BOARD.rows.length) list=`<div class="lb-empty">No scores yet — be the first!</div>`;
+  else{
+    list=`<ol class="lb-list">`+BOARD.rows.map((r,i)=>
+      `<li class="lb-row${r.me?' me':''}"><span class="lb-rank">${i+1}</span><span class="lb-name">${escHtml(r.name)}${r.me?' (you)':''}</span><span class="lb-mi">${r.totalMiles.toFixed(1)}<small>mi</small></span></li>`).join('')+`</ol>`;
+    if(BOARD.entry && BOARD.rank && BOARD.rank>10){
+      list+=`<div class="lb-dots">···</div><ol class="lb-list"><li class="lb-row me"><span class="lb-rank">${BOARD.rank}</span><span class="lb-name">${escHtml(BOARD.entry.name)} (you)</span><span class="lb-mi">${BOARD.entry.totalMiles.toFixed(1)}<small>mi</small></span></li></ol>`;
+    }
+  }
+  let status;
+  if(!ACCOUNT){
+    status=`Sign in with Google to save your progress and post your score.<br><button class="btn btn-teal btn-sm" data-act="signin">Sign in with Google</button>`;
+  }else if(BOARD.entry){
+    status=`You're <b>#${BOARD.rank||'—'}</b> on this game with ${BOARD.entry.totalMiles.toFixed(1)} mi`+
+      (BOARD.playerNo?`, and you were player <b>#${BOARD.playerNo}</b> to finish it`:'')+`. Only your first finished game counts.`;
+  }else if(!done){
+    status=`Finish all five ${escHtml(label)} rounds to post your score.`;
+  }else if(!ACCOUNT.name){
+    status=`Pick a leaderboard name to post your score.<br><button class="btn btn-teal btn-sm" data-act="name">Choose a Name</button>`;
+  }else{
+    status=`Posting your score…`;
+  }
+  return `<div class="lb-head"><div><div class="eyebrow">Current game leaderboard</div><h3>${escHtml(label)} · Top 10</h3></div><div class="lb-reset">Fewest miles wins.<br>Resets with each new game.</div></div>${list}<div class="lb-status">${status}</div>`;
+}
+function renderBoards(){
+  ['lb-card-final','lb-card-modal'].forEach(id=>{
+    const el=document.getElementById(id); if(!el) return;
+    if(id==='lb-card-final') el.style.display=(activeCat===LEADERBOARD.cat)?'block':'none';
+    el.innerHTML=boardHtml();
+    el.querySelectorAll('[data-act="signin"]').forEach(b=>b.onclick=()=>scHook('signIn'));
+    el.querySelectorAll('[data-act="name"]').forEach(b=>b.onclick=()=>openNameModal(()=>scHook('onFinal')));
+  });
+}
+
+// Share card: draws a PNG of the score, then opens the phone's share sheet
+function fmtDate(d){ return d ? d.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}) : ''; }
+// info = {cat, gameId, totalMiles, rounds:[5 miles], playedAt:Date|null, playerNo, rank, current:bool}
+function currentShareInfo(){
+  const cat=activeCat, st=STATE[cat];
+  const mine=(cat===LEADERBOARD.cat && BOARD.entry) ? BOARD : null;
+  return { cat, gameId:LEADERBOARD.gameId, totalMiles:st.totalMiles, rounds:st.states.map(r=>r.mi),
+    playedAt: mine && BOARD.playedAt ? BOARD.playedAt : new Date(),
+    playerNo: mine ? BOARD.playerNo : null, rank: mine ? BOARD.rank : null, current:true };
+}
+function shareText(info){
+  const tier=getTier(medianMiles(info.rounds));
+  const row=info.rounds.map(mi=>TIER_EMOJI[getTier(mi).key]).join('');
+  const brag=info.playerNo?`Player #${info.playerNo} to finish${info.rank?` · ranked #${info.rank}`:''}\n`:'';
+  const cta=info.current?'Can you beat me?':'Play the latest SeeCoast:';
+  return `SeeCoast ${CAT_EMOJI[info.cat]||'📍'} ${DATA[info.cat].label}\n${info.totalMiles.toFixed(1)} mi off · ${tier.name}\n${row}\n${brag}${cta} ${GAME_URL}`;
+}
+function svgImage(svg,color,size){
+  const src=svg.replace(/currentColor/g,color).replace('<svg ',`<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" `);
+  return new Promise((res,rej)=>{ const im=new Image(); im.onload=()=>res(im); im.onerror=rej; im.src='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(src); });
+}
+function rrect(ctx,x,y,w,h,r){ ctx.beginPath(); ctx.moveTo(x+r,y); ctx.arcTo(x+w,y,x+w,y+h,r); ctx.arcTo(x+w,y+h,x,y+h,r); ctx.arcTo(x,y+h,x,y,r); ctx.arcTo(x,y,x+w,y,r); ctx.closePath(); }
+async function makeShareCard(info){
+  const W=1080,H=1080, cat=info.cat, cs=CAT_STYLE[cat];
+  const med=medianMiles(info.rounds), tier=getTier(med);
+  try{ await Promise.all(['600 80px Fraunces','italic 600 200px Fraunces','700 30px Inter','600 30px Inter'].map(f=>document.fonts.load(f))); }catch(e){}
+  const c=document.createElement('canvas'); c.width=W; c.height=H; const x=c.getContext('2d');
+  x.fillStyle='#FAF6EE'; x.fillRect(0,0,W,H);
+  x.save(); x.shadowColor='rgba(28,43,51,.14)'; x.shadowBlur=40; x.shadowOffsetY=14;
+  rrect(x,60,60,W-120,H-120,44); x.fillStyle='#FFFFFF'; x.fill(); x.restore();
+  x.strokeStyle='#E9E1D2'; x.lineWidth=2; rrect(x,60,60,W-120,H-120,44); x.stroke();
+  x.textAlign='center'; x.textBaseline='alphabetic';
+  // Title
+  x.font='600 84px Fraunces, Georgia, serif';
+  const wSee=x.measureText('See').width, wCoast=x.measureText('Coast').width, tx=W/2-(wSee+wCoast)/2;
+  x.textAlign='left'; x.fillStyle='#1C2B33'; x.fillText('See',tx,205); x.fillStyle='#0F6D66'; x.fillText('Coast',tx+wSee,205);
+  x.textAlign='center';
+  // Category pill
+  x.font='700 28px Inter, Arial, sans-serif';
+  const lab=DATA[cat].label.toUpperCase().split('').join(String.fromCharCode(8202));
+  const pw=x.measureText(lab).width+150; rrect(x,W/2-pw/2,245,pw,62,31); x.fillStyle=cs.tint; x.fill();
+  const catIco=await svgImage(ICONS[cs.icon],cs.color,36).catch(()=>null);
+  if(catIco) x.drawImage(catIco,W/2-pw/2+34,258,36,36);
+  x.fillStyle=cs.color; x.fillText(lab,W/2+22,286);
+  // Total
+  x.font='italic 600 210px Fraunces, Georgia, serif'; x.fillStyle='#1C2B33';
+  const tot=info.totalMiles.toFixed(1); const tw=x.measureText(tot).width;
+  x.font='700 54px Inter, Arial, sans-serif'; const uw=x.measureText(' mi off').width;
+  x.textAlign='left';
+  x.font='italic 600 210px Fraunces, Georgia, serif'; x.fillText(tot,W/2-(tw+uw)/2,530);
+  x.font='700 54px Inter, Arial, sans-serif'; x.fillStyle='#E8734A'; x.fillText(' mi off',W/2-(tw+uw)/2+tw,530);
+  x.textAlign='center';
+  x.font='700 26px Inter, Arial, sans-serif'; x.fillStyle='#95A1A8'; x.fillText('TOTAL ACROSS 5 ROUNDS',W/2,580);
+  x.font='600 60px Fraunces, Georgia, serif'; x.fillStyle=tier.color; x.fillText(tier.name,W/2,672);
+  // Five stamps
+  const D=118,gap=28,sx=W/2-(5*D+4*gap)/2;
+  for(let i=0;i<5;i++){
+    const t=getTier(info.rounds[i]), cx=sx+i*(D+gap)+D/2, cy=780;
+    x.beginPath(); x.arc(cx,cy,D/2,0,Math.PI*2); x.fillStyle=t.tint; x.fill(); x.lineWidth=4; x.strokeStyle=t.color; x.stroke();
+    const im=await svgImage(ICONS[t.icon],t.color,56).catch(()=>null); if(im) x.drawImage(im,cx-28,cy-28,56,56);
+  }
+  // Footer
+  const brag=[info.playerNo?`Player #${info.playerNo} to finish`:'', info.rank?`Ranked #${info.rank}`:'', fmtDate(info.playedAt)].filter(Boolean).join('  ·  ');
+  if(brag){ x.font='700 27px Inter, Arial, sans-serif'; x.fillStyle='#0F6D66'; x.fillText(brag,W/2,887); }
+  x.strokeStyle='#0F6D66'; x.lineWidth=3; x.beginPath();
+  for(let px=140;px<=W-140;px+=4){ const py=918+Math.sin((px-140)/72*Math.PI*2)*6; px===140?x.moveTo(px,py):x.lineTo(px,py); }
+  x.stroke();
+  x.font='700 34px Inter, Arial, sans-serif'; x.fillStyle='#1C2B33'; x.fillText(info.current?'Can you beat me?':'Play the latest SeeCoast game',W/2,975);
+  x.font='600 24px Inter, Arial, sans-serif'; x.fillStyle='#5B6B72'; x.fillText('Blue Marble Games · ianmlever-143.github.io/bluemarble/seecoast',W/2,1010);
+  return new Promise(r=>c.toBlob(r,'image/png'));
+}
+async function shareScore(info, btn){
+  if(btn) btn.disabled=true;
+  try{
+    const text=shareText(info);
+    const blob=await makeShareCard(info);
+    const file=new File([blob],'seecoast-score.png',{type:'image/png'});
+    if(navigator.canShare && navigator.canShare({files:[file]})){
+      try{ await navigator.share({files:[file],text}); if(typeof gtag==='function') gtag('event','share',{method:'native',content_type:'score_card',item_id:info.gameId}); return; }
+      catch(e){ if(e.name==='AbortError') return; }
+    }
+    // Desktop fallback: save the image and copy the message
+    const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='seecoast-score.png'; a.click();
+    setTimeout(()=>URL.revokeObjectURL(a.href),4000);
+    try{ await navigator.clipboard.writeText(text); toast('Score card saved and message copied — paste it into a text.'); }
+    catch(e){ toast('Score card saved to your downloads.'); }
+    if(typeof gtag==='function') gtag('event','share',{method:'download',content_type:'score_card',item_id:info.gameId});
+  }finally{ if(btn) btn.disabled=false; }
+}
+document.getElementById('share-btn').onclick=e=>shareScore(currentShareInfo(),e.currentTarget);
+
+// Profile: every game this player has finished (signed in), newest first
+let PROFILE={loading:true, games:[]};
+function openProfile(){ renderProfile(); document.getElementById('profile-modal').classList.add('open'); scHook('loadProfile'); }
+function renderProfile(){
+  const sub=document.getElementById('profile-sub');
+  sub.innerHTML=ACCOUNT?`Leaderboard name: <b>${escHtml(ACCOUNT.name||'not set yet')}</b> · <button class="link-btn" id="change-name-btn" style="margin:0">Change</button>`:'';
+  const cb=document.getElementById('change-name-btn'); if(cb) cb.onclick=()=>openNameModal(null);
+  const box=document.getElementById('profile-games');
+  if(PROFILE.loading){ box.innerHTML=`<div class="lb-empty">Loading your games…</div>`; return; }
+  if(!PROFILE.games.length){ box.innerHTML=`<div class="lb-empty">No finished games yet. Finish all five rounds while signed in and your score lands here.</div>`; return; }
+  box.innerHTML=PROFILE.games.map((g,i)=>{
+    const cs=CAT_STYLE[g.cat], t=getTier(medianMiles(g.rounds));
+    const meta=[`Finished ${fmtDate(g.playedAt)}`, g.playerNo?`<b>Player #${g.playerNo}</b> to finish`:'', g.rank?`Ranked #${g.rank} of ${g.players}`:''].filter(Boolean).join(' · ');
+    return `<div class="pg-row"><div class="icon-badge" style="background:${cs.tint};color:${cs.color}"><div class="ico">${ICONS[cs.icon]}</div></div>`+
+      `<div class="pg-main"><div class="pg-title">${escHtml(DATA[g.cat].label)}${g.current?' <span class="eyebrow" style="color:var(--coral)">· Current</span>':''}</div><div class="pg-meta">${meta}<br><span style="color:${t.color}">${t.name}</span></div></div>`+
+      `<div class="pg-score"><div class="lb-mi">${g.totalMiles.toFixed(1)}<small>mi</small></div><button class="btn btn-sm pg-share" data-i="${i}">Share</button></div></div>`;
+  }).join('');
+  box.querySelectorAll('.pg-share').forEach(b=>b.onclick=()=>shareScore(PROFILE.games[+b.dataset.i],b));
+}
+
+// Bridge the Firebase module uses
+window.SC_GAME={
+  LEADERBOARD,
+  getStates(cat){ return STATE[cat].states.map(r=>r?{lat:r.lat,lon:r.lon,mi:r.mi,inside:!!r.inside}:null); },
+  isDone(cat){ const s=STATE[cat]; return !!(s && s.done && s.states.every(Boolean)); },
+  applyStates(cat,states){
+    if(!STATE[cat]||!Array.isArray(states)||states.length!==5) return;
+    const s=STATE[cat];
+    s.states=states.map(r=>r?{lat:r.lat,lon:r.lon,mi:r.mi,inside:!!r.inside}:null);
+    s.totalMiles=s.states.reduce((sum,r)=>sum+(r?r.mi:0),0);
+    s.done=s.states.every(Boolean); s.tracked=s.done;
+    const next=s.states.findIndex(r=>r===null); s.round=next<0?0:next;
+    updateTabStatus(cat); updateGrandTotal();
+    if(activeCat===cat) setTab(cat);
+    toast('Welcome back — your progress is restored.');
+  },
+  setAccount(acc){ ACCOUNT=acc; renderAccountBtn(); renderBoards(); if(!acc) document.getElementById('profile-modal').classList.remove('open'); },
+  setBoard(b){ BOARD=b; renderBoards(); },
+  GAMES,
+  setProfile(p){ PROFILE=p; renderProfile(); },
+  askName(cb){ openNameModal(cb); },
+  toast
+};
+renderAccountBtn();
+setTimeout(()=>{ if(!window.SCFB && BOARD.loading){ BOARD={loading:false,error:true,rows:[],entry:null,rank:null}; renderBoards(); } },10000);
+
 buildTabNav();
 buildModalTiers();
 CATS.forEach(updateTabStatus);
 updateGrandTotal();
 ensureMap().then(()=>{ renderRound(activeCat,0); });
+</script>
+<!-- ===================================================================== -->
+<!-- FIREBASE: Google sign-in, saved progress, weekly leaderboard          -->
+<!-- This config is meant to be public; the Firestore security rules are   -->
+<!-- what protect the data.                                                -->
+<!-- ===================================================================== -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
+import { getAuth, GoogleAuthProvider, signInWithPopup, signInWithRedirect, onAuthStateChanged, signOut }
+  from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
+import { getFirestore, doc, getDoc, setDoc, collection, query, orderBy, limit, where, getDocs, getCountFromServer, serverTimestamp }
+  from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBXG0RWQ7vAeBLb2IFTQjp3peJCK_h5iI4",
+  authDomain: "seecoast-a61db.firebaseapp.com",
+  projectId: "seecoast-a61db",
+  storageBucket: "seecoast-a61db.firebasestorage.app",
+  messagingSenderId: "335834144223",
+  appId: "1:335834144223:web:22cb1592c42b9a296fb86a",
+  measurementId: "G-70Z1E5G41J"
+};
+
+const G = window.SC_GAME;
+const LB = G.LEADERBOARD;
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+let user = null, profile = {}, myEntry;   // myEntry: undefined = not loaded, null = none
+let submitting = false;
+const r2 = n => Math.round(n * 100) / 100;
+const scoresCol = (gameId = LB.gameId) => collection(db, 'leaderboards', gameId, 'scores');
+const toDate = t => (t && typeof t.toDate === 'function') ? t.toDate() : null;
+
+// Where an entry stands: rank by score, and finishing order ("player #N")
+async function standing(gameId, entry){
+  const col = scoresCol(gameId);
+  const [better, earlier, all] = await Promise.all([
+    getCountFromServer(query(col, where('totalMiles', '<', entry.totalMiles))),
+    entry.createdAt ? getCountFromServer(query(col, where('createdAt', '<', entry.createdAt))) : null,
+    getCountFromServer(col)
+  ]);
+  return { rank: better.data().count + 1, playerNo: earlier ? earlier.data().count + 1 : null, players: all.data().count };
+}
+const answered = st => (st || []).filter(Boolean).length;
+const suggest = u => { try { return (window.suggestName || (()=>''))(u.displayName); } catch(e){ return ''; } };
+
+async function signIn(){
+  const p = new GoogleAuthProvider();
+  p.setCustomParameters({ prompt: 'select_account' });
+  try { await signInWithPopup(auth, p); }
+  catch(e){
+    if (e.code === 'auth/popup-blocked' || e.code === 'auth/operation-not-supported-in-this-environment') {
+      await signInWithRedirect(auth, p);
+    } else if (e.code !== 'auth/popup-closed-by-user' && e.code !== 'auth/cancelled-popup-request') {
+      console.error(e); G.toast("Sign-in didn't work. Please try again.");
+    }
+  }
+}
+
+async function saveProgress(){
+  if (!user) return;
+  try {
+    await setDoc(doc(db, 'users', user.uid, 'progress', LB.gameId),
+      { states: G.getStates(LB.cat), updatedAt: serverTimestamp() });
+  } catch(e){ console.warn('save progress', e); }
+}
+
+async function syncProgress(){
+  try {
+    const snap = await getDoc(doc(db, 'users', user.uid, 'progress', LB.gameId));
+    const remote = snap.exists() ? snap.data().states : null;
+    const local = G.getStates(LB.cat);
+    if (remote && answered(remote) > answered(local)) G.applyStates(LB.cat, remote);
+    else if (answered(local) > 0) await saveProgress();
+  } catch(e){ console.warn('sync progress', e); }
+}
+
+async function loadMyEntry(){
+  try {
+    const snap = await getDoc(doc(scoresCol(), user.uid));
+    myEntry = snap.exists() ? snap.data() : null;
+  } catch(e){ myEntry = undefined; console.warn('load entry', e); }
+}
+
+async function refreshBoard(){
+  try {
+    const snap = await getDocs(query(scoresCol(), orderBy('totalMiles'), limit(10)));
+    const rows = snap.docs.map(d => ({ name: d.data().name, totalMiles: d.data().totalMiles, me: !!user && d.id === user.uid }));
+    let rank = null, playerNo = null, playedAt = null;
+    if (myEntry) {
+      const st = await standing(LB.gameId, myEntry);
+      const i = rows.findIndex(r => r.me);
+      rank = i >= 0 ? i + 1 : st.rank;
+      playerNo = st.playerNo; playedAt = toDate(myEntry.createdAt);
+    }
+    G.setBoard({ loading: false, rows, entry: myEntry || null, rank, playerNo, playedAt });
+  } catch(e){
+    console.warn('leaderboard', e);
+    G.setBoard({ loading: false, error: true, rows: [], entry: myEntry || null, rank: null });
+  }
+}
+
+async function saveName(name){
+  if (!user) return false;
+  try { await setDoc(doc(db, 'users', user.uid), { name }, { merge: true }); }
+  catch(e){ console.warn('save name', e); return false; }
+  profile.name = name;
+  G.setAccount({ name, suggested: suggest(user) });
+  return true;
+}
+
+async function maybeSubmit(){
+  if (!user || submitting || myEntry !== null || !G.isDone(LB.cat)) return;
+  if (!profile.name) { G.askName(() => maybeSubmit()); return; }
+  submitting = true;
+  const states = G.getStates(LB.cat);
+  const entry = {
+    name: profile.name,
+    totalMiles: r2(states.reduce((s, r) => s + r.mi, 0)),
+    rounds: states.map(r => r2(r.mi)),
+    createdAt: serverTimestamp()
+  };
+  try {
+    await setDoc(doc(scoresCol(), user.uid), entry);
+    await loadMyEntry();           // re-read so the server's timestamp is filled in
+    G.toast("You're on the leaderboard!");
+    if (typeof gtag === 'function') gtag('event', 'post_score', { game_id: LB.gameId, total_miles: entry.totalMiles });
+  } catch(e){
+    console.warn('submit score', e);
+    await loadMyEntry();           // most likely they already posted this week
+  } finally { submitting = false; }
+  refreshBoard();
+}
+
+onAuthStateChanged(auth, async u => {
+  user = u; profile = {}; myEntry = undefined;
+  if (u) {
+    try { const s = await getDoc(doc(db, 'users', u.uid)); profile = s.exists() ? s.data() : {}; }
+    catch(e){ console.warn('profile', e); }
+    G.setAccount({ name: profile.name || null, suggested: suggest(u) });
+    await syncProgress();
+    await loadMyEntry();
+  } else {
+    G.setAccount(null);
+  }
+  await refreshBoard();
+  if (u) maybeSubmit();
+});
+
+async function loadProfile(){
+  if (!user) return;
+  G.setProfile({ loading: true, games: [] });
+  try {
+    const games = await Promise.all(G.GAMES.map(async (g, i) => {
+      const snap = await getDoc(doc(scoresCol(g.gameId), user.uid));
+      if (!snap.exists()) return null;
+      const e = snap.data();
+      const st = await standing(g.gameId, e);
+      return { gameId: g.gameId, cat: g.cat, totalMiles: e.totalMiles, rounds: e.rounds,
+        playedAt: toDate(e.createdAt), current: i === G.GAMES.length - 1, ...st };
+    }));
+    G.setProfile({ loading: false, games: games.filter(Boolean).reverse() });
+  } catch(e){
+    console.warn('profile', e);
+    G.setProfile({ loading: false, games: [] });
+  }
+}
+
+window.SCFB = {
+  loadProfile,
+  signIn,
+  signOut: () => signOut(auth),
+  saveProgress,
+  saveName,
+  refreshBoard,
+  onFinal: () => { refreshBoard(); maybeSubmit(); }
+};
 </script>
 </body>
 </html>
