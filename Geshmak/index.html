@@ -70,8 +70,11 @@ h1 span{color:var(--sun)}
 .lb-list .pos{font-weight:700;text-align:center}
 .lb-list .nm{overflow-wrap:anywhere}
 .lb-list .sc{font-weight:700;font-size:19px;font-variant-numeric:tabular-nums}
-#lb-form{flex-direction:column;gap:6px}
-#lb .row{flex-wrap:nowrap}
+#lb-auth{display:flex;flex-direction:column;gap:10px}
+#lb-auth form{flex-direction:column;gap:8px;border:2px solid var(--ink);border-radius:16px;padding:12px;background:var(--cream)}
+#lb-auth input[type=email],#lb-auth input[type=password]{border:3px solid var(--ink);background:#fff;border-radius:16px;padding:11px 14px}
+.linkbtn{align-self:flex-start;background:none;border:0;padding:2px 0;color:var(--ink);font-family:var(--display);font-weight:600;font-size:14px;text-decoration:underline;cursor:pointer}
+.btn:disabled{opacity:.55;cursor:default}
 .lb-lab{font-family:var(--display);font-weight:600;font-size:14px}
 
 /* scoreboard */
@@ -299,10 +302,37 @@ dialog .btn{margin-top:6px}
     </div>
     <p class="quip good" id="lb-status" role="status">Loading the leaderboard…</p>
     <ol class="lb-list" id="lb-list"></ol>
-    <form id="lb-form" hidden>
-      <label class="lb-lab" for="lb-name">Your name on the board</label>
-      <div class="row"><input type="text" id="lb-name" maxlength="24" autocomplete="nickname" placeholder="Ian L."><button class="btn" type="submit">Save</button></div>
-    </form>
+    <div id="lb-auth">
+      <div id="lb-signedout" hidden>
+        <p class="lb-lab">Put your score on the board</p>
+        <div class="row">
+          <button class="btn ghost" type="button" id="lb-google">Continue with Google</button>
+          <button class="btn ghost" type="button" id="lb-showemail">Email</button>
+          <button class="btn ghost" type="button" id="lb-showguest">Just add my name</button>
+        </div>
+        <form id="lb-emailform" hidden>
+          <label class="lb-lab" for="lb-email">Email</label>
+          <input type="email" id="lb-email" autocomplete="email" required>
+          <label class="lb-lab" for="lb-pass">Password (6 or more characters)</label>
+          <input type="password" id="lb-pass" autocomplete="current-password" minlength="6" required>
+          <div class="row"><button class="btn" type="submit">Sign in</button><button class="btn ghost" type="button" id="lb-create">Create account</button></div>
+          <button class="linkbtn" type="button" id="lb-forgot">Forgot password?</button>
+        </form>
+        <form id="lb-guestform" hidden>
+          <label class="lb-lab" for="lb-guestname">Name to show on the board</label>
+          <div class="row"><input type="text" id="lb-guestname" maxlength="24" autocomplete="nickname" placeholder="Ian L." required><button class="btn" type="submit">Join</button></div>
+        </form>
+      </div>
+      <div id="lb-signedin" hidden>
+        <p class="lb-lab" id="lb-who"></p>
+        <form id="lb-nameform">
+          <label class="sr" for="lb-nameinput">Your name on the board</label>
+          <div class="row"><input type="text" id="lb-nameinput" maxlength="24" autocomplete="nickname" placeholder="Ian L."><button class="btn" type="submit">Save name</button></div>
+        </form>
+        <button class="linkbtn" type="button" id="lb-out">Sign out</button>
+      </div>
+      <p class="quip good" id="lb-msg" role="status"></p>
+    </div>
     <svg class="ico peek" aria-hidden="true"><use href="#i-hand"/></svg>
   </section>
 
@@ -653,9 +683,25 @@ function render(focusId){
   if(focusId){ const el=document.getElementById(focusId); if(el) el.focus(); }
 }
 
-/* ---------- leaderboard ---------- */
-const lb={status:"loading",rows:[],uid:null,db:null,tab:"puzzle",canWrite:true,note:""};
-let myName=(ls("geshmak-name")||"").slice(0,24);
+/* ---------- leaderboard (Firebase) ---------- */
+const FIREBASE_CONFIG = {
+  apiKey: "AIzaSyD_bnRdsvR8EOaILdp4zlR4IqMaJI3TdEg",
+  authDomain: "geshmak-to-be-a-yid.firebaseapp.com",
+  projectId: "geshmak-to-be-a-yid",
+  storageBucket: "geshmak-to-be-a-yid.firebasestorage.app",
+  messagingSenderId: "472104301620",
+  appId: "1:472104301620:web:1abd1e5bfb107154940661"
+};
+const FB_BASE = "https://www.gstatic.com/firebasejs/12.7.0/";
+const lb={status:"loading",rows:[],tab:"puzzle",user:null,msg:"",busy:false};
+let fb=null, unsubRows=null, rowsTimer=null, writing=Promise.resolve();
+function cleanName(s){ return String(s||"").replace(/\s+/g," ").trim().slice(0,24); }
+function defaultName(u){
+  const d=cleanName(u&&u.displayName); if(!d) return "";
+  const parts=d.split(" "); return parts.length>1?cleanName(parts[0]+" "+parts[parts.length-1].charAt(0)+"."):d;
+}
+let myName=cleanName(ls("geshmak-name"));
+function setMyName(v){ myName=cleanName(v); lsSet("geshmak-name",myName); }
 function localScores(){
   const out={};
   PUZZLES.forEach(p=>{ const s=p.id===PUZZLE.id?state:rawState(p.id); if(s&&finished(s)) out[String(p.id)]=total(s); });
@@ -663,91 +709,170 @@ function localScores(){
 }
 function boardRows(){
   return lb.rows.map(r=>{
-    const p=r.p&&typeof r.p==="object"?r.p:{}, sc={};
-    PUZZLES.forEach(z=>{ const v=p[String(z.id)]; if(typeof v==="number"&&isFinite(v)) sc[z.id]=Math.max(0,Math.min(180,Math.round(v))); });
-    return {id:r.id, name:String(r.name||"").trim().slice(0,24)||"Mystery Yid", sc:sc};
-  });
+    const p=r.p&&typeof r.p==="object"?r.p:{}; let n=0,score=0;
+    PUZZLES.forEach(z=>{
+      const v=p[String(z.id)];
+      if(typeof v==="number"&&isFinite(v)&&(lb.tab==="all"||z.id===PUZZLE.id)){ n++; score+=Math.max(0,Math.min(180,Math.round(v))); }
+    });
+    return {id:r.id,name:cleanName(r.name)||"Mystery Yid",n:n,score:score};
+  }).filter(r=>r.n>0).sort((a,b)=>b.score-a.score||a.name.localeCompare(b.name));
 }
 function renderLB(){
   const tp=document.getElementById("lb-tab-p"), ta=document.getElementById("lb-tab-a");
   tp.textContent="No. "+PUZZLE.id; tp.setAttribute("aria-pressed",lb.tab==="puzzle"); ta.setAttribute("aria-pressed",lb.tab==="all");
-  const status=document.getElementById("lb-status"), list=document.getElementById("lb-list"), form=document.getElementById("lb-form");
-  list.textContent="";
+  const list=document.getElementById("lb-list"); list.textContent="";
   let msg="";
   if(lb.status==="loading") msg="Loading the leaderboard…";
-  else if(lb.status==="off") msg="The leaderboard isn't switched on here yet. Your scores are saved on this device.";
+  else if(lb.status==="off") msg="The leaderboard couldn't load here. Your scores are still saved on this device.";
+  else if(lb.status==="error") msg="The leaderboard couldn't be read right now. Try again in a bit.";
   else {
-    let rows=boardRows().map(r=>{
-      const vals=lb.tab==="puzzle"?(r.sc[PUZZLE.id]===undefined?[]:[r.sc[PUZZLE.id]]):Object.keys(r.sc).map(k=>r.sc[k]);
-      return {id:r.id,name:r.name,n:vals.length,score:vals.reduce((a,b)=>a+b,0)};
-    }).filter(r=>r.n>0).sort((a,b)=>b.score-a.score||a.name.localeCompare(b.name));
-    rows.forEach((r,i)=>{ r.pos=i+1; });
-    const shown=rows.slice(0,10), me=rows.find(r=>r.id===lb.uid);
+    const rows=boardRows(); rows.forEach((r,i)=>{ r.pos=i+1; });
+    const shown=rows.slice(0,10), me=lb.user?rows.find(r=>r.id===lb.user.uid):null;
     if(me&&me.pos>10) shown.push(me);
     shown.forEach(r=>{
-      const li=document.createElement("li"); if(r.id===lb.uid) li.className="me";
+      const li=document.createElement("li"), mine=lb.user&&r.id===lb.user.uid; if(mine) li.className="me";
       const a=document.createElement("span"); a.className="pos"; a.textContent=r.pos;
-      const b=document.createElement("span"); b.className="nm"; b.textContent=r.name+(r.id===lb.uid?" (you)":"");
+      const b=document.createElement("span"); b.className="nm"; b.textContent=r.name+(mine?" (you)":"");
       const c=document.createElement("span"); c.className="sc"; c.textContent=r.score;
       li.append(a,b,c); list.appendChild(li);
     });
     if(lb.status==="slow") msg="Still trying to reach the leaderboard. This may be out of date.";
     else if(!rows.length) msg=lb.tab==="puzzle"?"No scores for this puzzle yet. Finish it and be the first.":"No scores yet. Finish a puzzle and be the first.";
-    if(!lb.canWrite) msg="You can see the board here, but your account can't post scores to it.";
+    else if(!lb.user&&Object.keys(localScores()).length) msg="Sign in below to put your score on the board.";
   }
-  status.textContent=lb.note||msg;
-  form.hidden=!(lb.uid&&lb.canWrite&&lb.status!=="off"&&lb.status!=="loading");
+  document.getElementById("lb-status").textContent=msg;
+  renderAuth();
 }
-let writing=Promise.resolve();
+function renderAuth(){
+  const on=!!fb, out=document.getElementById("lb-signedout"), inn=document.getElementById("lb-signedin");
+  out.hidden=!(on&&!lb.user); inn.hidden=!(on&&lb.user);
+  document.querySelectorAll("#lb-auth button").forEach(b=>{ b.disabled=lb.busy; });
+  if(on&&lb.user){
+    document.getElementById("lb-who").textContent=myName?"Your name on the board: "+myName:"Pick a name to show on the board.";
+    document.getElementById("lb-out").hidden=!!lb.user.isAnonymous;
+  }
+  document.getElementById("lb-msg").textContent=lb.msg;
+}
+function authMsg(e){
+  const c=e&&e.code||"";
+  if(c==="auth/popup-closed-by-user"||c==="auth/cancelled-popup-request") return "";
+  if(c==="auth/popup-blocked") return "Your browser blocked the Google window. Allow pop-ups for this page, or use email or just add your name.";
+  if(c==="auth/unauthorized-domain") return "This site isn't approved for sign-in yet.";
+  if(c==="auth/operation-not-allowed") return "That sign-in method isn't switched on yet.";
+  if(c==="auth/email-already-in-use") return "That email already has an account. Use Sign in.";
+  if(c==="auth/weak-password") return "Use a password with at least 6 characters.";
+  if(c==="auth/invalid-email") return "That email address doesn't look right.";
+  if(c==="auth/invalid-credential"||c==="auth/wrong-password"||c==="auth/user-not-found") return "That email and password don't match.";
+  if(c==="auth/too-many-requests") return "Too many tries. Wait a minute and try again.";
+  if(c==="auth/network-request-failed") return "Couldn't reach the sign-in service. Check your connection.";
+  return "Sign-in didn't work. Try another way.";
+}
+async function guard(fn){
+  if(lb.busy) return;
+  lb.busy=true; lb.msg=""; renderAuth();
+  try{ await fn(); }catch(e){ lb.msg=authMsg(e); }
+  lb.busy=false; renderAuth();
+}
 function submitScores(){
-  if(!lb.db||!lb.uid||!myName||!lb.canWrite) return;
+  if(!fb||!lb.user||!myName) return;
+  const uid=lb.user.uid, name=myName;
   writing=writing.then(async()=>{
     try{
-      const ref=lb.db.doc("scores/"+lb.uid);
-      const snap=await ref.get();
-      const cur=snap.exists?(snap.data()||{}):{};
+      const ref=fb.F.doc(fb.db,"scores",uid), snap=await fb.F.getDoc(ref);
+      const cur=snap.exists()?(snap.data()||{}):{};
       const p=Object.assign({},cur.p&&typeof cur.p==="object"?cur.p:{});
-      let changed=cur.name!==myName;
+      let changed=!snap.exists()||cur.name!==name;
       const mine=localScores();
       Object.keys(mine).forEach(k=>{ if(typeof p[k]!=="number"){ p[k]=mine[k]; changed=true; } });
-      if(changed) await ref.set({name:myName,p:p,updated:Date.now()});
-    }catch(e){ if(e&&e.code==="invalid_argument"){ lb.canWrite=false; } renderLB(); }
+      const keys=Object.keys(p); if(!keys.length||!changed) return;
+      const t=keys.reduce((s,k)=>s+(typeof p[k]==="number"?Math.max(0,Math.min(180,Math.round(p[k]))):0),0);
+      await fb.F.setDoc(ref,{name:name,p:p,t:t,updated:Date.now()});
+    }catch(e){ lb.msg="Couldn't save your score to the board. Try again in a bit."; renderAuth(); }
   });
 }
-async function initLB(){
-  try{
-    if(!window.claude||typeof window.claude.use!=="function"){ lb.status="off"; renderLB(); return; }
-    const got=await Promise.all([window.claude.use("db"),window.claude.use("user")]);
-    if(!got[0]||!got[1]){ lb.status="off"; renderLB(); return; }
-    lb.db=got[0]; lb.uid=await got[1].id();
-    const timer=setTimeout(()=>{ if(lb.status==="loading"){ lb.status="slow"; renderLB(); } },10000);
-    lb.db.collection("scores").onSnapshot(snap=>{
-      lb.rows=snap.docs.map(d=>Object.assign({id:d.id},d.data()||{}));
-      if(!snap.metadata||!snap.metadata.fromCache) clearTimeout(timer);
-      lb.status="ready"; renderLB();
-    },()=>{ clearTimeout(timer); lb.status="off"; renderLB(); });
-    submitScores();
-  }catch(e){ lb.status="off"; renderLB(); }
+function subscribeRows(){
+  if(!fb){ renderLB(); return; }
+  if(unsubRows){ unsubRows(); unsubRows=null; }
+  clearTimeout(rowsTimer);
+  lb.status="loading"; lb.rows=[]; renderLB();
+  const field=lb.tab==="all"?"t":"p."+PUZZLE.id;
+  const q=fb.F.query(fb.F.collection(fb.db,"scores"),fb.F.orderBy(field,"desc"),fb.F.limit(50));
+  rowsTimer=setTimeout(()=>{ if(lb.status==="loading"){ lb.status="slow"; renderLB(); } },10000);
+  unsubRows=fb.F.onSnapshot(q,snap=>{
+    clearTimeout(rowsTimer);
+    lb.rows=snap.docs.map(d=>Object.assign({id:d.id},d.data()||{}));
+    lb.status="ready"; renderLB();
+  },()=>{ clearTimeout(rowsTimer); lb.status="error"; renderLB(); });
 }
-document.getElementById("lb-name").value=myName;
-document.getElementById("lb-form").addEventListener("submit",e=>{
+async function onUser(u){
+  lb.user=u||null; lb.msg="";
+  if(u){
+    if(!myName){
+      try{ const s=await fb.F.getDoc(fb.F.doc(fb.db,"scores",u.uid)); if(s.exists()) myName=cleanName((s.data()||{}).name); }catch(e){}
+      if(!myName) myName=defaultName(u);
+      lsSet("geshmak-name",myName);
+    }
+    document.getElementById("lb-nameinput").value=myName;
+    submitScores();
+  }
+  renderLB();
+}
+async function initLB(){
+  const slow=setTimeout(()=>{ if(lb.status==="loading"){ lb.status="slow"; renderLB(); } },10000);
+  try{
+    const m=await Promise.all([import(FB_BASE+"firebase-app.js"),import(FB_BASE+"firebase-auth.js"),import(FB_BASE+"firebase-firestore.js")]);
+    const app=m[0].initializeApp(FIREBASE_CONFIG);
+    fb={Au:m[1],F:m[2],auth:m[1].getAuth(app),db:m[2].getFirestore(app)};
+    clearTimeout(slow);
+    fb.Au.onAuthStateChanged(fb.auth,onUser,()=>{});
+    subscribeRows();
+  }catch(e){ clearTimeout(slow); lb.status="off"; renderLB(); }
+}
+function show(id,yes){ document.getElementById(id).hidden=!yes; }
+document.getElementById("lb-google").addEventListener("click",()=>guard(async()=>{
+  await fb.Au.signInWithPopup(fb.auth,new fb.Au.GoogleAuthProvider());
+}));
+document.getElementById("lb-showemail").addEventListener("click",()=>{ show("lb-emailform",true); show("lb-guestform",false); document.getElementById("lb-email").focus(); });
+document.getElementById("lb-showguest").addEventListener("click",()=>{ show("lb-guestform",true); show("lb-emailform",false); document.getElementById("lb-guestname").focus(); });
+document.getElementById("lb-emailform").addEventListener("submit",e=>{
   e.preventDefault();
-  const v=document.getElementById("lb-name").value.trim().slice(0,24);
-  if(!v) return;
-  myName=v; lsSet("geshmak-name",v);
-  lb.note=Object.keys(localScores()).length?"Saved. You're on the board.":"Saved. Finish a puzzle to get on the board.";
-  submitScores(); renderLB(); lb.note="";
+  const em=document.getElementById("lb-email").value.trim(), pw=document.getElementById("lb-pass").value;
+  guard(()=>fb.Au.signInWithEmailAndPassword(fb.auth,em,pw));
 });
+document.getElementById("lb-create").addEventListener("click",()=>{
+  const f=document.getElementById("lb-emailform"); if(!f.reportValidity()) return;
+  const em=document.getElementById("lb-email").value.trim(), pw=document.getElementById("lb-pass").value;
+  guard(()=>fb.Au.createUserWithEmailAndPassword(fb.auth,em,pw));
+});
+document.getElementById("lb-forgot").addEventListener("click",()=>{
+  const em=document.getElementById("lb-email").value.trim();
+  if(!em){ lb.msg="Type your email above first, then tap Forgot password."; renderAuth(); return; }
+  guard(async()=>{ await fb.Au.sendPasswordResetEmail(fb.auth,em); lb.msg="Reset email sent. Check your inbox and spam folder."; });
+});
+document.getElementById("lb-guestform").addEventListener("submit",e=>{
+  e.preventDefault();
+  const v=cleanName(document.getElementById("lb-guestname").value); if(!v) return;
+  setMyName(v); document.getElementById("lb-nameinput").value=myName;
+  guard(()=>fb.Au.signInAnonymously(fb.auth));
+});
+document.getElementById("lb-nameform").addEventListener("submit",e=>{
+  e.preventDefault();
+  const v=cleanName(document.getElementById("lb-nameinput").value); if(!v) return;
+  setMyName(v); lb.msg="Saved."; submitScores(); renderLB();
+});
+document.getElementById("lb-out").addEventListener("click",()=>guard(async()=>{
+  await fb.Au.signOut(fb.auth); setMyName(""); document.getElementById("lb-nameinput").value="";
+}));
 document.getElementById("lb").addEventListener("click",e=>{
-  const b=e.target.closest("[data-lbtab]"); if(!b) return;
-  lb.tab=b.dataset.lbtab; renderLB();
+  const b=e.target.closest("[data-lbtab]"); if(!b||b.dataset.lbtab===lb.tab) return;
+  lb.tab=b.dataset.lbtab; subscribeRows();
 });
 
 /* ---------- actions ---------- */
 function switchPuzzle(id){
   const p=PUZZLES.find(z=>z.id===id); if(!p||p.id===PUZZLE.id) return;
   PUZZLE=p; lsSet("geshmak-current",String(id)); state=loadState(id);
-  render(); renderLB(); window.scrollTo(0,0);
+  render(); if(lb.tab==='puzzle') subscribeRows(); else renderLB(); window.scrollTo(0,0);
 }
 document.addEventListener("click",e=>{
   const b=e.target.closest("[data-puzzle]"); if(b) switchPuzzle(Number(b.dataset.puzzle));
@@ -759,7 +884,7 @@ function finishRound(i,status,quip,good){
   const el=document.getElementById(nxt>=0?"guess-"+nxt:"thread-guess"); if(el) el.focus({preventScroll:true});
 }
 function finishBonus(status,quip,good){
-  state.bonus=status; state.quip=quip; state.quipGood=good; save(); render(); submitScores();
+  state.bonus=status; state.quip=quip; state.quipGood=good; save(); render(); renderLB(); submitScores();
 }
 game.addEventListener("submit",e=>{
   e.preventDefault();
