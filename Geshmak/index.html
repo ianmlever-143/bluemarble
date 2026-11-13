@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Geshmak!</title>
+<meta name="description" content="Can you name the Yid? Three Jewish figures a day, three clues each, and one thread that ties them together.">
+<meta property="og:title" content="Geshmak! Can you name the Yid?">
+<meta property="og:description" content="Three Jewish figures a day, three clues each, and one thread that ties them together.">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bagel+Fat+One&family=Fredoka:wght@500;600;700&family=Rubik:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* Layout idea: a sticker sheet. Electric-blue page papered with Jewish doodles, chunky outlined cards
+   in candy colors, and a little character peeking off every card. One theme, on purpose. */
+:root{
+  --bg:#3346FF;
+  --ink:#1B1464;
+  --card:#FFFFFF;
+  --pink:#FF4F9A;
+  --sun:#FFD23F;
+  --mint:#2EE6A6;
+  --grape:#9B5CFF;
+  --sky:#7DE3FF;
+  --cream:#FFF6DC;
+  --bad:#D81B72;
+  --good:#0B7F58;
+  --title:"Bagel Fat One","Fredoka","Trebuchet MS",system-ui,sans-serif;
+  --display:"Fredoka","Trebuchet MS",system-ui,sans-serif;
+  --body:"Rubik",system-ui,-apple-system,"Segoe UI",sans-serif;
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{
+  background-color:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.5;-webkit-font-smoothing:antialiased;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180' fill='none' stroke='white' stroke-opacity='.17' stroke-width='3' stroke-linejoin='round' stroke-linecap='round'%3E%3Cpath d='M30 14l14 24H16zM30 46L16 22h28z'/%3E%3Cpath d='M112 24h24v16l-12 14-12-14zM124 14v10'/%3E%3Cpath d='M28 108h20c0 14-4 20-10 20s-10-6-10-20zM38 128v14M30 144h16'/%3E%3Ccircle cx='112' cy='120' r='8'/%3E%3Ccircle cx='126' cy='118' r='10'/%3E%3Ccircle cx='140' cy='120' r='8'/%3E%3C/svg%3E");
+}
+.wrap{max-width:600px;margin:0 auto;padding:22px 18px 56px;display:flex;flex-direction:column;gap:22px}
+h1,h2,h3{font-family:var(--display);margin:0;text-wrap:balance;line-height:1.1}
+button,input{font:inherit;color:inherit}
+:focus-visible{outline:4px solid var(--sun);outline-offset:2px}
+.ico{display:inline-block;flex:none;width:1.4em;height:1.4em;vertical-align:-.3em}
+
+/* header */
+header{display:flex;flex-direction:column;gap:14px}
+.top{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.logo{display:flex;align-items:center;gap:10px}
+.logo .ico{width:72px;height:72px;transform:rotate(-8deg)}
+h1{font-family:var(--title);font-weight:400;font-size:58px;color:#fff;letter-spacing:.5px;text-shadow:4px 4px 0 var(--ink)}
+h1 span{color:var(--sun)}
+.tag{font-family:var(--display);font-weight:600;font-size:19px;color:#fff}
+.score{font-family:var(--display);font-weight:700;font-size:20px;background:var(--sun);border:3px solid var(--ink);box-shadow:4px 4px 0 var(--ink);border-radius:999px;padding:6px 16px;font-variant-numeric:tabular-nums;white-space:nowrap;transform:rotate(3deg)}
+.score small{font-weight:600;font-size:13px}
+.chips{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.chip{border:3px solid var(--ink);background:#fff;border-radius:999px;padding:6px 14px 6px 10px;font-family:var(--display);font-weight:600;font-size:15px;cursor:pointer;box-shadow:3px 3px 0 var(--ink);display:inline-flex;align-items:center;gap:6px}
+.chip:nth-child(1){background:var(--mint)} .chip:nth-child(2){background:var(--sun)} .chip:nth-child(3){background:var(--sky)}
+.chip:hover,.btn:hover{transform:translate(-1px,-1px)}
+.chip:active,.btn:active{transform:translate(2px,2px);box-shadow:none}
+[hidden]{display:none!important}
+.switch,.tabs{display:inline-flex;border:3px solid var(--ink);border-radius:999px;overflow:hidden;background:#fff}
+.switch{margin-left:auto;box-shadow:3px 3px 0 var(--ink)}
+.switch button,.tabs button{border:0;background:#fff;font-family:var(--display);font-weight:700;font-size:14px;padding:6px 13px;cursor:pointer;white-space:nowrap}
+.switch button+button,.tabs button+button{border-left:3px solid var(--ink)}
+.switch button[aria-pressed="true"],.tabs button[aria-pressed="true"]{background:var(--ink);color:var(--sun)}
+.lb-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}
+.lb-list li{display:grid;grid-template-columns:2.2em 1fr auto;gap:10px;align-items:center;padding:6px 12px;border:2px solid var(--ink);border-radius:14px;background:var(--cream);font-family:var(--display);font-weight:600}
+.lb-list li.me{background:var(--sun)}
+.lb-list .pos{font-weight:700;text-align:center}
+.lb-list .nm{overflow-wrap:anywhere}
+.lb-list .sc{font-weight:700;font-size:19px;font-variant-numeric:tabular-nums}
+#lb-form{flex-direction:column;gap:6px}
+#lb .row{flex-wrap:nowrap}
+.lb-lab{font-family:var(--display);font-weight:600;font-size:14px}
+
+/* scoreboard */
+.board{display:grid;grid-template-columns:repeat(4,1fr) 1.15fr;border:3px solid var(--ink);border-radius:18px;overflow:hidden;background:#fff;box-shadow:5px 5px 0 var(--ink);position:sticky;top:8px;z-index:5}
+.cell{display:flex;flex-direction:column;text-align:center;border-right:3px solid var(--ink);background:#fff}
+.cell .lab{font-family:var(--display);font-weight:600;font-size:12px;padding:3px 2px;border-bottom:2px solid var(--ink);white-space:nowrap}
+.cell .val{font-family:var(--display);font-weight:700;font-size:24px;line-height:1.5;font-variant-numeric:tabular-nums}
+.cell .val small{font-size:12px;font-weight:600}
+.cell.k-pink .lab{background:var(--pink)} .cell.k-sun .lab{background:var(--sun)} .cell.k-mint .lab{background:var(--mint)} .cell.k-grape .lab{background:var(--grape)}
+.cell.pending .val{color:#A9A6C8}
+.cell.now{background:var(--cream)}
+.cell.total{border-right:0;background:var(--ink);color:#fff}
+.cell.total .lab{border-bottom-color:#fff;background:var(--ink)}
+.cell.total .val{color:var(--sun)}
+.cell.total .val small{color:#fff}
+
+/* intro */
+.rules{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px}
+.rules li{display:grid;grid-template-columns:3.4em 1fr;gap:12px;align-items:center}
+.rules .worth{font-family:var(--display);font-weight:700;font-size:20px;background:var(--sun);border:2px solid var(--ink);border-radius:12px;text-align:center;padding:2px 4px;font-variant-numeric:tabular-nums}
+.rules .worth.bonus{background:var(--grape);color:#fff} .rules .worth.max{background:var(--ink);color:var(--sun)}
+.ladder{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.ladder div{border:2px solid var(--ink);border-radius:14px;padding:6px 10px;background:var(--cream);display:flex;align-items:center;gap:8px;font-family:var(--display);font-weight:600;font-size:14px;line-height:1.2}
+.ladder .ico{width:30px;height:30px}
+.ladder small{display:block;font-family:var(--body);font-weight:500;font-size:12px;font-variant-numeric:tabular-nums}
+.sub{font-family:var(--display);font-weight:700;font-size:17px;margin:4px 0 0}
+
+/* sticker rows */
+.stickers{display:flex;justify-content:space-between;align-items:center;gap:6px;padding:0 6px}
+.stickers .ico{width:44px;height:44px}
+.stickers .ico:nth-child(odd){transform:rotate(-10deg)}
+.stickers .ico:nth-child(even){transform:rotate(9deg) translateY(4px)}
+
+/* cards */
+main{display:flex;flex-direction:column;gap:30px}
+main:empty{display:none}
+.card{position:relative;background:var(--card);border:3px solid var(--ink);border-radius:26px;padding:20px 18px 24px;display:flex;flex-direction:column;gap:14px;box-shadow:7px 7px 0 var(--ink)}
+.card.locked{background:var(--cream)}
+.card .peek{position:absolute;right:-10px;bottom:-24px;width:60px;height:60px;transform:rotate(12deg);pointer-events:none}
+.card:nth-of-type(even) .peek{right:auto;left:-10px;transform:rotate(-12deg)}
+.band{margin:-20px -18px 0;padding:14px 18px;border-bottom:3px solid var(--ink);border-radius:23px 23px 0 0;display:flex;align-items:center;justify-content:space-between;gap:10px}
+.c-pink .band{background:var(--pink)} .c-sun .band{background:var(--sun)} .c-mint .band{background:var(--mint)}
+.c-grape .band{background:var(--grape)} .c-sky .band{background:var(--sky)}
+.era{font-family:var(--display);font-size:24px;font-weight:700;display:flex;align-items:center;gap:8px}
+.era .ico{width:44px;height:44px}
+.pts{font-family:var(--display);font-weight:700;font-size:15px;border:3px solid var(--ink);border-radius:999px;padding:2px 12px;background:#fff;font-variant-numeric:tabular-nums;white-space:nowrap}
+.pts.won{background:var(--mint)} .pts.zero{background:var(--cream)}
+.clues{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px}
+.clue{display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:start;padding:12px;border-radius:16px;background:var(--cream);border:2px solid var(--ink)}
+.clue .worth{font-family:var(--display);font-weight:700;font-size:18px;background:var(--sun);border:2px solid var(--ink);border-radius:12px;font-variant-numeric:tabular-nums;min-width:2.6em;text-align:center;padding:2px 4px;line-height:1.15}
+.clue .worth small{display:block;font-size:11px;font-weight:600}
+.clue.hidden{background:#fff;border-style:dashed;color:#5A5590}
+.clue.hidden .worth{background:#fff;border-style:dashed}
+.clue p{margin:0}
+form{display:flex;gap:10px;flex-wrap:wrap}
+label.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+input[type=text]{flex:1 1 200px;min-width:0;border:3px solid var(--ink);background:#fff;border-radius:16px;padding:11px 14px}
+input[type=text]:focus{background:var(--cream);outline:none;box-shadow:0 0 0 4px var(--sun)}
+.btn{border:3px solid var(--ink);border-radius:16px;padding:10px 18px;font-family:var(--display);font-weight:700;cursor:pointer;background:var(--pink);color:var(--ink);box-shadow:4px 4px 0 var(--ink);display:inline-flex;align-items:center;gap:6px;text-decoration:none}
+.btn.ghost{background:#fff}
+.btn.gold{background:var(--sun);font-size:19px;padding:12px 22px}
+.row{display:flex;gap:10px;flex-wrap:wrap}
+.quip{min-height:1.5em;font-family:var(--display);font-weight:600;color:var(--bad);margin:0}
+.quip.good{color:var(--good)}
+.answer{font-family:var(--title);font-size:34px;line-height:1.05;color:var(--ink)}
+.learn{margin:0;padding:12px 14px;border:2px solid var(--ink);background:var(--cream);border-radius:16px;font-size:15px;display:grid;grid-template-columns:auto 1fr;gap:10px;align-items:start}
+.learn .ico{width:34px;height:34px}
+.learn b{font-family:var(--display)}
+.wait{margin:0;display:flex;align-items:center;gap:10px;color:#5A5590}
+.wait .ico{width:34px;height:34px}
+.pop{animation:pop .4s cubic-bezier(.3,1.6,.5,1)}
+@keyframes pop{from{transform:scale(.9) rotate(-2deg)}to{transform:none}}
+.wiggle{animation:wig 2.6s ease-in-out infinite}
+@keyframes wig{0%,100%{rotate:-4deg}50%{rotate:5deg}}
+@media (prefers-reduced-motion: reduce){.pop,.wiggle{animation:none}}
+
+/* results */
+.rank{font-family:var(--title);font-size:38px;line-height:1.05;display:flex;align-items:center;gap:10px}
+.rank .ico{width:60px;height:60px}
+.big{font-family:var(--display);font-size:22px;font-weight:700;font-variant-numeric:tabular-nums}
+.thread p{margin:0;max-width:62ch}
+.fact{display:grid;grid-template-columns:auto 1fr;gap:10px;align-items:start}
+.fact .ico{width:32px;height:32px;margin-top:-2px}
+.tally{border:3px solid var(--ink);border-radius:18px;overflow:hidden;display:flex;flex-direction:column}
+.tally .line{display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:center;padding:8px 12px;border-bottom:2px solid var(--ink);font-family:var(--display);font-weight:600;font-size:17px;background:var(--cream)}
+.tally .line .ico{width:34px;height:34px}
+.tally .n{font-weight:700;font-size:20px;font-variant-numeric:tabular-nums;border:2px solid var(--ink);border-radius:999px;padding:0 12px;min-width:3.2em;text-align:center}
+.tally .n small{font-size:12px;font-weight:600}
+.tally .k-pink{background:var(--pink)} .tally .k-sun{background:var(--sun)} .tally .k-mint{background:var(--mint)} .tally .k-grape{background:var(--grape);color:#fff}
+.tally .sum{border-bottom:0;background:var(--ink);color:#fff;font-size:19px}
+.tally .sum .n{border-color:var(--sun);color:var(--sun);font-size:22px}
+.chai{text-align:center;align-items:center;background:var(--mint)}
+.chai h2{font-family:var(--title);font-weight:400;font-size:32px}
+.chai p{margin:0;font-size:14px;font-weight:500}
+.chai .hands{display:flex;gap:8px;align-items:center}
+.chai .hands .ico{width:48px;height:48px}
+footer{font-size:14px;color:#fff;text-align:center;font-weight:500}
+footer button{background:none;border:0;color:#fff;text-decoration:underline;cursor:pointer;font-size:13px}
+
+dialog{border:3px solid var(--ink);border-radius:26px;background:#fff;color:var(--ink);max-width:min(520px,calc(100vw - 32px));padding:22px;box-shadow:8px 8px 0 var(--ink)}
+dialog::backdrop{background:rgba(27,20,100,.7)}
+dialog h2{font-family:var(--title);font-weight:400;font-size:30px;margin-bottom:12px;display:flex;align-items:center;gap:10px}
+dialog h2 .ico{width:48px;height:48px}
+dialog p{margin:0 0 10px}
+dialog .btn{margin-top:6px}
+@media (max-width:420px){.cell .lab{font-size:11px}.cell .val{font-size:21px}.ladder{grid-template-columns:1fr}h1{font-size:44px}.logo .ico{width:54px;height:54px}.stickers .ico{width:34px;height:34px}}
+</style>
+</head>
+<body>
+
+<!-- the sticker set -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <g id="face">
+      <circle cx="-5" cy="0" r="2.2" fill="#1B1464"/><circle cx="5" cy="0" r="2.2" fill="#1B1464"/>
+      <path d="M-3.5 4.5q3.5 3.5 7 0" fill="none" stroke="#1B1464" stroke-width="2" stroke-linecap="round"/>
+      <circle cx="-9.5" cy="4" r="2.6" fill="#FF7BB5" opacity=".85"/><circle cx="9.5" cy="4" r="2.6" fill="#FF7BB5" opacity=".85"/>
+    </g>
+  </defs>
+  <symbol id="i-challah" viewBox="0 0 64 64">
+    <g stroke="#1B1464" stroke-width="3" fill="#FFB52E">
+      <circle cx="12" cy="37" r="9.5"/><circle cx="52" cy="37" r="9.5"/><circle cx="24" cy="34" r="12.5"/><circle cx="40" cy="34" r="12.5"/>
+    </g>
+    <g fill="#FFF6DC"><ellipse cx="20" cy="26" rx="2" ry="1.2"/><ellipse cx="32" cy="24.5" rx="2" ry="1.2"/><ellipse cx="44" cy="26" rx="2" ry="1.2"/><ellipse cx="11" cy="32" rx="1.6" ry="1"/><ellipse cx="53" cy="32" rx="1.6" ry="1"/></g>
+    <use href="#face" x="32" y="35"/>
+  </symbol>
+  <symbol id="i-star" viewBox="0 0 64 64">
+    <g stroke="#1B1464" stroke-width="3" stroke-linejoin="round" fill="#7DE3FF">
+      <polygon points="32,5 55,45 9,45"/><polygon points="32,59 9,19 55,19"/>
+    </g>
+    <polygon points="32,11 49.5,42 14.5,42" fill="#7DE3FF"/>
+    <use href="#face" x="32" y="30"/>
+  </symbol>
+  <symbol id="i-dreidel" viewBox="0 0 64 64">
+    <g stroke="#1B1464" stroke-width="3" stroke-linejoin="round">
+      <rect x="28" y="4" width="8" height="14" rx="3" fill="#FFD23F"/>
+      <path d="M14 18h36v20L32 60 14 38z" fill="#FF4F9A"/>
+    </g>
+    <use href="#face" x="32" y="31"/>
+  </symbol>
+  <symbol id="i-wine" viewBox="0 0 64 64">
+    <g stroke="#1B1464" stroke-width="3" stroke-linejoin="round" stroke-linecap="round">
+      <path d="M32 38v16M22 57h20" fill="none"/>
+      <path d="M16 6h32c0 22-7 32-16 32S16 28 16 6z" fill="#fff"/>
+      <path d="M17 17h30c-1.500 14-7.500 21-15 21s-13.500-7-15-21z" fill="#B14CFF" stroke-width="2.500"/>
+    </g>
+    <g transform="translate(32 25)"><circle cx="-5" cy="0" r="2.2" fill="#fff"/><circle cx="5" cy="0" r="2.2" fill="#fff"/><path d="M-3.500 4.500q3.500 3.500 7 0" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"/></g>
+  </symbol>
+  <symbol id="i-menorah" viewBox="0 0 64 64">
+    <g fill="none" stroke-linecap="round" stroke="#1B1464" stroke-width="7.500">
+      <path d="M6 22a26 26 0 0 0 52 0M12.500 22a19.500 19.500 0 0 0 39 0M19 22a13 13 0 0 0 26 0M25.500 22a6.500 6.500 0 0 0 13 0M32 20v36M20 58h24"/>
+    </g>
+    <g fill="none" stroke-linecap="round" stroke="#FFD23F" stroke-width="3.500">
+      <path d="M6 22a26 26 0 0 0 52 0M12.500 22a19.500 19.500 0 0 0 39 0M19 22a13 13 0 0 0 26 0M25.500 22a6.500 6.500 0 0 0 13 0M32 20v36M20 58h24"/>
+    </g>
+    <g fill="#FF7A1A" stroke="#1B1464" stroke-width="1.500">
+      <ellipse cx="6" cy="12" rx="2.800" ry="4.200"/><ellipse cx="12.500" cy="12" rx="2.800" ry="4.200"/><ellipse cx="19" cy="12" rx="2.800" ry="4.200"/><ellipse cx="25.500" cy="12" rx="2.800" ry="4.200"/>
+      <ellipse cx="32" cy="9" rx="3" ry="4.600"/>
+      <ellipse cx="38.500" cy="12" rx="2.800" ry="4.200"/><ellipse cx="45" cy="12" rx="2.800" ry="4.200"/><ellipse cx="51.500" cy="12" rx="2.800" ry="4.200"/><ellipse cx="58" cy="12" rx="2.800" ry="4.200"/>
+    </g>
+  </symbol>
+  <symbol id="i-mezuzah" viewBox="0 0 64 64">
+    <g transform="rotate(18 32 32)">
+      <rect x="21" y="4" width="22" height="56" rx="9" fill="#2EE6A6" stroke="#1B1464" stroke-width="3"/>
+      <text x="32" y="24" text-anchor="middle" font-family="Rubik,Arial,sans-serif" font-weight="700" font-size="15" fill="#1B1464">ש</text>
+      <g transform="translate(32 38) scale(.8)"><use href="#face"/></g>
+    </g>
+  </symbol>
+  <symbol id="i-candles" viewBox="0 0 64 64">
+    <g stroke="#1B1464" stroke-width="3" stroke-linejoin="round">
+      <rect x="9" y="28" width="18" height="30" rx="4" fill="#fff"/><rect x="37" y="28" width="18" height="30" rx="4" fill="#fff"/>
+      <path d="M18 6c6 7 6 14 0 17c-6-3-6-10 0-17z" fill="#FF9F1C"/><path d="M46 6c6 7 6 14 0 17c-6-3-6-10 0-17z" fill="#FF9F1C"/>
+    </g>
+    <g transform="translate(18 41) scale(.62)"><use href="#face"/></g>
+    <g transform="translate(46 41) scale(.62)"><use href="#face"/></g>
+  </symbol>
+  <symbol id="i-pom" viewBox="0 0 64 64">
+    <g stroke="#1B1464" stroke-width="3" stroke-linejoin="round" fill="#FF3B6B">
+      <path d="M24 20l-3-12 7 5 4-8 4 8 7-5-3 12z"/><circle cx="32" cy="38" r="21"/>
+    </g>
+    <use href="#face" x="32" y="37"/>
+  </symbol>
+  <symbol id="i-hand" viewBox="0 0 64 64">
+    <g stroke="#1B1464" stroke-width="3" stroke-linejoin="round" fill="#FFD23F">
+      <rect x="10" y="20" width="9" height="26" rx="4.500"/><rect x="19" y="10" width="9" height="34" rx="4.500"/><rect x="28" y="6" width="9" height="38" rx="4.500"/><rect x="37" y="10" width="9" height="34" rx="4.500"/>
+      <rect x="45" y="26" width="9" height="20" rx="4.500" transform="rotate(28 49 36)"/>
+      <rect x="12" y="32" width="36" height="28" rx="13"/>
+    </g>
+    <rect x="13.500" y="33" width="31" height="12" fill="#FFD23F"/>
+    <use href="#face" x="30" y="46"/>
+  </symbol>
+</svg>
+
+<div class="wrap">
+  <header>
+    <div class="top">
+      <div class="logo">
+        <svg class="ico wiggle" aria-hidden="true"><use href="#i-challah"/></svg>
+        <div>
+          <h1>Gesh<span>mak!</span></h1>
+          <div class="tag">Can you name the Yid?</div>
+        </div>
+      </div>
+    </div>
+    <div class="chips">
+      <button class="chip" type="button" data-open="dlg-how"><svg class="ico" aria-hidden="true"><use href="#i-dreidel"/></svg>How to play</button>
+      <button class="chip" type="button" data-open="dlg-name"><svg class="ico" aria-hidden="true"><use href="#i-challah"/></svg>What's "Geshmak"?</button>
+      <button class="chip" type="button" data-open="dlg-why"><svg class="ico" aria-hidden="true"><use href="#i-candles"/></svg>Why I made this</button>
+      <span class="switch" role="group" aria-label="Choose a puzzle" id="switch"></span>
+    </div>
+  </header>
+
+  <div class="stickers" aria-hidden="true">
+    <svg class="ico"><use href="#i-star"/></svg><svg class="ico"><use href="#i-wine"/></svg><svg class="ico"><use href="#i-menorah"/></svg><svg class="ico"><use href="#i-pom"/></svg><svg class="ico"><use href="#i-mezuzah"/></svg><svg class="ico"><use href="#i-dreidel"/></svg><svg class="ico"><use href="#i-candles"/></svg>
+  </div>
+
+  <div class="board" id="board" role="status" aria-label="Scoreboard"></div>
+
+  <main id="game"></main>
+
+  <section class="card c-sky" id="lb" aria-label="Leaderboard">
+    <div class="band">
+      <h2 class="era"><svg class="ico" aria-hidden="true"><use href="#i-star"/></svg>Leaderboard</h2>
+      <span class="tabs" role="group" aria-label="Which leaderboard"><button type="button" data-lbtab="puzzle" id="lb-tab-p" aria-pressed="true">No. 1</button><button type="button" data-lbtab="all" id="lb-tab-a" aria-pressed="false">All time</button></span>
+    </div>
+    <p class="quip good" id="lb-status" role="status">Loading the leaderboard…</p>
+    <ol class="lb-list" id="lb-list"></ol>
+    <form id="lb-form" hidden>
+      <label class="lb-lab" for="lb-name">Your name on the board</label>
+      <div class="row"><input type="text" id="lb-name" maxlength="24" autocomplete="nickname" placeholder="Ian L."><button class="btn" type="submit">Save</button></div>
+    </form>
+    <svg class="ico peek" aria-hidden="true"><use href="#i-hand"/></svg>
+  </section>
+
+  <div class="stickers" aria-hidden="true">
+    <svg class="ico"><use href="#i-candles"/></svg><svg class="ico"><use href="#i-challah"/></svg><svg class="ico"><use href="#i-star"/></svg><svg class="ico"><use href="#i-dreidel"/></svg><svg class="ico"><use href="#i-wine"/></svg><svg class="ico"><use href="#i-pom"/></svg><svg class="ico"><use href="#i-menorah"/></svg>
+  </div>
+
+  <footer>
+    Geshmak! is a prototype with two puzzles so far. Everyone gets the same three Yids.
+    <br>Clues are checked against public sources. Where a thread rests on a guess, we say so.
+    <br><button type="button" id="reset">Start over (for testing)</button>
+  </footer>
+</div>
+
+<dialog id="dlg-how">
+  <h2><svg class="ico" aria-hidden="true"><use href="#i-dreidel"/></svg>How to play</h2>
+  <p>Three Yids a puzzle: a <b>Today Yid</b>, a <b>Yester Yid</b> and a <b>Really Old Yid</b>. Everyone gets the same three.</p>
+  <p>Each one comes with three clues. Name them on the first clue for <b>54</b> points, the second for <b>36</b>, the third for <b>18</b>. A wrong guess flips the next clue. Take all the time you want.</p>
+  <p>Then the bonus: the three are connected. Guess the thread for <b>18</b> more. A perfect day is 180, which is ten times chai.</p>
+  <button class="btn" type="button" data-close>Let's go</button>
+</dialog>
+
+<dialog id="dlg-name">
+  <h2><svg class="ico" aria-hidden="true"><use href="#i-challah"/></svg>What's "Geshmak"?</h2>
+  <p><b>Geshmak</b> (guh-SHMAHK) is Yiddish for delicious, delightful, a pleasure. It shares a root with the German <i>Geschmack</i>, "taste." You can eat something geshmak, and you can also do something <i>with</i> a geshmak, meaning with real relish.</p>
+  <p>For generations the famous Yiddish sigh was <i>"S'iz shver tsu zayn a Yid"</i>: it's hard to be a Jew. Sholem Aleichem even made it the title of a play.</p>
+  <p>The comeback, a favorite in Hasidic teaching, flips one word: <i>"S'iz geshmak tsu zayn a Yid."</i> It's delicious to be a Jew.</p>
+  <p>And <b>Yid</b>? It's simply the Yiddish word for Jew. Here it's said the way it's said around the Shabbat table: with love.</p>
+  <button class="btn" type="button" data-close>Geshmak!</button>
+</dialog>
+
+<dialog id="dlg-why">
+  <h2><svg class="ico" aria-hidden="true"><use href="#i-candles"/></svg>Why I made this</h2>
+  <p><b>I love being Jewish and I love making games!</b></p>
+  <p>I'm Ian, and I made Geshmak! for three reasons:</p>
+  <p class="fact"><svg class="ico" aria-hidden="true"><use href="#i-star"/></svg><span><b>To build Jewish connection.</b> Play it, share it, argue about it at dinner.</span></p>
+  <p class="fact"><svg class="ico" aria-hidden="true"><use href="#i-wine"/></svg><span><b>To celebrate how awesome it is to be Jewish.</b> We show up everywhere: sports, science, food, fashion, film, scripture.</span></p>
+  <p class="fact"><svg class="ico" aria-hidden="true"><use href="#i-pom"/></svg><span><b>To deepen Jewish learning.</b> A bite at a time, with a nod to how deep the well goes.</span></p>
+  <button class="btn" type="button" data-close>Back to the game</button>
+</dialog>
+
+<script>
+/* ---------- content: the puzzles ---------- */
+const VENMO_HANDLE = "ian-lever";
+
+const P1 = {
+  id: 1,
+  rounds: [
+    {
+      era: "Today Yid", icon: "star", peek: "wine", color: "pink",
+      answer: "Amar'e Stoudemire",
+      aliases: ["amare stoudemire", "stoudemire", "amare", "stat"],
+      clues: [
+        "Born in Lake Wales, Florida, and raised Baptist. When he was a teenager, his mother told him their family came from the ancient Hebrews. The idea never left him.",
+        "He skipped college, turned pro straight out of high school in 2002 and was named Rookie of the Year. In 2010 he made his first trip to Israel to explore those roots.",
+        "A six-time NBA All-Star with the Phoenix Suns and New York Knicks, he later won an Israeli championship with Maccabi Tel Aviv and completed an Orthodox conversion in 2020."
+      ],
+      learn: "His Hebrew name is Yahoshafat ben Avraham. He also started a kosher wine label and a campus program that brings Black and Jewish students together."
+    },
+    {
+      era: "Yester Yid", icon: "candles", peek: "dreidel", color: "sun",
+      answer: "Marilyn Monroe",
+      aliases: ["marilyn monroe", "monroe", "marilyn", "norma jeane", "norma jean", "norma jeane baker", "norma jeane mortenson"],
+      clues: [
+        "Born Norma Jeane in Los Angeles in 1926, she grew up in foster homes and an orphanage, raised in a strict Christian faith she never warmed to.",
+        "A photographer spotted her working in a wartime factory, and a modeling career took off. In 1956 she studied with a Reform rabbi and converted on the day of her Jewish wedding to a famous playwright. Egypt banned her films in response.",
+        "The star of Some Like It Hot and Gentlemen Prefer Blondes, forever pictured in a white dress over a subway grate. Her husbands included Joe DiMaggio and Arthur Miller."
+      ],
+      learn: "After her divorce in 1961 she told her rabbi she was staying Jewish. She kept a prayer book and a menorah that played music."
+    },
+    {
+      era: "Really Old Yid", icon: "pom", peek: "mezuzah", color: "mint",
+      answer: "Ruth",
+      aliases: ["ruth", "rut", "rus", "ruth the moabite", "ruth the moabitess"],
+      clues: [
+        "She was born in Moab, across the Jordan, among a people the Israelites counted as enemies. She married into an Israelite family that had fled a famine in Bethlehem.",
+        "Widowed young, she refused to go back home. She followed her mother-in-law Naomi to Bethlehem and gleaned leftover barley in the fields of a man named Boaz to keep them both fed.",
+        "\"Your people shall be my people, and your God my God.\" A book of the Tanakh carries her name, and we read it every Shavuot."
+      ],
+      learn: "She married Boaz, and their great-grandson was King David."
+    }
+  ],
+  thread: {
+    title: "They all chose to be Jewish",
+    prompt: "Amar'e, Marilyn and Ruth have something in common. What ties them together?",
+    keywords: ["convert", "conversion", "giyur", "geirus", "gerut", "jew by choice", "jews by choice", "chose judaism", "chose to be jewish", "became jewish", "proselyte", "joined the jewish"],
+    words: ["ger", "gerim", "giyoret", "converts", "converted", "convert", "conversion"],
+    body: [
+      ["star", "<b>All three are gerim</b>, people who chose Judaism. In the Torah, <i>ger</i> means a stranger living among the people. The rabbis gave the word a new job: a <i>ger tzedek</i> is someone who joins the Jewish people for good."],
+      ["wine", "The Talmud counts <b>36 places</b> where the Torah warns us to treat the ger well (Bava Metzia 59b). That's twice chai."],
+      ["mezuzah", "The Mishnah goes further (Bava Metzia 4:10): you may not even say to the child of converts, \"Remember what your ancestors did.\" Once someone is family, their past is not ours to bring up."],
+      ["pom", "And the proof of how much honor a ger carries? Ruth, a Moabite convert, is the great-grandmother of King David. Tradition says the Messiah will come from David's line, which means from hers."],
+      ["candles", "One more thread inside the thread: Marilyn reportedly recited Ruth's own words at her conversion."],
+      ["challah", "<i>So why did we just name three converts? Ruth's story is told in her own book, and Amar'e and Marilyn shared theirs proudly. The teaching is about never making someone feel like an outsider. These three are simply ours.</i>"]
+    ]
+  }
+};
+
+const P2 = {
+  id: 2,
+  rounds: [
+    {
+      era: "Today Yid", icon: "dreidel", peek: "candles", color: "pink",
+      answer: "Dan Levy",
+      aliases: ["dan levy", "daniel levy", "daniel joseph levy", "dan j levy"],
+      clues: [
+        "Born in Toronto in 1983 and named after an Elton John song. With a Jewish father and a Protestant mother, he grew up with both Hanukkah and Christmas, had a bar mitzvah, and once called himself a \"halfie.\"",
+        "His first break was hosting on MTV Canada. Then he started a production company with his father, a comedy legend, and the two of them wrote a sitcom pilot together.",
+        "He co-created Schitt's Creek and played David Rose. In 2020 the show swept the Emmy comedy awards, and he took home four of them in one night."
+      ],
+      learn: "Schitt's Creek was a family business: his father Eugene played his dad, and his sister Sarah played Twyla, the waitress at the café."
+    },
+    {
+      era: "Yester Yid", icon: "mezuzah", peek: "star", color: "sun",
+      answer: "Eli Cohen",
+      aliases: ["eli cohen", "eliyahu cohen", "elie cohen", "eli kohen", "eliahu cohen"],
+      clues: [
+        "Born in Alexandria, Egypt, in 1924 to a Syrian-Jewish family. His father had come from Aleppo, and he grew up speaking Arabic and active in Zionist circles.",
+        "After moving to Israel he married Nadia, an Iraqi-born Jew, and was recruited by Israeli intelligence. His cover began in Buenos Aires, where he posed as a wealthy Syrian businessman named Kamel Amin Thaabet.",
+        "Israel's most famous spy. He charmed his way into the top of Syria's government in Damascus until he was caught and hanged in 1965. Sacha Baron Cohen played him in the Netflix series The Spy."
+      ],
+      learn: "In 2025, sixty years after his death, the Mossad brought his Syrian file home to Israel: about 2,500 documents, photos and personal items. His burial place is still unknown."
+    },
+    {
+      era: "Really Old Yid", icon: "wine", peek: "pom", color: "mint",
+      answer: "Miriam",
+      aliases: ["miriam", "miryam", "miriam the prophetess", "miriam hanevia", "miriam haneviah"],
+      clues: [
+        "Born a slave in Egypt to Amram and Yocheved. As a girl she stood watch by the Nile over her baby brother in his basket, then talked a princess into hiring the baby's own mother as his nurse.",
+        "The Torah calls her a prophetess. When the sea closed behind the Israelites, she picked up a timbrel and led the women in song and dance.",
+        "Sister of Moses and Aaron. Legend says a well followed the Israelites through the desert in her merit, and many families now set a cup of water with her name on the seder table."
+      ],
+      learn: "Miriam's cup sits beside Elijah's at many seders. His holds wine; hers holds water, for the well."
+    }
+  ],
+  thread: {
+    title: "The tribe of Levi (we think)",
+    prompt: "Dan, Eli and Miriam have something in common. What ties them together?",
+    keywords: ["tribe of levi", "priest", "kohan", "cohan", "leviim", "levi im"],
+    words: ["levi", "levite", "levites", "levy", "levys", "levis", "kohen", "kohens", "cohen", "cohens", "kohein", "aaron", "aharon", "levitical"],
+    body: [
+      ["star", "<b>Miriam is a Levite for certain.</b> Her parents, Amram and Yocheved, both came from the tribe of Levi (Numbers 26:59)."],
+      ["candles", "Her brother Aaron became the first <i>Kohen Gadol</i>, the high priest. Every <b>Kohen</b> since is counted as his descendant. The rest of the tribe, the <b>Levi'im</b>, served beside them in the Temple as its singers, musicians and gatekeepers."],
+      ["mezuzah", "The status passes from father to child, and families held on to it through their names. Cohen, Kahn and Katz usually point to Kohanim. Levy, Levine and Segal usually point to Levites."],
+      ["wine", "It still matters in shul. A Kohen gets the first aliyah to the Torah and a Levi the second, and Levites wash the Kohanim's hands before the priestly blessing."],
+      ["hand", "That blessing is given with the fingers split into a V. Leonard Nimoy saw it in synagogue as a boy and turned it into Spock's Vulcan salute."],
+      ["challah", "<i>A confession: we haven't seen Dan's or Eli's family trees. Their surnames are the hint, and plenty of Cohens and Levys carry the name without the lineage. Call this one our best guess.</i>"]
+    ]
+  }
+};
+const PUZZLES = [P1, P2];
+let PUZZLE = PUZZLES[0];
+
+const POINTS = [54, 36, 18];
+const BONUS = 18;
+const RANKS = [
+  { min: 162, name: "Mentsch Master", icon: "star" },
+  { min: 108, name: "Sleepaway Camp Star", icon: "candles" },
+  { min: 54,  name: "Hebrew School Dropout", icon: "dreidel" },
+  { min: 0,   name: "Oy.", icon: "challah" }
+];
+const QUIPS = {
+  wrong: [
+    "Nu? Try again.",
+    "Two Jews, three opinions. Yours was wrong.",
+    "For this I schlepped you to Hebrew school?",
+    "It's fine. I'll just sit here in the dark while you guess.",
+    "Close only counts in horseshoes and kugel."
+  ],
+  first: "Dayenu! But wait, there's more.",
+  right: ["Mazel tov!", "Look at you. Your bubbe is kvelling.", "Yasher koach!"],
+  miss: "It's okay. Moses didn't make it to the end either.",
+  thread: "Now you're cooking with schmaltz.",
+  perfect: "A perfect day. Call your mother, she'll want to hear this."
+};
+
+/* ---------- pure logic ---------- */
+function norm(s){
+  return String(s).toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g,"")
+    .replace(/['’`]/g,"").replace(/[^a-z0-9]+/g," ").trim();
+}
+function lev(a,b){
+  const m=a.length,n=b.length; if(!m) return n; if(!n) return m;
+  let prev=Array.from({length:n+1},(_,i)=>i);
+  for(let i=1;i<=m;i++){
+    const cur=[i];
+    for(let j=1;j<=n;j++) cur[j]=Math.min(prev[j]+1,cur[j-1]+1,prev[j-1]+(a[i-1]===b[j-1]?0:1));
+    prev=cur;
+  }
+  return prev[n];
+}
+function slack(len){ return len>=9?2:len>=5?1:0; }
+function matchName(guess, aliases){
+  const g=norm(guess); if(!g) return false;
+  return aliases.some(a=>{ const t=norm(a); return g===t || lev(g,t)<=slack(t.length); });
+}
+function matchThread(guess, thread){
+  const g=norm(guess); if(!g) return false;
+  if(thread.keywords.some(k=>g.includes(norm(k)))) return true;
+  const toks=g.split(" ");
+  return thread.words.some(w=>toks.some(t=>t===w || (w.length>=6 && lev(t,w)<=1)));
+}
+function roundPoints(r){ return r.status==="won" ? POINTS[r.clue] : 0; }
+function total(state){ return state.rounds.reduce((s,r)=>s+roundPoints(r),0) + (state.bonus==="won"?BONUS:0); }
+function rankFor(score){ return RANKS.find(r=>score>=r.min); }
+function shareText(state){
+  const t=total(state);
+  const lines=["Geshmak! No. "+PUZZLE.id+": "+t+"/180", rankFor(t).name, ""];
+  state.rounds.forEach((r,i)=>{ lines.push(PUZZLE.rounds[i].era+": "+roundPoints(r)+"/54"); });
+  lines.push("The thread: "+(state.bonus==="won"?BONUS:0)+"/18");
+  lines.push("", "Can you name the Yid?");
+  try{ if(/github\.io$/.test(location.hostname)) lines.push(location.origin+location.pathname); }catch(e){}
+  return lines.join("\n");
+}
+function freshState(){
+  return { rounds: PUZZLE.rounds.map(()=>({clue:0,status:"playing"})), bonus:"playing", quip:"", quipGood:false, started:false };
+}
+</script>
+<script>
+/* ---------- state + storage ---------- */
+function ls(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } }
+function lsSet(k,v){ try{ localStorage.setItem(k,v); }catch(e){} }
+function keyFor(id){ return "geshmak-puzzle-"+id; }
+function rawState(id){ try{ const s=JSON.parse(ls(keyFor(id))); if(s&&s.rounds&&s.rounds.length===3){ if(s.started===undefined) s.started=true; return s; } }catch(e){} return null; }
+let seenIntro = ls("geshmak-intro")==="1" || PUZZLES.some(p=>{ const s=rawState(p.id); return s&&s.started; });
+function loadState(id){ const s=rawState(id); if(s){ if(seenIntro) s.started=true; return s; } const f=freshState(); f.started=seenIntro; return f; }
+PUZZLE = PUZZLES.find(p=>String(p.id)===ls("geshmak-current")) || PUZZLES[0];
+let state=loadState(PUZZLE.id);
+function save(){ lsSet(keyFor(PUZZLE.id),JSON.stringify(state)); }
+function finished(s){ return s.rounds.every(r=>r.status!=="playing") && s.bonus!=="playing"; }
+function pick(a){ return a[Math.floor(Math.random()*a.length)]; }
+function esc(s){ return String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c])); }
+function ico(name,cls){ return '<svg class="ico'+(cls?' '+cls:'')+'" aria-hidden="true"><use href="#i-'+name+'"/></svg>'; }
+function activeIndex(){ return state.rounds.findIndex(r=>r.status==="playing"); }
+
+/* ---------- render ---------- */
+const game=document.getElementById("game");
+const SHORT=["Today","Yester","Really Old"];
+function renderSwitch(){
+  document.getElementById("switch").innerHTML=PUZZLES.map(p=>
+    '<button type="button" data-puzzle="'+p.id+'" aria-pressed="'+(p.id===PUZZLE.id)+'">No. '+p.id+'</button>').join("");
+}
+function renderBoard(){
+  const act=state.started?activeIndex():-2;
+  let h="";
+  state.rounds.forEach((r,i)=>{
+    const done=r.status!=="playing";
+    h+='<div class="cell k-'+PUZZLE.rounds[i].color+(done?'':' pending')+(i===act?' now':'')+'"><span class="lab">'+SHORT[i]+'</span>'+
+       '<span class="val" aria-label="'+SHORT[i]+' Yid: '+(done?roundPoints(r)+' points':'not played yet')+'">'+(done?roundPoints(r):(i===act?'?':'–'))+'</span></div>';
+  });
+  const bd=state.bonus!=="playing";
+  h+='<div class="cell k-grape'+(bd?'':' pending')+(act===-1&&!bd?' now':'')+'"><span class="lab">Thread</span>'+
+     '<span class="val" aria-label="Thread bonus: '+(bd?(state.bonus==="won"?18:0)+' points':'not played yet')+'">'+(bd?(state.bonus==="won"?18:0):(act===-1?'?':'–'))+'</span></div>';
+  h+='<div class="cell total"><span class="lab">Total</span><span class="val" aria-label="Total: '+total(state)+' of 180">'+total(state)+'<small> /180</small></span></div>';
+  document.getElementById("board").innerHTML=h;
+}
+function introHTML(){
+  return '<section class="card c-sun" aria-label="How scoring works"><div class="band"><h2 class="era">'+ico("dreidel")+'How scoring works</h2><span class="pts">180 max</span></div>'+
+    '<p style="margin:0">Three Yids, three clues each. The sooner you name them, the more you score. No timer, so take all the time you want.</p>'+
+    '<ul class="rules">'+
+    '<li><span class="worth">54</span><span>Name the Yid on the <b>first clue</b></span></li>'+
+    '<li><span class="worth">36</span><span>Name them on the <b>second clue</b></span></li>'+
+    '<li><span class="worth">18</span><span>Name them on the <b>third clue</b></span></li>'+
+    '<li><span class="worth bonus">+18</span><span><b>Bonus:</b> guess the thread that ties all three together</span></li>'+
+    '<li><span class="worth max">180</span><span>A perfect day. That\'s ten times chai.</span></li>'+
+    '</ul>'+
+    '<p style="margin:0">A wrong guess flips the next clue, which costs you 18.</p>'+
+    '<p class="sub">What your total makes you</p>'+
+    '<div class="ladder">'+
+    '<div>'+ico("challah")+'<span>Oy.<small>0 to 36</small></span></div>'+
+    '<div>'+ico("dreidel")+'<span>Hebrew School Dropout<small>54 to 90</small></span></div>'+
+    '<div>'+ico("candles")+'<span>Sleepaway Camp Star<small>108 to 144</small></span></div>'+
+    '<div>'+ico("star")+'<span>Mentsch Master<small>162 to 180</small></span></div>'+
+    '</div>'+
+    '<div class="row"><button class="btn gold" type="button" data-act="start" id="start-btn">Let\'s play</button></div>'+
+    ico("wine","peek")+'</section>';
+}
+function render(focusId){
+  renderSwitch(); renderBoard();
+  if(!state.started){ game.innerHTML=introHTML(); return; }
+  const act=activeIndex();
+  let html="";
+  PUZZLE.rounds.forEach((R,i)=>{
+    const r=state.rounds[i], done=r.status!=="playing", isAct=i===act;
+    const cls="card c-"+R.color+(isAct?" active":"")+(!done&&!isAct?" locked":"");
+    let badge;
+    if(r.status==="won") badge='<span class="pts won">+'+POINTS[r.clue]+'</span>';
+    else if(r.status==="lost") badge='<span class="pts zero">+0</span>';
+    else badge='<span class="pts">up to 54</span>';
+    html+='<section class="'+cls+'" aria-label="'+esc(R.era)+'">';
+    html+='<div class="band"><h2 class="era">'+ico(R.icon)+esc(R.era)+'</h2>'+badge+'</div>';
+    if(done){
+      html+='<div class="answer pop">'+esc(R.answer)+'</div>';
+      html+='<p class="learn">'+ico("challah")+'<span><b>Nosh on this:</b> '+esc(R.learn)+'</span></p>';
+    } else if(isAct){
+      html+='<ol class="clues">';
+      R.clues.forEach((c,j)=>{
+        if(j<=r.clue) html+='<li class="clue"><span class="worth">'+POINTS[j]+'<small>pts</small></span><p>'+esc(c)+'</p></li>';
+        else html+='<li class="clue hidden"><span class="worth">'+POINTS[j]+'<small>pts</small></span><p>Clue '+(j+1)+' is waiting.</p></li>';
+      });
+      html+='</ol>';
+      html+='<form data-form="guess"><label class="sr" for="guess-'+i+'">Your guess for the '+esc(R.era)+'</label>'+
+            '<input type="text" id="guess-'+i+'" autocomplete="off" autocapitalize="words" placeholder="Who is it?">'+
+            '<button class="btn" type="submit">Guess</button></form>';
+      html+='<div class="row">'+(r.clue<2
+            ? '<button class="btn ghost" type="button" data-act="next">Next clue (−18)</button>'
+            : '<button class="btn ghost" type="button" data-act="giveup">I give up, tell me</button>')+'</div>';
+      html+='<p class="quip'+(state.quipGood?' good':'')+'" role="status">'+esc(state.quip)+'</p>';
+    } else {
+      html+='<p class="wait">'+ico("menorah")+'Three clues, coming up after the one above.</p>';
+    }
+    html+=ico(R.peek,"peek")+'</section>';
+  });
+
+  if(act===-1){
+    const T=PUZZLE.thread;
+    if(state.bonus==="playing"){
+      html+='<section class="card c-grape active" aria-label="Bonus"><div class="band"><h2 class="era">'+ico("menorah")+'Bonus: the thread</h2><span class="pts">+18</span></div>'+
+        '<p style="margin:0">'+esc(T.prompt)+'</p>'+
+        '<form data-form="thread"><label class="sr" for="thread-guess">What connects all three?</label>'+
+        '<input type="text" id="thread-guess" autocomplete="off" placeholder="They all…">'+
+        '<button class="btn" type="submit">Guess</button></form>'+
+        '<div class="row"><button class="btn ghost" type="button" data-act="reveal">Just tell me</button></div>'+
+        '<p class="quip'+(state.quipGood?' good':'')+'" role="status">'+esc(state.quip)+'</p>'+ico("star","peek")+'</section>';
+    } else {
+      const t=total(state), rk=rankFor(t);
+      html+='<section class="card c-grape thread pop" aria-label="The thread"><div class="band"><h2 class="era">'+ico("menorah")+esc(T.title)+'</h2>'+
+        '<span class="pts '+(state.bonus==="won"?'won':'zero')+'">+'+(state.bonus==="won"?18:0)+'</span></div>'+
+        T.body.map(p=>'<p class="fact">'+ico(p[0])+'<span>'+p[1]+'</span></p>').join("")+ico("star","peek")+'</section>';
+      html+='<section class="card c-sky" aria-label="Your result"><div class="band"><h2 class="era">'+ico("wine")+'Your score</h2><span class="pts">'+t+' / 180</span></div>'+
+        '<div class="rank pop">'+ico(rk.icon)+esc(rk.name)+'</div>'+
+        '<p class="quip good" role="status">'+esc(t===180?QUIPS.perfect:state.quip)+'</p>'+
+        '<div class="tally">'+
+        state.rounds.map((r,i)=>'<div class="line">'+ico(PUZZLE.rounds[i].icon)+'<span>'+esc(PUZZLE.rounds[i].era)+'</span><span class="n k-'+PUZZLE.rounds[i].color+'">'+roundPoints(r)+'<small> /54</small></span></div>').join("")+
+        '<div class="line">'+ico("menorah")+'<span>The thread</span><span class="n k-grape">'+(state.bonus==="won"?18:0)+'<small> /18</small></span></div>'+
+        '<div class="line sum">'+ico("challah")+'<span>Total</span><span class="n">'+t+'<small> /180</small></span></div>'+
+        '</div>'+
+        '<div class="row"><button class="btn" type="button" data-act="share">Copy my score to share</button>'+
+        PUZZLES.filter(p=>p.id!==PUZZLE.id).map(p=>'<button class="btn ghost" type="button" data-puzzle="'+p.id+'">Play No. '+p.id+'</button>').join("")+'</div>'+
+        '<p class="quip good" id="share-note" role="status"></p>'+ico("dreidel","peek")+'</section>';
+      html+='<section class="card chai" aria-label="Support the game"><h2>Like the game?</h2>'+
+        '<div class="hands">'+ico("hand","wiggle")+
+        '<a class="btn gold" href="https://venmo.com/u/'+encodeURIComponent(VENMO_HANDLE)+'" target="_blank" rel="noopener">Give me a Chai-Five</a></div>'+
+        '<p>Venmo @'+esc(VENMO_HANDLE)+' (Ian Lever). $18 is traditional. So is $1.80.</p>'+ico("pom","peek")+'</section>';
+    }
+  }
+  game.innerHTML=html;
+  if(focusId){ const el=document.getElementById(focusId); if(el) el.focus(); }
+}
+
+/* ---------- leaderboard ---------- */
+const lb={status:"loading",rows:[],uid:null,db:null,tab:"puzzle",canWrite:true,note:""};
+let myName=(ls("geshmak-name")||"").slice(0,24);
+function localScores(){
+  const out={};
+  PUZZLES.forEach(p=>{ const s=p.id===PUZZLE.id?state:rawState(p.id); if(s&&finished(s)) out[String(p.id)]=total(s); });
+  return out;
+}
+function boardRows(){
+  return lb.rows.map(r=>{
+    const p=r.p&&typeof r.p==="object"?r.p:{}, sc={};
+    PUZZLES.forEach(z=>{ const v=p[String(z.id)]; if(typeof v==="number"&&isFinite(v)) sc[z.id]=Math.max(0,Math.min(180,Math.round(v))); });
+    return {id:r.id, name:String(r.name||"").trim().slice(0,24)||"Mystery Yid", sc:sc};
+  });
+}
+function renderLB(){
+  const tp=document.getElementById("lb-tab-p"), ta=document.getElementById("lb-tab-a");
+  tp.textContent="No. "+PUZZLE.id; tp.setAttribute("aria-pressed",lb.tab==="puzzle"); ta.setAttribute("aria-pressed",lb.tab==="all");
+  const status=document.getElementById("lb-status"), list=document.getElementById("lb-list"), form=document.getElementById("lb-form");
+  list.textContent="";
+  let msg="";
+  if(lb.status==="loading") msg="Loading the leaderboard…";
+  else if(lb.status==="off") msg="The leaderboard isn't switched on here yet. Your scores are saved on this device.";
+  else {
+    let rows=boardRows().map(r=>{
+      const vals=lb.tab==="puzzle"?(r.sc[PUZZLE.id]===undefined?[]:[r.sc[PUZZLE.id]]):Object.keys(r.sc).map(k=>r.sc[k]);
+      return {id:r.id,name:r.name,n:vals.length,score:vals.reduce((a,b)=>a+b,0)};
+    }).filter(r=>r.n>0).sort((a,b)=>b.score-a.score||a.name.localeCompare(b.name));
+    rows.forEach((r,i)=>{ r.pos=i+1; });
+    const shown=rows.slice(0,10), me=rows.find(r=>r.id===lb.uid);
+    if(me&&me.pos>10) shown.push(me);
+    shown.forEach(r=>{
+      const li=document.createElement("li"); if(r.id===lb.uid) li.className="me";
+      const a=document.createElement("span"); a.className="pos"; a.textContent=r.pos;
+      const b=document.createElement("span"); b.className="nm"; b.textContent=r.name+(r.id===lb.uid?" (you)":"");
+      const c=document.createElement("span"); c.className="sc"; c.textContent=r.score;
+      li.append(a,b,c); list.appendChild(li);
+    });
+    if(lb.status==="slow") msg="Still trying to reach the leaderboard. This may be out of date.";
+    else if(!rows.length) msg=lb.tab==="puzzle"?"No scores for this puzzle yet. Finish it and be the first.":"No scores yet. Finish a puzzle and be the first.";
+    if(!lb.canWrite) msg="You can see the board here, but your account can't post scores to it.";
+  }
+  status.textContent=lb.note||msg;
+  form.hidden=!(lb.uid&&lb.canWrite&&lb.status!=="off"&&lb.status!=="loading");
+}
+let writing=Promise.resolve();
+function submitScores(){
+  if(!lb.db||!lb.uid||!myName||!lb.canWrite) return;
+  writing=writing.then(async()=>{
+    try{
+      const ref=lb.db.doc("scores/"+lb.uid);
+      const snap=await ref.get();
+      const cur=snap.exists?(snap.data()||{}):{};
+      const p=Object.assign({},cur.p&&typeof cur.p==="object"?cur.p:{});
+      let changed=cur.name!==myName;
+      const mine=localScores();
+      Object.keys(mine).forEach(k=>{ if(typeof p[k]!=="number"){ p[k]=mine[k]; changed=true; } });
+      if(changed) await ref.set({name:myName,p:p,updated:Date.now()});
+    }catch(e){ if(e&&e.code==="invalid_argument"){ lb.canWrite=false; } renderLB(); }
+  });
+}
+async function initLB(){
+  try{
+    if(!window.claude||typeof window.claude.use!=="function"){ lb.status="off"; renderLB(); return; }
+    const got=await Promise.all([window.claude.use("db"),window.claude.use("user")]);
+    if(!got[0]||!got[1]){ lb.status="off"; renderLB(); return; }
+    lb.db=got[0]; lb.uid=await got[1].id();
+    const timer=setTimeout(()=>{ if(lb.status==="loading"){ lb.status="slow"; renderLB(); } },10000);
+    lb.db.collection("scores").onSnapshot(snap=>{
+      lb.rows=snap.docs.map(d=>Object.assign({id:d.id},d.data()||{}));
+      if(!snap.metadata||!snap.metadata.fromCache) clearTimeout(timer);
+      lb.status="ready"; renderLB();
+    },()=>{ clearTimeout(timer); lb.status="off"; renderLB(); });
+    submitScores();
+  }catch(e){ lb.status="off"; renderLB(); }
+}
+document.getElementById("lb-name").value=myName;
+document.getElementById("lb-form").addEventListener("submit",e=>{
+  e.preventDefault();
+  const v=document.getElementById("lb-name").value.trim().slice(0,24);
+  if(!v) return;
+  myName=v; lsSet("geshmak-name",v);
+  lb.note=Object.keys(localScores()).length?"Saved. You're on the board.":"Saved. Finish a puzzle to get on the board.";
+  submitScores(); renderLB(); lb.note="";
+});
+document.getElementById("lb").addEventListener("click",e=>{
+  const b=e.target.closest("[data-lbtab]"); if(!b) return;
+  lb.tab=b.dataset.lbtab; renderLB();
+});
+
+/* ---------- actions ---------- */
+function switchPuzzle(id){
+  const p=PUZZLES.find(z=>z.id===id); if(!p||p.id===PUZZLE.id) return;
+  PUZZLE=p; lsSet("geshmak-current",String(id)); state=loadState(id);
+  render(); renderLB(); window.scrollTo(0,0);
+}
+document.addEventListener("click",e=>{
+  const b=e.target.closest("[data-puzzle]"); if(b) switchPuzzle(Number(b.dataset.puzzle));
+});
+function finishRound(i,status,quip,good){
+  state.rounds[i].status=status; state.quip=quip; state.quipGood=good;
+  save(); render();
+  const nxt=activeIndex();
+  const el=document.getElementById(nxt>=0?"guess-"+nxt:"thread-guess"); if(el) el.focus({preventScroll:true});
+}
+function finishBonus(status,quip,good){
+  state.bonus=status; state.quip=quip; state.quipGood=good; save(); render(); submitScores();
+}
+game.addEventListener("submit",e=>{
+  e.preventDefault();
+  const kind=e.target.dataset.form, input=e.target.querySelector("input"), val=input.value;
+  if(!val.trim()) return;
+  if(kind==="guess"){
+    const i=activeIndex(), r=state.rounds[i];
+    if(matchName(val,PUZZLE.rounds[i].aliases)){
+      finishRound(i,"won", r.clue===0?QUIPS.first:pick(QUIPS.right), true);
+    } else {
+      if(r.clue<2) r.clue++;
+      state.quip=pick(QUIPS.wrong); state.quipGood=false; save(); render("guess-"+i);
+    }
+  } else {
+    if(matchThread(val,PUZZLE.thread)) finishBonus("won",QUIPS.thread,true);
+    else { state.quip=pick(QUIPS.wrong); state.quipGood=false; save(); render("thread-guess"); }
+  }
+});
+game.addEventListener("click",e=>{
+  const b=e.target.closest("[data-act]"); if(!b) return;
+  const a=b.dataset.act, i=activeIndex();
+  if(a==="start"){ seenIntro=true; lsSet("geshmak-intro","1"); state.started=true; save(); render("guess-0"); }
+  else if(a==="next"){ state.rounds[i].clue++; state.quip=""; save(); render("guess-"+i); }
+  else if(a==="giveup"){ finishRound(i,"lost",QUIPS.miss,false); }
+  else if(a==="reveal"){ finishBonus("lost",QUIPS.miss,false); }
+  else if(a==="share"){
+    const txt=shareText(state), note=document.getElementById("share-note");
+    const ok=()=>{ note.textContent="Copied! Go brag in the group chat."; };
+    const no=()=>{ note.textContent="Couldn't copy automatically. Here it is to copy by hand: "+txt.replace(/\n+/g," · "); };
+    try{ navigator.clipboard.writeText(txt).then(ok,no); }catch(err){ no(); }
+  }
+});
+document.querySelectorAll("[data-open]").forEach(b=>b.addEventListener("click",()=>{
+  const d=document.getElementById(b.dataset.open); if(d.showModal) d.showModal(); else d.setAttribute("open","");
+}));
+document.querySelectorAll("[data-close]").forEach(b=>b.addEventListener("click",()=>b.closest("dialog").close()));
+document.querySelectorAll("dialog").forEach(d=>d.addEventListener("click",e=>{ if(e.target===d) d.close(); }));
+document.getElementById("reset").addEventListener("click",()=>{
+  seenIntro=false; lsSet("geshmak-intro","0"); state=freshState(); save(); render(); renderLB(); window.scrollTo(0,0);
+});
+render(); renderLB(); initLB();
+</script>
+</body>
+</html>
