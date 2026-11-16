@@ -3,6 +3,14 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-PVEW2YMT5C"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-PVEW2YMT5C');
+</script>
 <title>Geshmak!</title>
 <meta name="description" content="Can you name the Yid? Three Jewish figures a day, three clues each, and one thread that ties them together.">
 <meta property="og:title" content="Geshmak! Can you name the Yid?">
@@ -66,7 +74,7 @@ h1 span{color:var(--sun)}
 .score small{font-weight:600;font-size:13px}
 .chips{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
 .chip{border:3px solid var(--ink);background:#fff;border-radius:999px;padding:6px 14px 6px 10px;font-family:var(--display);font-weight:600;font-size:15px;cursor:pointer;box-shadow:3px 3px 0 var(--ink);display:inline-flex;align-items:center;gap:6px}
-.chip:nth-child(1){background:var(--mint)} .chip:nth-child(2){background:var(--sun)} .chip:nth-child(3){background:var(--sky)}
+.chip{background:var(--mint)}
 .chip:hover,.btn:hover{transform:translate(-1px,-1px)}
 .chip:active,.btn:active{transform:translate(2px,2px);box-shadow:none}
 [hidden]{display:none!important}
@@ -191,6 +199,36 @@ dialog h2{font-family:var(--title);font-weight:400;font-size:30px;margin-bottom:
 dialog h2 .ico{width:48px;height:48px}
 dialog p{margin:0 0 10px}
 dialog .btn{margin-top:6px}
+dialog h2{padding-right:46px}
+.x{position:absolute;top:12px;right:12px;width:40px;height:40px;flex:none;padding:0;border:3px solid var(--ink);border-radius:50%;background:#fff;color:var(--ink);font-family:var(--display);font-weight:700;font-size:20px;line-height:1;cursor:pointer;box-shadow:3px 3px 0 var(--ink);display:grid;place-items:center}
+.x:hover{transform:translate(-1px,-1px)} .x:active{transform:translate(2px,2px);box-shadow:none}
+.band .x{position:static}
+.band .side{display:flex;align-items:center;gap:8px;flex:none}
+#game .card,#lb{scroll-margin-top:96px}
+.misses{margin:0;font-size:14px;color:#5A5590}
+.misses s{margin-right:.6em;white-space:nowrap}
+.sure{display:flex;flex-direction:column;gap:10px;padding:12px;border:2px dashed var(--ink);border-radius:16px;background:var(--cream)}
+.sure p{margin:0}
+.sure b{font-family:var(--display)}
+.join{display:flex;flex-direction:column;gap:8px;padding:12px;border:2px solid var(--ink);border-radius:16px;background:var(--cream)}
+.join:empty{display:none}
+.join p{margin:0}
+.about details{border:2px solid var(--ink);border-radius:16px;background:var(--cream);margin:0 0 10px;overflow:hidden}
+.about summary{cursor:pointer;list-style:none;display:flex;align-items:center;gap:10px;padding:10px 12px;font-family:var(--display);font-weight:700;font-size:18px}
+.about summary::-webkit-details-marker{display:none}
+.about summary::after{content:"+";margin-left:auto;font-size:24px;line-height:1}
+.about details[open] summary::after{content:"–"}
+.about details[open] summary{border-bottom:2px solid var(--ink)}
+.about summary .ico{width:34px;height:34px}
+.about .sec{padding:12px 12px 2px;background:#fff}
+.switch button .ck{margin-left:4px}
+.more{border-top:2px dashed var(--ink);padding-top:12px}
+.more .sub{margin:0 0 8px}
+.more ul{margin:0;padding-left:1.2em;display:flex;flex-direction:column;gap:6px;font-size:15px}
+.more a{color:var(--ink);font-weight:600;text-decoration:underline;text-underline-offset:2px}
+.more li span{color:#5A5590;font-size:13px;white-space:nowrap}
+.more li span::before{content:"· "}
+.wait b{color:var(--ink);font-family:var(--display)}
 @media (max-width:420px){.cell .lab{font-size:11px}.cell .val{font-size:21px}.ladder{grid-template-columns:1fr}h1{font-size:44px}.logo .ico{width:54px;height:54px}.stickers .ico{width:34px;height:34px}}
 </style>
 </head>
@@ -285,9 +323,15 @@ dialog .btn{margin-top:6px}
     <use href="#face" x="32" y="32"/>
   </symbol>
   <symbol id="i-reel" viewBox="0 0 64 64">
-    <circle cx="32" cy="32" r="25" fill="#B14CFF" stroke="#1B1464" stroke-width="3"/>
-    <g fill="#fff" stroke="#1B1464" stroke-width="2.5"><circle cx="20" cy="19" r="4.500"/><circle cx="44" cy="19" r="4.500"/><circle cx="20" cy="46" r="4.500"/><circle cx="44" cy="46" r="4.500"/></g>
-    <g transform="translate(32 33)"><circle cx="-5" cy="0" r="2.200" fill="#fff"/><circle cx="5" cy="0" r="2.200" fill="#fff"/><path d="M-3.500 4.500q3.500 3.500 7 0" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"/></g>
+    <rect x="8" y="24" width="48" height="33" rx="6" fill="#B14CFF" stroke="#1B1464" stroke-width="3" stroke-linejoin="round"/>
+    <rect x="8" y="24" width="48" height="10" rx="3" fill="#fff" stroke="#1B1464" stroke-width="3" stroke-linejoin="round"/>
+    <g fill="#1B1464"><path d="M14 24h7l4 10h-7z"/><path d="M27 24h7l4 10h-7z"/><path d="M40 24h7l4 10h-7z"/></g>
+    <g transform="rotate(-14 10 22)">
+      <rect x="8" y="11" width="48" height="10" rx="3" fill="#fff" stroke="#1B1464" stroke-width="3" stroke-linejoin="round"/>
+      <g fill="#1B1464"><path d="M18 11h7l-4 10h-7z"/><path d="M31 11h7l-4 10h-7z"/><path d="M44 11h7l-4 10h-7z"/></g>
+    </g>
+    <circle cx="11" cy="23" r="2.500" fill="#FFD23F" stroke="#1B1464" stroke-width="2"/>
+    <g transform="translate(32 45)"><circle cx="-5" cy="0" r="2.200" fill="#fff"/><circle cx="5" cy="0" r="2.200" fill="#fff"/><path d="M-3.500 4.500q3.500 3.500 7 0" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"/></g>
   </symbol>
   <symbol id="i-corn" viewBox="0 0 64 64">
     <g stroke="#1B1464" stroke-width="3" stroke-linejoin="round">
@@ -324,9 +368,7 @@ dialog .btn{margin-top:6px}
       </div>
     </div>
     <div class="chips">
-      <button class="chip" type="button" data-open="dlg-how"><svg class="ico" aria-hidden="true"><use href="#i-dreidel"/></svg>How to play</button>
-      <button class="chip" type="button" data-open="dlg-name"><svg class="ico" aria-hidden="true"><use href="#i-challah"/></svg>What's "Geshmak"?</button>
-      <button class="chip" type="button" data-open="dlg-why"><svg class="ico" aria-hidden="true"><use href="#i-candles"/></svg>Why I made this</button>
+      <button class="chip" type="button" data-open="dlg-about"><svg class="ico" aria-hidden="true"><use href="#i-challah"/></svg>About</button>
       <span class="switch" role="group" aria-label="Choose a puzzle" id="switch"></span>
     </div>
   </header>
@@ -342,8 +384,8 @@ dialog .btn{margin-top:6px}
   <section class="card c-sky" id="lb" aria-label="Leaderboard">
     <div class="band">
       <h2 class="era"><svg class="ico" aria-hidden="true"><use href="#i-star"/></svg>Leaderboard</h2>
-      <span class="tabs" role="group" aria-label="Which leaderboard"><button type="button" data-lbtab="puzzle" id="lb-tab-p" aria-pressed="true">No. 1</button><button type="button" data-lbtab="all" id="lb-tab-a" aria-pressed="false">All time</button></span>
     </div>
+    <div class="row"><span class="tabs" role="group" aria-label="Which leaderboard"><button type="button" data-lbtab="puzzle" id="lb-tab-p" aria-pressed="true">Puzzle 1</button><button type="button" data-lbtab="all" id="lb-tab-a" aria-pressed="false">All time</button></span></div>
     <p class="quip good" id="lb-status" role="status">Loading the leaderboard…</p>
     <ol class="lb-list" id="lb-list"></ol>
     <div id="lb-auth">
@@ -385,36 +427,43 @@ dialog .btn{margin-top:6px}
   </div>
 
   <footer>
-    Geshmak! is a prototype with two puzzles so far. Everyone gets the same three Yids.
+    Geshmak! is in beta and is being shared with a limited audience for now. New puzzles are coming soon.
     <br>Clues are checked against public sources. Where a thread rests on a guess, we say so.
-    <br><button type="button" id="reset">Start over (for testing)</button>
+    <br>Questions, ideas or a Yid to suggest? <button type="button" id="contact">Contact me</button>
+    <br><button type="button" id="reset" hidden>Start over</button>
   </footer>
 </div>
 
-<dialog id="dlg-how">
-  <h2><svg class="ico" aria-hidden="true"><use href="#i-dreidel"/></svg>How to play</h2>
-  <p>Three Yids a puzzle: a <b>Today Yid</b>, a <b>Yester Yid</b> and a <b>Really Old Yid</b>. Everyone gets the same three.</p>
+<dialog id="dlg-about" class="about">
+  <button class="x" type="button" data-close aria-label="Close">✕</button>
+  <h2><svg class="ico" aria-hidden="true"><use href="#i-challah"/></svg>About</h2>
+  <details name="about" open>
+    <summary><svg class="ico" aria-hidden="true"><use href="#i-dreidel"/></svg>How to play</summary>
+    <div class="sec">
+  <p>There are three Yids to a puzzle: a <b>Today Yid</b>, a <b>Yester Yid</b> and a <b>Really Old Yid</b>. Everyone gets the same three.</p>
   <p>Each one comes with three clues. Name them on the first clue for <b>54</b> points, the second for <b>36</b>, the third for <b>18</b>. A wrong guess flips the next clue. Take all the time you want.</p>
-  <p>Then the bonus: the three are connected. Guess the thread for <b>18</b> more. A perfect day is 180, which is ten times chai.</p>
-  <button class="btn" type="button" data-close>Let's go</button>
-</dialog>
-
-<dialog id="dlg-name">
-  <h2><svg class="ico" aria-hidden="true"><use href="#i-challah"/></svg>What's "Geshmak"?</h2>
+  <p>Then the bonus: the three share a connection to one another that you have to figure out. We call it <b>the thread</b>, and guessing it is worth <b>18</b> more. A perfect day is 180, which is ten times chai.</p>
+    </div>
+  </details>
+  <details name="about">
+    <summary><svg class="ico" aria-hidden="true"><use href="#i-challah"/></svg>Why's it called "Geshmak!"?</summary>
+    <div class="sec">
   <p><b>Geshmak</b> (guh-SHMAHK) is Yiddish for delicious, delightful, a pleasure. It shares a root with the German <i>Geschmack</i>, "taste." You can eat something geshmak, and you can also do something <i>with</i> a geshmak, meaning with real relish.</p>
   <p>For generations the famous Yiddish sigh was <i>"S'iz shver tsu zayn a Yid"</i>: it's hard to be a Jew. Sholem Aleichem even made it the title of a play.</p>
-  <p>The comeback, a favorite in Hasidic teaching, flips one word: <i>"S'iz geshmak tsu zayn a Yid."</i> It's delicious to be a Jew.</p>
-  <p>And <b>Yid</b>? It's simply the Yiddish word for Jew. Here it's said the way it's said around the Shabbat table: with love.</p>
-  <button class="btn" type="button" data-close>Geshmak!</button>
-</dialog>
-
-<dialog id="dlg-why">
-  <h2><svg class="ico" aria-hidden="true"><use href="#i-candles"/></svg>Why I made this</h2>
+  <p>The comeback, a favorite in Hasidic teaching, flips one word: <i>"S'iz geshmak tsu zayn a Yid."</i> It's delicious, or awesome to be Jewish!</p>
+  <p>And <b>Yid</b>? As you might know, it's the Yiddish word for a Jew. Here it's not said as a slur, but reclaimed as a symbol of pride in our past, present, and future.</p>
+    </div>
+  </details>
+  <details name="about">
+    <summary><svg class="ico" aria-hidden="true"><use href="#i-candles"/></svg>Why I made this</summary>
+    <div class="sec">
   <p><b>I love being Jewish and I love making games!</b></p>
   <p>I'm Ian, and I made Geshmak! for three reasons:</p>
   <p class="fact"><svg class="ico" aria-hidden="true"><use href="#i-star"/></svg><span><b>To build Jewish connection.</b> Play it, share it, argue about it at dinner.</span></p>
   <p class="fact"><svg class="ico" aria-hidden="true"><use href="#i-wine"/></svg><span><b>To celebrate how awesome it is to be Jewish.</b> We show up everywhere: sports, science, food, fashion, film, scripture.</span></p>
-  <p class="fact"><svg class="ico" aria-hidden="true"><use href="#i-pom"/></svg><span><b>To deepen Jewish learning.</b> A bite at a time, with a nod to how deep the well goes.</span></p>
+  <p class="fact"><svg class="ico" aria-hidden="true"><use href="#i-pom"/></svg><span><b>To deepen Jewish learning.</b> A bite at a time, with an appreciation that there's always more to learn and discover.</span></p>
+    </div>
+  </details>
   <button class="btn" type="button" data-close>Back to the game</button>
 </dialog>
 
@@ -471,6 +520,13 @@ const P1 = {
       ["pom", "And the proof of how much honor a ger carries? Ruth, a Moabite convert, is the great-grandmother of King David. Tradition says the Messiah will come from David's line, which means from hers."],
       ["candles", "One more thread inside the thread: Marilyn reportedly recited Ruth's own words at her conversion."],
       ["challah", "<i>So why did we just name three converts? Ruth's story is told in her own book, and Amar'e and Marilyn shared theirs proudly. The teaching is about never making someone feel like an outsider. These three are simply ours.</i>"]
+    ],
+    sources: [
+      ["Amar'e Stoudemire completes his conversion to Judaism", "The Times of Israel", "https://www.timesofisrael.com/amare-stoudemire-completes-his-conversion-to-judaism/"],
+      ["9 Stunning Jewish Facts About Marilyn Monroe", "Kveller", "https://www.kveller.com/9-stunning-jewish-facts-about-marilyn-monroe/"],
+      ["Marilyn Monroe, Liz Taylor Were Seriously Jewish, Exhibit Explains", "JTA", "https://www.jta.org/2015/11/30/ny/marilyn-monroe-liz-taylor-were-seriously-jewish-exhibit-explains"],
+      ["10 Facts About Ruth in the Bible Everyone Should Know", "Chabad.org", "https://www.chabad.org/library/article_cdo/aid/5954235/jewish/10-Facts-About-Ruth-In-The-Bible-Everyone-Should-Know.htm"],
+      ["About Conversion to Judaism", "My Jewish Learning", "https://www.myjewishlearning.com/article/about-conversion/"]
     ]
   }
 };
@@ -524,6 +580,15 @@ const P2 = {
       ["wine", "It still matters in shul. A Kohen gets the first aliyah to the Torah and a Levi the second, and Levites wash the Kohanim's hands before the priestly blessing."],
       ["hand", "That blessing is given with the fingers split into a V. Leonard Nimoy saw it in synagogue as a boy and turned it into Spock's Vulcan salute."],
       ["challah", "<i>A confession: we haven't seen Dan's or Eli's family trees. Their surnames are the hint, and plenty of Cohens and Levys carry the name without the lineage. Call this one our best guess.</i>"]
+    ],
+    sources: [
+      ["18 Things to Know About Dan Levy", "Hey Alma", "https://www.heyalma.com/18-things-to-know-about-dan-levy/"],
+      ["2,500 items belonging to executed spy Eli Cohen recovered from Syria by Mossad", "The Times of Israel", "https://www.timesofisrael.com/2500-items-belonging-to-executed-spy-eli-cohen-recovered-from-syria-by-mossad/"],
+      ["Miriam the Prophetess", "My Jewish Learning", "https://www.myjewishlearning.com/article/miriam-the-prophetess/"],
+      ["Miriam: Bible", "Jewish Women's Archive", "https://jwa.org/encyclopedia/article/miriam-bible"],
+      ["What Are Kohanim, or Jewish 'Priests'?", "My Jewish Learning", "https://www.myjewishlearning.com/article/kohanim-jewish-priests/"],
+      ["Levites Today", "My Jewish Learning", "https://www.myjewishlearning.com/article/levites/"],
+      ["Who Were the Levites?", "Chabad.org", "https://www.chabad.org/library/article_cdo/aid/4254752/jewish/Who-Were-the-Levites.htm"]
     ]
   }
 };
@@ -533,10 +598,10 @@ let PUZZLE = PUZZLES[0];
 const POINTS = [54, 36, 18];
 const BONUS = 18;
 const RANKS = [
-  { min: 162, name: "Mentsch Master", icon: "star" },
-  { min: 108, name: "Sleepaway Camp Star", icon: "candles" },
-  { min: 54,  name: "Hebrew School Dropout", icon: "dreidel" },
-  { min: 0,   name: "Oy.", icon: "challah" }
+  { min: 162, name: "Mentsch Master", icon: "star", emoji: "\u{1F451}" },
+  { min: 108, name: "Sleepaway Camp Star", icon: "candles", emoji: "\u{1F3D5}\uFE0F" },
+  { min: 54,  name: "Hebrew School Dropout", icon: "dreidel", emoji: "\u{1F392}" },
+  { min: 0,   name: "Oy.", icon: "challah", emoji: "\u{1F62C}" }
 ];
 const QUIPS = {
   wrong: [
@@ -546,6 +611,7 @@ const QUIPS = {
     "It's fine. I'll just sit here in the dark while you guess.",
     "Close only counts in horseshoes and kugel."
   ],
+  again: "You tried that one already. No charge for the rerun.",
   first: "Dayenu! But wait, there's more.",
   right: ["Mazel tov!", "Look at you. Your bubbe is kvelling.", "Yasher koach!"],
   miss: "It's okay. Moses didn't make it to the end either.",
@@ -584,10 +650,11 @@ function total(state){ return state.rounds.reduce((s,r)=>s+roundPoints(r),0) + (
 function rankFor(score){ return RANKS.find(r=>score>=r.min); }
 function shareText(state){
   const t=total(state);
-  const lines=["Geshmak! No. "+PUZZLE.id+": "+t+"/180", rankFor(t).name, ""];
-  state.rounds.forEach((r,i)=>{ lines.push(PUZZLE.rounds[i].era+": "+roundPoints(r)+"/54"); });
-  lines.push("The thread: "+(state.bonus==="won"?BONUS:0)+"/18");
-  lines.push("", "Can you name the Yid?");
+  const rk=rankFor(t), E=["\u{1F4F1}","\u{1F4DC}","\u{1F3FA}"];
+  const lines=["\u2721\uFE0F Geshmak! No. "+PUZZLE.id+": "+t+"/180"+(t===180?" \u{1F389}":""), rk.emoji+" "+rk.name, ""];
+  state.rounds.forEach((r,i)=>{ lines.push(E[i]+" "+PUZZLE.rounds[i].era+": "+roundPoints(r)+"/54"); });
+  lines.push("\u{1F9F5} The thread: "+(state.bonus==="won"?BONUS:0)+"/18");
+  lines.push("", "Can you name the Yid? \u{1F56F}\uFE0F\u{1F35E}\u{1F377}");
   try{ if(/github\.io$/.test(location.hostname)) lines.push(location.origin+location.pathname); }catch(e){}
   return lines.join("\n");
 }
@@ -617,7 +684,8 @@ const game=document.getElementById("game");
 const SHORT=["Today","Yester","Really Old"];
 function renderSwitch(){
   document.getElementById("switch").innerHTML=PUZZLES.map(p=>
-    '<button type="button" data-puzzle="'+p.id+'" aria-pressed="'+(p.id===PUZZLE.id)+'">No. '+p.id+'</button>').join("");
+    { const s=p.id===PUZZLE.id?state:rawState(p.id), fin=!!(s&&finished(s));
+      return '<button type="button" data-puzzle="'+p.id+'" aria-pressed="'+(p.id===PUZZLE.id)+'"'+(fin?' aria-label="Puzzle '+p.id+', finished"':'')+'>Puzzle '+p.id+(fin?'<span class="ck" aria-hidden="true">\u2713</span>':'')+'</button>'; }).join("");
 }
 function renderBoard(){
   const act=state.started?activeIndex():-2;
@@ -634,13 +702,13 @@ function renderBoard(){
   document.getElementById("board").innerHTML=h;
 }
 function introHTML(){
-  return '<section class="card c-sun" aria-label="How scoring works"><div class="band"><h2 class="era">'+ico("dreidel")+'How scoring works</h2><span class="pts">180 max</span></div>'+
+  return '<section class="card c-sun" aria-label="How scoring works"><div class="band"><h2 class="era">'+ico("dreidel")+'How scoring works</h2><span class="side"><span class="pts">180 max</span><button class="x" type="button" data-act="start" aria-label="Close and start playing">✕</button></span></div>'+
     '<p style="margin:0">Three Yids, three clues each. The sooner you name them, the more you score. No timer, so take all the time you want.</p>'+
     '<ul class="rules">'+
     '<li><span class="worth">54</span><span>Name the Yid on the <b>first clue</b></span></li>'+
     '<li><span class="worth">36</span><span>Name them on the <b>second clue</b></span></li>'+
     '<li><span class="worth">18</span><span>Name them on the <b>third clue</b></span></li>'+
-    '<li><span class="worth bonus">+18</span><span><b>Bonus:</b> guess the thread that ties all three together</span></li>'+
+    '<li><span class="worth bonus">+18</span><span><b>Bonus: the thread.</b> Guess the connection that brings all three together</span></li>'+
     '<li><span class="worth max">180</span><span>A perfect day. That\'s ten times chai.</span></li>'+
     '</ul>'+
     '<p style="margin:0">A wrong guess flips the next clue, which costs you 18.</p>'+
@@ -653,6 +721,43 @@ function introHTML(){
     '</div>'+
     '<div class="row"><button class="btn gold" type="button" data-act="start" id="start-btn">Let\'s play</button></div>'+
     ico("wine","peek")+'</section>';
+}
+let confirming=false;
+function missesHTML(m){
+  if(!m||!m.length) return "";
+  return '<p class="misses"><b>Not it:</b> '+m.map(x=>'<s>'+esc(x)+'</s>').join(" ")+'</p>';
+}
+function sureHTML(yes){
+  return '<div class="sure" role="group" aria-label="Are you sure?"><p><b>Sure?</b> Before you fold, talk it out with a friend and see if you can figure it out together.</p>'+
+    '<div class="row"><button class="btn" type="button" data-act="sure-no">Keep guessing</button><button class="btn ghost" type="button" data-act="'+yes+'">Yes, tell me</button></div></div>';
+}
+function toCard(n){
+  const c=game.querySelectorAll("section.card")[n]; if(!c) return;
+  let smooth=true; try{ smooth=!matchMedia("(prefers-reduced-motion: reduce)").matches; }catch(e){}
+  let y=0; for(let n=c;n;n=n.offsetParent) y+=n.offsetTop;
+  y=Math.max(0,y-96);
+  try{ window.scrollTo({top:y,behavior:smooth?"smooth":"auto"}); }catch(e){ window.scrollTo(0,y); }
+}
+function touchy(){ try{ return matchMedia("(pointer: coarse)").matches; }catch(e){ return false; } }
+function renderJoin(){
+  const el=document.getElementById("score-join"); if(!el) return;
+  const mode=!fb?"off":!lb.user?"out":myName?"named":"noname";
+  const key=mode+"|"+myName+"|"+lb.busy+"|"+lb.msg;
+  if(el.dataset.key===key) return;
+  const keep=el.querySelector("input"), val=keep?keep.value:"", had=keep&&document.activeElement===keep;
+  el.dataset.key=key;
+  let h2="";
+  if(mode==="named"){
+    h2='<p class="lb-lab">You\'re on the leaderboard as <b>'+esc(myName)+'</b></p><div class="row"><button class="btn ghost" type="button" data-act="toboard">See the leaderboard</button></div>';
+  } else if(mode!=="off"){
+    h2='<form data-form="join"><label class="lb-lab" for="join-name" style="flex-basis:100%">Put your score on the leaderboard</label>'+
+       '<input type="text" id="join-name" maxlength="24" autocomplete="nickname" placeholder="Your name, like Ian L."'+(lb.busy?' disabled':'')+'>'+
+       '<button class="btn" type="submit"'+(lb.busy?' disabled':'')+'>Put me on the board</button></form>'+
+       (mode==="out"?'<button class="linkbtn" type="button" data-act="toboard">Or sign in with Google or email</button>':'')+
+       (lb.msg?'<p class="quip">'+esc(lb.msg)+'</p>':'');
+  }
+  el.innerHTML=h2;
+  const inp=el.querySelector("input"); if(inp){ inp.value=val; if(had) inp.focus(); }
 }
 function render(focusId){
   renderSwitch(); renderBoard();
@@ -679,10 +784,11 @@ function render(focusId){
       });
       html+='</ol>';
       html+='<form data-form="guess"><label class="sr" for="guess-'+i+'">Your guess for the '+esc(R.era)+'</label>'+
-            '<input type="text" id="guess-'+i+'" autocomplete="off" autocapitalize="words" placeholder="Who is it?">'+
+            '<input type="text" id="guess-'+i+'" name="geshmak-answer-'+i+'" autocomplete="off" autocorrect="off" spellcheck="false" enterkeyhint="go" data-1p-ignore data-lpignore="true" data-bwignore data-form-type="other" autocapitalize="words" placeholder="Who is it?">'+
             '<button class="btn" type="submit">Guess</button></form>';
-      html+='<div class="row">'+(r.clue<2
-            ? '<button class="btn ghost" type="button" data-act="next">Next clue (−18)</button>'
+      html+=missesHTML(r.misses);
+      html+=confirming?sureHTML("giveup-yes"):'<div class="row">'+(r.clue<2
+            ? '<button class="btn ghost" type="button" data-act="next">Next clue</button>'
             : '<button class="btn ghost" type="button" data-act="giveup">I give up, tell me</button>')+'</div>';
       html+='<p class="quip'+(state.quipGood?' good':'')+'" role="status">'+esc(state.quip)+'</p>';
     } else {
@@ -691,21 +797,29 @@ function render(focusId){
     html+=ico(R.peek,"peek")+'</section>';
   });
 
+  if(act!==-1){
+    html+='<section class="card c-grape locked" aria-label="Bonus: the thread"><div class="band"><h2 class="era">'+ico("menorah")+'Bonus: the thread</h2><span class="pts">+18</span></div>'+
+      '<p class="wait">'+ico("star")+'<span><b>The thread</b> is the connection that brings all three Yids together. Name them, then guess it for 18 more.</span></p>'+ico("star","peek")+'</section>';
+  }
   if(act===-1){
     const T=PUZZLE.thread;
     if(state.bonus==="playing"){
       html+='<section class="card c-grape active" aria-label="Bonus"><div class="band"><h2 class="era">'+ico("menorah")+'Bonus: the thread</h2><span class="pts">+18</span></div>'+
         '<p style="margin:0">'+esc(T.prompt)+'</p>'+
         '<form data-form="thread"><label class="sr" for="thread-guess">What connects all three?</label>'+
-        '<input type="text" id="thread-guess" autocomplete="off" placeholder="They all…">'+
+        '<input type="text" id="thread-guess" name="geshmak-thread" autocomplete="off" autocorrect="off" spellcheck="false" enterkeyhint="go" data-1p-ignore data-lpignore="true" data-bwignore data-form-type="other" autocapitalize="sentences" placeholder="They all…">'+
         '<button class="btn" type="submit">Guess</button></form>'+
-        '<div class="row"><button class="btn ghost" type="button" data-act="reveal">Just tell me</button></div>'+
+        missesHTML(state.tmisses)+
+        (confirming?sureHTML("reveal-yes"):'<div class="row"><button class="btn ghost" type="button" data-act="reveal">Just tell me</button></div>')+
         '<p class="quip'+(state.quipGood?' good':'')+'" role="status">'+esc(state.quip)+'</p>'+ico("star","peek")+'</section>';
     } else {
       const t=total(state), rk=rankFor(t);
       html+='<section class="card c-grape thread pop" aria-label="The thread"><div class="band"><h2 class="era">'+ico("menorah")+esc(T.title)+'</h2>'+
         '<span class="pts '+(state.bonus==="won"?'won':'zero')+'">+'+(state.bonus==="won"?18:0)+'</span></div>'+
-        T.body.map(p=>'<p class="fact">'+ico(p[0])+'<span>'+p[1]+'</span></p>').join("")+ico("star","peek")+'</section>';
+        T.body.map(p=>'<p class="fact">'+ico(p[0])+'<span>'+p[1]+'</span></p>').join("")+
+        (T.sources&&T.sources.length?'<div class="more"><p class="sub">Want to learn more? Check out these sources!</p><ul>'+
+          T.sources.map(s=>'<li><a href="'+esc(s[2])+'" target="_blank" rel="noopener">'+esc(s[0])+'</a> <span>'+esc(s[1])+'</span></li>').join("")+'</ul></div>':'')+
+        ico("star","peek")+'</section>';
       html+='<section class="card c-sky" aria-label="Your result"><div class="band"><h2 class="era">'+ico("wine")+'Your score</h2><span class="pts">'+t+' / 180</span></div>'+
         '<div class="rank pop">'+ico(rk.icon)+esc(rk.name)+'</div>'+
         '<p class="quip good" role="status">'+esc(t===180?QUIPS.perfect:state.quip)+'</p>'+
@@ -714,8 +828,9 @@ function render(focusId){
         '<div class="line">'+ico("menorah")+'<span>The thread</span><span class="n k-grape">'+(state.bonus==="won"?18:0)+'<small> /18</small></span></div>'+
         '<div class="line sum">'+ico("challah")+'<span>Total</span><span class="n">'+t+'<small> /180</small></span></div>'+
         '</div>'+
-        '<div class="row"><button class="btn" type="button" data-act="share">Copy my score to share</button>'+
-        PUZZLES.filter(p=>p.id!==PUZZLE.id).map(p=>'<button class="btn ghost" type="button" data-puzzle="'+p.id+'">Play No. '+p.id+'</button>').join("")+'</div>'+
+        '<div class="join" id="score-join"></div>'+
+        '<div class="row"><button class="btn" type="button" data-act="share">Share my score</button>'+
+        PUZZLES.filter(p=>p.id!==PUZZLE.id).map(p=>'<button class="btn ghost" type="button" data-puzzle="'+p.id+'">Play Puzzle '+p.id+'</button>').join("")+'</div>'+
         '<p class="quip good" id="share-note" role="status"></p>'+ico("dreidel","peek")+'</section>';
       html+='<section class="card chai" aria-label="Support the game"><h2>Like the game?</h2>'+
         '<div class="hands">'+ico("hand","wiggle")+
@@ -724,6 +839,7 @@ function render(focusId){
     }
   }
   game.innerHTML=html;
+  renderJoin();
   if(focusId){ const el=document.getElementById(focusId); if(el) el.focus(); }
 }
 
@@ -763,7 +879,7 @@ function boardRows(){
 }
 function renderLB(){
   const tp=document.getElementById("lb-tab-p"), ta=document.getElementById("lb-tab-a");
-  tp.textContent="No. "+PUZZLE.id; tp.setAttribute("aria-pressed",lb.tab==="puzzle"); ta.setAttribute("aria-pressed",lb.tab==="all");
+  tp.textContent="Puzzle "+PUZZLE.id; tp.setAttribute("aria-pressed",lb.tab==="puzzle"); ta.setAttribute("aria-pressed",lb.tab==="all");
   const list=document.getElementById("lb-list"); list.textContent="";
   let msg="";
   if(lb.status==="loading") msg="Loading the leaderboard…";
@@ -796,6 +912,7 @@ function renderAuth(){
     document.getElementById("lb-out").hidden=!!lb.user.isAnonymous;
   }
   document.getElementById("lb-msg").textContent=lb.msg;
+  renderJoin();
 }
 function authMsg(e){
   const c=e&&e.code||"";
@@ -913,52 +1030,80 @@ document.getElementById("lb").addEventListener("click",e=>{
 });
 
 /* ---------- actions ---------- */
+function toLB(){
+  const c=document.getElementById("lb"); let smooth=true; try{ smooth=!matchMedia("(prefers-reduced-motion: reduce)").matches; }catch(e){}
+  try{ c.scrollIntoView({behavior:smooth?"smooth":"auto",block:"start"}); }catch(e){ c.scrollIntoView(); }
+}
 function switchPuzzle(id){
   const p=PUZZLES.find(z=>z.id===id); if(!p||p.id===PUZZLE.id) return;
-  PUZZLE=p; lsSet("geshmak-current",String(id)); state=loadState(id);
+  PUZZLE=p; lsSet("geshmak-current",String(id)); state=loadState(id); confirming=false;
   render(); if(lb.tab==='puzzle') subscribeRows(); else renderLB(); window.scrollTo(0,0);
 }
 document.addEventListener("click",e=>{
   const b=e.target.closest("[data-puzzle]"); if(b) switchPuzzle(Number(b.dataset.puzzle));
 });
 function finishRound(i,status,quip,good){
-  state.rounds[i].status=status; state.quip=quip; state.quipGood=good;
+  state.rounds[i].status=status; state.quip=quip; state.quipGood=good; confirming=false;
   save(); render();
   const nxt=activeIndex();
-  const el=document.getElementById(nxt>=0?"guess-"+nxt:"thread-guess"); if(el) el.focus({preventScroll:true});
+  const el=document.getElementById(nxt>=0?"guess-"+nxt:"thread-guess"); if(el&&!touchy()) el.focus({preventScroll:true});
+  toCard(i);
 }
 function finishBonus(status,quip,good){
-  state.bonus=status; state.quip=quip; state.quipGood=good; save(); render(); renderLB(); submitScores();
+  state.bonus=status; state.quip=quip; state.quipGood=good; confirming=false; save(); render(); renderLB(); submitScores();
+  toCard(3);
 }
 game.addEventListener("submit",e=>{
   e.preventDefault();
   const kind=e.target.dataset.form, input=e.target.querySelector("input"), val=input.value;
+  if(kind==="join"){
+    const v=cleanName(val); if(!v||!fb) return;
+    setMyName(v); document.getElementById("lb-nameinput").value=myName;
+    if(lb.user){ lb.msg=""; submitScores(); renderLB(); }
+    else guard(()=>fb.Au.signInAnonymously(fb.auth));
+    return;
+  }
   if(!val.trim()) return;
+  confirming=false;
+  const shown=val.replace(/\s+/g," ").trim().slice(0,40);
+  const tried=(list)=>list.some(x=>norm(x)===norm(shown));
   if(kind==="guess"){
     const i=activeIndex(), r=state.rounds[i];
+    if(!r.misses) r.misses=[];
     if(matchName(val,PUZZLE.rounds[i].aliases)){
       finishRound(i,"won", r.clue===0?QUIPS.first:pick(QUIPS.right), true);
+    } else if(tried(r.misses)){
+      state.quip=QUIPS.again; state.quipGood=false; save(); render("guess-"+i);
     } else {
+      r.misses.push(shown);
       if(r.clue<2) r.clue++;
       state.quip=pick(QUIPS.wrong); state.quipGood=false; save(); render("guess-"+i);
     }
   } else {
+    if(!state.tmisses) state.tmisses=[];
     if(matchThread(val,PUZZLE.thread)) finishBonus("won",QUIPS.thread,true);
-    else { state.quip=pick(QUIPS.wrong); state.quipGood=false; save(); render("thread-guess"); }
+    else if(tried(state.tmisses)){ state.quip=QUIPS.again; state.quipGood=false; save(); render("thread-guess"); }
+    else { state.tmisses.push(shown); state.quip=pick(QUIPS.wrong); state.quipGood=false; save(); render("thread-guess"); }
   }
 });
 game.addEventListener("click",e=>{
   const b=e.target.closest("[data-act]"); if(!b) return;
   const a=b.dataset.act, i=activeIndex();
   if(a==="start"){ seenIntro=true; lsSet("geshmak-intro","1"); state.started=true; save(); render("guess-0"); }
-  else if(a==="next"){ state.rounds[i].clue++; state.quip=""; save(); render("guess-"+i); }
-  else if(a==="giveup"){ finishRound(i,"lost",QUIPS.miss,false); }
-  else if(a==="reveal"){ finishBonus("lost",QUIPS.miss,false); }
+  else if(a==="next"){ confirming=false; state.rounds[i].clue++; state.quip=""; save(); render("guess-"+i); }
+  else if(a==="giveup"||a==="reveal"){ confirming=true; state.quip=""; render(); const y=game.querySelector('[data-act="sure-no"]'); if(y) y.focus(); }
+  else if(a==="sure-no"){ confirming=false; render(touchy()?null:(i>=0?"guess-"+i:"thread-guess")); }
+  else if(a==="giveup-yes"){ finishRound(i,"lost",QUIPS.miss,false); }
+  else if(a==="reveal-yes"){ finishBonus("lost",QUIPS.miss,false); }
+  else if(a==="toboard"){ toLB(); }
   else if(a==="share"){
     const txt=shareText(state), note=document.getElementById("share-note");
     const ok=()=>{ note.textContent="Copied! Go brag in the group chat."; };
     const no=()=>{ note.textContent="Couldn't copy automatically. Here it is to copy by hand: "+txt.replace(/\n+/g," · "); };
-    try{ navigator.clipboard.writeText(txt).then(ok,no); }catch(err){ no(); }
+    const copy=()=>{ try{ navigator.clipboard.writeText(txt).then(ok,no); }catch(err){ no(); } };
+    if(touchy()&&navigator.share){
+      try{ navigator.share({text:txt}).then(()=>{ note.textContent="Shared! Go brag in the group chat."; },err=>{ if(!err||err.name!=="AbortError") copy(); }); }catch(err){ copy(); }
+    } else copy();
   }
 });
 document.querySelectorAll("[data-open]").forEach(b=>b.addEventListener("click",()=>{
@@ -966,7 +1111,12 @@ document.querySelectorAll("[data-open]").forEach(b=>b.addEventListener("click",(
 }));
 document.querySelectorAll("[data-close]").forEach(b=>b.addEventListener("click",()=>b.closest("dialog").close()));
 document.querySelectorAll("dialog").forEach(d=>d.addEventListener("click",e=>{ if(e.target===d) d.close(); }));
+document.getElementById("contact").addEventListener("click",()=>{
+  location.href="mailto:"+["ian.m.lever","gmail.com"].join("@")+"?subject="+encodeURIComponent("Geshmak!");
+});
+try{ if(/[?&]test\b/.test(location.search)) document.getElementById("reset").hidden=false; }catch(e){}
 document.getElementById("reset").addEventListener("click",()=>{
+  confirming=false;
   seenIntro=false; lsSet("geshmak-intro","0"); state=freshState(); save(); render(); renderLB(); window.scrollTo(0,0);
 });
 render(); renderLB(); initLB();
