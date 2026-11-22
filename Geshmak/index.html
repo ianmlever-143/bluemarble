@@ -29,6 +29,8 @@ gtag('config', 'G-PVEW2YMT5C');
 <meta name="twitter:image" content="https://ianmlever-143.github.io/bluemarble/Geshmak/geshmak-share.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="dns-prefetch" href="https://www.gstatic.com">
+<link rel="dns-prefetch" href="https://firestore.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Bagel+Fat+One&family=Fredoka:wght@500;600;700&family=Rubik:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 /* Layout idea: a sticker sheet. Electric-blue page papered with Jewish doodles, chunky outlined cards
@@ -73,6 +75,16 @@ h1 span{color:var(--sun)}
 .score{font-family:var(--display);font-weight:700;font-size:20px;background:var(--sun);border:3px solid var(--ink);box-shadow:4px 4px 0 var(--ink);border-radius:999px;padding:6px 16px;font-variant-numeric:tabular-nums;white-space:nowrap;transform:rotate(3deg)}
 .score small{font-weight:600;font-size:13px}
 .chips{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.chip.lbchip{background:var(--sky)}
+#lb{scroll-margin-top:16px}
+/* all three clues, after a Yid is revealed */
+.allclues summary{cursor:pointer;list-style:none;display:flex;align-items:center;gap:10px;padding:10px 14px;border:2px solid var(--ink);border-radius:16px;background:#fff;font-family:var(--display);font-weight:600}
+.allclues summary::-webkit-details-marker{display:none}
+.allclues summary .ico{width:30px;height:30px}
+.allclues summary::after{content:"\25BE";margin-left:auto;transition:transform .2s}
+.allclues[open] summary::after{transform:rotate(180deg)}
+.allclues summary:hover{background:var(--cream)}
+.allclues .clues{margin-top:10px}
 .chip{border:3px solid var(--ink);background:#fff;border-radius:999px;padding:6px 14px 6px 10px;font-family:var(--display);font-weight:600;font-size:15px;cursor:pointer;box-shadow:3px 3px 0 var(--ink);display:inline-flex;align-items:center;gap:6px}
 .chip{background:var(--mint)}
 .chip:hover,.btn:hover{transform:translate(-1px,-1px)}
@@ -450,6 +462,7 @@ dialog h2{padding-right:46px}
     </div>
     <div class="chips">
       <button class="chip" type="button" data-open="dlg-about"><svg class="ico" aria-hidden="true"><use href="#i-challah"/></svg>About</button>
+      <button class="chip lbchip" type="button" id="lb-chip"><svg class="ico" aria-hidden="true"><use href="#i-shofar"/></svg>Leaderboard</button>
       <span class="switch" role="group" aria-label="Choose a week" id="switch"></span>
     </div>
   </header>
@@ -915,6 +928,7 @@ function introHTML(){
     ico("wine","peek")+'</section>';
 }
 let confirming=false;
+const openClues={};
 function missesHTML(m){
   if(!m||!m.length) return "";
   return '<p class="misses"><b>Not it:</b> '+m.map(x=>'<s>'+esc(x)+'</s>').join(" ")+'</p>';
@@ -967,6 +981,9 @@ function render(focusId){
     html+='<div class="band"><h2 class="era">'+ico(R.icon)+esc(R.era)+'</h2>'+badge+'</div>';
     if(done){
       html+='<div class="answer pop">'+esc(R.answer)+'</div>';
+      const ck=PUZZLE.id+"-"+i;
+      html+='<details class="allclues" data-ck="'+ck+'"'+(openClues[ck]?' open':'')+'><summary>'+ico("torah")+'See all three clues</summary><ol class="clues">'+
+        R.clues.map((c,j)=>'<li class="clue"><span class="worth">'+POINTS[j]+'<small>pts</small></span><p>'+esc(c)+'</p></li>').join("")+'</ol></details>';
       html+='<p class="learn">'+ico("challah")+'<span><b>Nosh on this:</b> '+esc(R.learn)+'</span></p>';
       if(R.read) html+='<a class="read" href="'+esc(R.read[2])+'" target="_blank" rel="noopener">'+ico("book")+'<span class="t"><span>'+esc(R.read[0])+'</span><small>Read more on '+esc(R.read[1])+' ↗</small></span></a>';
     } else if(isAct){
@@ -986,7 +1003,7 @@ function render(focusId){
             : '<button class="btn ghost" type="button" data-act="giveup">I give up, tell me</button>')+'</div>';
       html+='<p class="quip'+(state.quipGood?' good':'')+'" role="status">'+esc(state.quip)+'</p>';
     } else {
-      html+='<p class="wait">'+ico(["bagel","torah","book"][i]||"bagel")+'Three clues, coming up after the one above.</p>';
+      html+='<p class="wait">'+ico(["bagel","torah","book"][i]||"bagel")+'Three clues coming up! Guess the '+esc(PUZZLE.rounds[i-1]?PUZZLE.rounds[i-1].era:"one above")+' first.</p>';
     }
     html+=ico(R.peek,"peek")+'</section>';
   });
@@ -1048,8 +1065,14 @@ const FIREBASE_CONFIG = {
   appId: "1:472104301620:web:1abd1e5bfb107154940661"
 };
 const FB_BASE = "https://www.gstatic.com/firebasejs/12.7.0/";
-const lb={status:"loading",rows:[],tab:"puzzle",user:null,msg:"",busy:false};
-let fb=null, unsubRows=null, rowsTimer=null, writing=Promise.resolve();
+const lb={status:"loading",rows:[],tab:"puzzle",user:null,msg:"",busy:false,me:null};
+let fb=null, fbLoading=null, rowsTimer=null, rowsSeq=0, lbWanted=false, writing=Promise.resolve();
+/* Keeps Firebase light so lots of people can play at once:
+   - the game never waits on Firebase; the SDK loads in the background after the page is up
+   - the leaderboard is read once (top 10), not streamed live, and only when someone looks at it
+   - results are cached on the device for 2 minutes, so reloads and tab flips don't re-read
+   - your own rank comes from one cheap count query instead of downloading everyone's scores */
+const LB_TOP=10, LB_TTL=120000;
 function cleanName(s){ return String(s||"").replace(/\s+/g," ").trim().slice(0,24); }
 function defaultName(u){
   const d=cleanName(u&&u.displayName); if(!d) return "";
@@ -1082,8 +1105,9 @@ function renderLB(){
   else if(lb.status==="error") msg="The leaderboard couldn't be read right now. Try again in a bit.";
   else {
     const rows=boardRows(); rows.forEach((r,i)=>{ r.pos=i+1; });
-    const shown=rows.slice(0,10), me=lb.user?rows.find(r=>r.id===lb.user.uid):null;
-    if(me&&me.pos>10) shown.push(me);
+    const shown=rows.slice(0,LB_TOP), me=lb.user?rows.find(r=>r.id===lb.user.uid):null;
+    if(me&&me.pos>LB_TOP) shown.push(me);
+    else if(!me&&lb.user&&lb.me) shown.push({id:lb.user.uid,name:myName||"You",score:lb.me.score,pos:lb.me.pos});
     shown.forEach(r=>{
       const li=document.createElement("li"), mine=lb.user&&r.id===lb.user.uid; if(mine) li.className="me";
       const a=document.createElement("span"); a.className="pos"; a.textContent=r.pos;
@@ -1132,6 +1156,9 @@ async function guard(fn){
 function submitScores(){
   if(!fb||!lb.user||!myName) return;
   const uid=lb.user.uid, name=myName;
+  /* skip the round trip entirely if this device already saved exactly these scores */
+  const sig=uid+"|"+name+"|"+JSON.stringify(localScores());
+  if(ls("geshmak-synced")===sig) return;
   writing=writing.then(async()=>{
     try{
       const ref=fb.F.doc(fb.db,"scores",uid), snap=await fb.F.getDoc(ref);
@@ -1140,25 +1167,46 @@ function submitScores(){
       let changed=!snap.exists()||cur.name!==name;
       const mine=localScores();
       Object.keys(mine).forEach(k=>{ if(typeof p[k]!=="number"){ p[k]=mine[k]; changed=true; } });
-      const keys=Object.keys(p); if(!keys.length||!changed) return;
+      const keys=Object.keys(p); if(!keys.length) return;
+      if(!changed){ lsSet("geshmak-synced",sig); return; }
       const t=keys.reduce((s,k)=>s+(typeof p[k]==="number"?Math.max(0,Math.min(180,Math.round(p[k]))):0),0);
       await fb.F.setDoc(ref,{name:name,p:p,t:t,updated:Date.now()});
+      lsSet("geshmak-synced",sig);
+      if(lbWanted) loadRows(true);
     }catch(e){ lb.msg="Couldn't save your score to the board. Try again in a bit."; renderAuth(); }
   });
 }
-function subscribeRows(){
-  if(!fb){ renderLB(); return; }
-  if(unsubRows){ unsubRows(); unsubRows=null; }
+function lbField(){ return lb.tab==="all"?"t":"p."+PUZZLE.id; }
+function myScoreFor(field){
+  const mine=localScores();
+  if(field==="t"){ const v=Object.values(mine); return v.length?v.reduce((a,b)=>a+b,0):null; }
+  const k=field.slice(2); return typeof mine[k]==="number"?mine[k]:null;
+}
+async function loadRows(force){
+  lbWanted=true;
+  if(!fb){ if(lb.status!=="off") startFB(); renderLB(); return; }
+  const field=lbField(), key="geshmak-lb:"+field, seq=++rowsSeq;
+  if(!force){
+    try{ const c=JSON.parse(sessionStorage.getItem(key)||"null"); if(c&&Date.now()-c.at<LB_TTL&&(!lb.user||c.uid===lb.user.uid)){ lb.rows=c.rows; lb.me=c.me; lb.status="ready"; renderLB(); return; } }catch(e){}
+  }
+  if(!lb.rows.length) lb.status="loading";
+  renderLB();
   clearTimeout(rowsTimer);
-  lb.status="loading"; lb.rows=[]; renderLB();
-  const field=lb.tab==="all"?"t":"p."+PUZZLE.id;
-  const q=fb.F.query(fb.F.collection(fb.db,"scores"),fb.F.orderBy(field,"desc"),fb.F.limit(50));
-  rowsTimer=setTimeout(()=>{ if(lb.status==="loading"){ lb.status="slow"; renderLB(); } },10000);
-  unsubRows=fb.F.onSnapshot(q,snap=>{
+  rowsTimer=setTimeout(()=>{ if(seq===rowsSeq&&lb.status==="loading"){ lb.status="slow"; renderLB(); } },10000);
+  try{
+    const F=fb.F, col=F.collection(fb.db,"scores");
+    const snap=await F.getDocs(F.query(col,F.orderBy(field,"desc"),F.limit(LB_TOP)));
+    const rows=snap.docs.map(d=>Object.assign({id:d.id},d.data()||{}));
+    let me=null;
+    const mineScore=myScoreFor(field), count=F.getCount||F.getCountFromServer;
+    if(lb.user&&mineScore!==null&&!rows.some(r=>r.id===lb.user.uid)&&rows.length>=LB_TOP&&count){
+      try{ const c=await count(F.query(col,F.where(field,">",mineScore))); me={score:mineScore,pos:(c.data().count||0)+1}; }catch(e){}
+    }
+    if(seq!==rowsSeq) return;
     clearTimeout(rowsTimer);
-    lb.rows=snap.docs.map(d=>Object.assign({id:d.id},d.data()||{}));
-    lb.status="ready"; renderLB();
-  },()=>{ clearTimeout(rowsTimer); lb.status="error"; renderLB(); });
+    lb.rows=rows; lb.me=me; lb.status="ready"; renderLB();
+    try{ sessionStorage.setItem(key,JSON.stringify({at:Date.now(),uid:lb.user?lb.user.uid:"",rows:rows,me:me})); }catch(e){}
+  }catch(e){ if(seq!==rowsSeq) return; clearTimeout(rowsTimer); lb.status=lb.rows.length?"ready":"error"; renderLB(); }
 }
 async function onUser(u){
   lb.user=u||null; lb.msg="";
@@ -1173,16 +1221,28 @@ async function onUser(u){
   }
   renderLB();
 }
-async function initLB(){
-  const slow=setTimeout(()=>{ if(lb.status==="loading"){ lb.status="slow"; renderLB(); } },10000);
-  try{
-    const m=await Promise.all([import(FB_BASE+"firebase-app.js"),import(FB_BASE+"firebase-auth.js"),import(FB_BASE+"firebase-firestore.js")]);
-    const app=m[0].initializeApp(FIREBASE_CONFIG);
-    fb={Au:m[1],F:m[2],auth:m[1].getAuth(app),db:m[2].getFirestore(app)};
-    clearTimeout(slow);
-    fb.Au.onAuthStateChanged(fb.auth,onUser,()=>{});
-    subscribeRows();
-  }catch(e){ clearTimeout(slow); lb.status="off"; renderLB(); }
+function startFB(){
+  if(fbLoading) return fbLoading;
+  fbLoading=(async()=>{
+    try{
+      const m=await Promise.all([import(FB_BASE+"firebase-app.js"),import(FB_BASE+"firebase-auth.js"),import(FB_BASE+"firebase-firestore-lite.js")]);
+      const app=m[0].initializeApp(FIREBASE_CONFIG);
+      fb={Au:m[1],F:m[2],auth:m[1].getAuth(app),db:m[2].getFirestore(app)};
+      fb.Au.onAuthStateChanged(fb.auth,async u=>{ await onUser(u); if(lbWanted) loadRows(); },()=>{});
+    }catch(e){ lb.status="off"; renderLB(); }
+  })();
+  return fbLoading;
+}
+function initLB(){
+  /* load Firebase once the page has settled, so the game paints first */
+  const go=()=>startFB();
+  if("requestIdleCallback" in window) requestIdleCallback(go,{timeout:2500}); else setTimeout(go,1200);
+  /* read the leaderboard only when it's about to come into view */
+  const el=document.getElementById("lb");
+  if("IntersectionObserver" in window){
+    const io=new IntersectionObserver(es=>{ if(es.some(e=>e.isIntersecting)){ io.disconnect(); loadRows(); } },{rootMargin:"400px 0px"});
+    io.observe(el);
+  } else loadRows();
 }
 function show(id,yes){ document.getElementById(id).hidden=!yes; }
 document.getElementById("lb-google").addEventListener("click",()=>guard(async()=>{
@@ -1221,7 +1281,7 @@ document.getElementById("lb-out").addEventListener("click",()=>guard(async()=>{
 }));
 document.getElementById("lb").addEventListener("click",e=>{
   const b=e.target.closest("[data-lbtab]"); if(!b||b.dataset.lbtab===lb.tab) return;
-  lb.tab=b.dataset.lbtab; subscribeRows();
+  lb.tab=b.dataset.lbtab; lb.rows=[]; lb.me=null; loadRows();
 });
 
 /* ---------- guess dropdown ---------- */
@@ -1284,6 +1344,8 @@ game.addEventListener("click",e=>{ const li=e.target.closest("[data-pick]"); if(
 game.addEventListener("focusout",e=>{ if(e.target.matches&&e.target.matches('input[role="combobox"]')){ const inp=e.target; setTimeout(()=>{ if(document.activeElement!==inp) comboClose(inp); },150); } });
 
 /* ---------- actions ---------- */
+game.addEventListener("toggle",e=>{ const d=e.target; if(d.matches&&d.matches("details[data-ck]")) openClues[d.dataset.ck]=d.open; },true);
+document.getElementById("lb-chip").addEventListener("click",()=>{ loadRows(); toLB(); });
 function toLB(){
   const c=document.getElementById("lb"); let smooth=true; try{ smooth=!matchMedia("(prefers-reduced-motion: reduce)").matches; }catch(e){}
   try{ c.scrollIntoView({behavior:smooth?"smooth":"auto",block:"start"}); }catch(e){ c.scrollIntoView(); }
@@ -1291,7 +1353,7 @@ function toLB(){
 function switchPuzzle(id){
   const p=PUZZLES.find(z=>z.id===id); if(!p||p.id===PUZZLE.id) return;
   PUZZLE=p; state=loadState(id); confirming=false;
-  render(); if(lb.tab==='puzzle') subscribeRows(); else renderLB(); window.scrollTo(0,0);
+  render(); if(lb.tab==='puzzle'&&lbWanted){ lb.rows=[]; lb.me=null; loadRows(); } else renderLB(); window.scrollTo(0,0);
 }
 document.addEventListener("click",e=>{
   const b=e.target.closest("[data-puzzle]"); if(!b) return;
