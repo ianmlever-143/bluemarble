@@ -12,9 +12,9 @@ gtag('js', new Date());
 gtag('config', 'G-PVEW2YMT5C');
 </script>
 <title>Geshmak!</title>
-<meta name="description" content="Can you name the Yid? Three Jewish figures a day, three clues each, and one thread that ties them together.">
+<meta name="description" content="Can you name the Yid? Three Jewish figures a week, three clues each, and one thread that ties them together.">
 <meta property="og:title" content="Geshmak! Can you name the Yid?">
-<meta property="og:description" content="Three Jewish figures a day, three clues each, and one thread that ties them together.">
+<meta property="og:description" content="Three Jewish figures a week, three clues each, and one thread that ties them together.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://ianmlever-143.github.io/bluemarble/Geshmak/">
 <meta property="og:site_name" content="Geshmak!">
@@ -25,7 +25,7 @@ gtag('config', 'G-PVEW2YMT5C');
 <meta property="og:image:alt" content="Geshmak! Can you name the Yid? Surrounded by smiling challah, dreidel, menorah and Star of David stickers.">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Geshmak! Can you name the Yid?">
-<meta name="twitter:description" content="Three Jewish figures a day, three clues each, and one thread that ties them together.">
+<meta name="twitter:description" content="Three Jewish figures a week, three clues each, and one thread that ties them together.">
 <meta name="twitter:image" content="https://ianmlever-143.github.io/bluemarble/Geshmak/geshmak-share.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -229,6 +229,44 @@ dialog h2{padding-right:46px}
 .more li span{color:#5A5590;font-size:13px;white-space:nowrap}
 .more li span::before{content:"· "}
 .wait b{color:var(--ink);font-family:var(--display)}
+/* name dropdown */
+.combo{position:relative;flex:1 1 200px;min-width:0;display:flex}
+.combo input[type=text]{flex:1 1 auto;width:100%;scroll-margin-top:130px;scroll-margin-bottom:240px}
+.sugg{position:absolute;left:0;right:0;top:calc(100% + 6px);z-index:30;list-style:none;margin:0;padding:6px;background:#fff;border:3px solid var(--ink);border-radius:16px;box-shadow:4px 4px 0 var(--ink);max-height:min(300px,46vh);overflow:auto;overscroll-behavior:contain}
+.sugg li{padding:9px 12px;border-radius:10px;cursor:pointer;font-family:var(--display);font-weight:500;line-height:1.25}
+.sugg li b{font-weight:700}
+.sugg li:hover{background:var(--cream)}
+.sugg li[aria-selected="true"]{background:var(--sun)}
+.sugg .none{cursor:default;color:#5A5590;font-family:var(--body);font-size:14px}
+.sugg .none:hover{background:none}
+/* week line */
+.weekline{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;background:#fff;border:3px solid var(--ink);border-radius:18px;padding:8px 10px 8px 14px;box-shadow:4px 4px 0 var(--ink);font-family:var(--display);font-weight:600}
+.weekline .wk{display:flex;align-items:center;gap:8px}
+.weekline .wk .ico{width:34px;height:34px}
+.weekline .wk b{font-family:var(--title);font-weight:400;font-size:22px}
+.weekline.past{background:var(--cream)}
+.weekline.cur{justify-content:center;gap:16px;padding:8px 18px;color:#fff;
+  background:radial-gradient(circle at 9% 28%,var(--sun) 0 4px,transparent 5px),radial-gradient(circle at 22% 80%,var(--sky) 0 3px,transparent 4px),radial-gradient(circle at 36% 18%,var(--mint) 0 3px,transparent 4px),radial-gradient(circle at 66% 84%,var(--sun) 0 3px,transparent 4px),radial-gradient(circle at 79% 20%,var(--pink) 0 4px,transparent 5px),radial-gradient(circle at 92% 74%,var(--mint) 0 4px,transparent 5px),var(--grape)}
+.weekline .wk-title{margin:0;font-family:var(--title);font-weight:400;font-size:clamp(30px,8vw,40px);line-height:1.1;color:#fff;text-shadow:3px 3px 0 var(--ink);letter-spacing:.5px}
+.weekline .deco{width:44px;height:44px;flex:none}
+.weekline .deco.l{transform:rotate(-14deg)}
+.weekline .deco.r{transform:rotate(12deg)}
+@media (prefers-reduced-motion:no-preference){.weekline .deco.l{animation:wkbob 3s ease-in-out infinite}.weekline .deco.r{animation:wkbob 3s ease-in-out infinite reverse}}
+@keyframes wkbob{0%,100%{translate:0 0}50%{translate:0 -4px}}
+.weekline .btn{padding:6px 12px;font-size:15px;box-shadow:3px 3px 0 var(--ink)}
+/* past weeks */
+.weeks{list-style:none;margin:0 0 12px;padding:0;display:flex;flex-direction:column;gap:8px}
+.weeks button{width:100%;display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:center;text-align:left;border:2px solid var(--ink);border-radius:16px;background:var(--cream);padding:10px 12px;cursor:pointer;font-family:var(--display);font-weight:700;font-size:18px;color:var(--ink)}
+.weeks button:hover{background:var(--sun)}
+.weeks .ico{width:36px;height:36px}
+.weeks small{font-family:var(--body);font-weight:500;font-size:14px;color:#5A5590}
+/* article link after each Yid */
+.read{display:grid;grid-template-columns:auto 1fr;gap:10px;align-items:center;padding:10px 14px;border:2px dashed var(--ink);border-radius:16px;font-size:15px;color:var(--ink);text-decoration:none}
+.read:hover{background:var(--cream)}
+.read .ico{width:30px;height:30px}
+.read .t{display:flex;flex-direction:column;gap:2px}
+.read .t>span{font-family:var(--display);font-weight:600;text-decoration:underline;text-underline-offset:2px}
+.read small{font-family:var(--body);font-weight:500;font-size:13px;color:#5A5590}
 @media (max-width:420px){.cell .lab{font-size:11px}.cell .val{font-size:21px}.ladder{grid-template-columns:1fr}h1{font-size:44px}.logo .ico{width:54px;height:54px}.stickers .ico{width:34px;height:34px}}
 </style>
 </head>
@@ -354,6 +392,49 @@ dialog h2{padding-right:46px}
     <path d="M19 40a13 13 0 0 0 6 11" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round"/>
     <use href="#face" x="33" y="41"/>
   </symbol>
+  <symbol id="i-phones" viewBox="0 0 64 64">
+    <circle cx="32" cy="38" r="17" fill="#7DE3FF" stroke="#1B1464" stroke-width="3"/>
+    <path d="M10 40V32a22 22 0 0 1 44 0v8" fill="none" stroke="#1B1464" stroke-width="8" stroke-linecap="round"/>
+    <path d="M10 40V32a22 22 0 0 1 44 0v8" fill="none" stroke="#FF4F9A" stroke-width="3.5" stroke-linecap="round"/>
+    <rect x="3" y="32" width="14" height="22" rx="6" fill="#FFD23F" stroke="#1B1464" stroke-width="3"/>
+    <rect x="47" y="32" width="14" height="22" rx="6" fill="#FFD23F" stroke="#1B1464" stroke-width="3"/>
+    <use href="#face" x="32" y="40"/>
+  </symbol>
+  <symbol id="i-note" viewBox="0 0 64 64">
+    <path d="M40 10c10 2 16 9 15 20c-3-6-8-9-15-10z" fill="#B14CFF" stroke="#1B1464" stroke-width="3" stroke-linejoin="round"/>
+    <rect x="37" y="8" width="6" height="40" rx="2" fill="#B14CFF" stroke="#1B1464" stroke-width="3"/>
+    <ellipse cx="27" cy="48" rx="15" ry="11" transform="rotate(-18 27 48)" fill="#B14CFF" stroke="#1B1464" stroke-width="3"/>
+    <g transform="translate(27 47)"><circle cx="-5" cy="0" r="2.2" fill="#fff"/><circle cx="5" cy="0" r="2.2" fill="#fff"/><path d="M-3.5 4.5q3.5 3.5 7 0" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"/></g>
+  </symbol>
+  <symbol id="i-crown" viewBox="0 0 64 64">
+    <path d="M7 22l13 13 12-21 12 21 13-13-5 28H12z" fill="#FFD23F" stroke="#1B1464" stroke-width="3" stroke-linejoin="round"/>
+    <rect x="11" y="47" width="42" height="10" rx="4" fill="#FF4F9A" stroke="#1B1464" stroke-width="3"/>
+    <g stroke="#1B1464" stroke-width="2.5" fill="#2EE6A6"><circle cx="7" cy="20" r="4"/><circle cx="32" cy="11" r="4.5"/><circle cx="57" cy="20" r="4"/></g>
+    <use href="#face" x="32" y="37"/>
+  </symbol>
+  <symbol id="i-bagel" viewBox="0 0 64 64">
+    <path fill-rule="evenodd" d="M32 9a25 22 0 1 0 0.01 0zM32 32a8 5.5 0 1 0 0.01 0z" fill="#F4A950" stroke="#1B1464" stroke-width="3"/>
+    <g fill="#FFF6DC"><ellipse cx="16" cy="25" rx="2" ry="1.2" transform="rotate(-30 16 25)"/><ellipse cx="48" cy="25" rx="2" ry="1.2" transform="rotate(30 48 25)"/><ellipse cx="13" cy="38" rx="2" ry="1.2"/><ellipse cx="51" cy="38" rx="2" ry="1.2"/><ellipse cx="22" cy="47" rx="2" ry="1.2" transform="rotate(20 22 47)"/><ellipse cx="42" cy="47" rx="2" ry="1.2" transform="rotate(-20 42 47)"/></g>
+    <use href="#face" x="32" y="20"/>
+  </symbol>
+  <symbol id="i-torah" viewBox="0 0 64 64">
+    <rect x="13" y="13" width="38" height="38" rx="3" fill="#FFF6DC" stroke="#1B1464" stroke-width="3"/>
+    <g stroke="#1B1464" stroke-width="2" stroke-linecap="round" opacity=".35"><path d="M21 41h22M24 45h16"/></g>
+    <g stroke="#1B1464" stroke-width="3"><rect x="5" y="7" width="11" height="50" rx="5.5" fill="#9B5CFF"/><rect x="48" y="7" width="11" height="50" rx="5.5" fill="#9B5CFF"/><path d="M10.5 2v5M10.5 57v5M53.5 2v5M53.5 57v5" stroke-linecap="round"/></g>
+    <use href="#face" x="32" y="29"/>
+  </symbol>
+  <symbol id="i-shofar" viewBox="0 0 64 64">
+    <path d="M4 45c14 3 24-1 32-10 6-7 9-15 10-24l14 3c0 13-5 25-13 34-11 12-26 16-43 12z" fill="#FFD9A0" stroke="#1B1464" stroke-width="3" stroke-linejoin="round"/>
+    <ellipse cx="53" cy="12.5" rx="7" ry="3.2" transform="rotate(12 53 12.5)" fill="#B5651D" stroke="#1B1464" stroke-width="3"/>
+    <g stroke="#1B1464" stroke-width="2" stroke-linecap="round" opacity=".3"><path d="M47 21l9 2M13 49l1 4"/></g>
+    <g transform="rotate(-38 42 39)"><use href="#face" x="42" y="39"/></g>
+  </symbol>
+  <symbol id="i-book" viewBox="0 0 64 64">
+    <path d="M32 14C22 7 12 8 4 11v42c8-3 18-4 28 3 10-7 20-6 28-3V11c-8-3-18-4-28 3z" fill="#2EE6A6" stroke="#1B1464" stroke-width="3" stroke-linejoin="round"/>
+    <path d="M32 17C23 11 15 11 9 13v35c7-2 15-2 23 4 8-6 16-6 23-4V13c-6-2-14-2-23 4z" fill="#FFF6DC" stroke="#1B1464" stroke-width="2.5" stroke-linejoin="round"/>
+    <path d="M32 17v35" stroke="#1B1464" stroke-width="2.5"/>
+    <use href="#face" x="32" y="33"/>
+  </symbol>
 </svg>
 
 <div class="wrap">
@@ -369,7 +450,7 @@ dialog h2{padding-right:46px}
     </div>
     <div class="chips">
       <button class="chip" type="button" data-open="dlg-about"><svg class="ico" aria-hidden="true"><use href="#i-challah"/></svg>About</button>
-      <span class="switch" role="group" aria-label="Choose a puzzle" id="switch"></span>
+      <span class="switch" role="group" aria-label="Choose a week" id="switch"></span>
     </div>
   </header>
 
@@ -377,15 +458,17 @@ dialog h2{padding-right:46px}
     <svg class="ico"><use href="#i-star"/></svg><svg class="ico"><use href="#i-wine"/></svg><svg class="ico"><use href="#i-menorah"/></svg><svg class="ico"><use href="#i-pom"/></svg><svg class="ico"><use href="#i-mezuzah"/></svg><svg class="ico"><use href="#i-dreidel"/></svg><svg class="ico"><use href="#i-candles"/></svg>
   </div>
 
+  <div class="weekline" id="weekline"></div>
+
   <div class="board" id="board" role="status" aria-label="Scoreboard"></div>
 
   <main id="game"></main>
 
   <section class="card c-sky" id="lb" aria-label="Leaderboard">
     <div class="band">
-      <h2 class="era"><svg class="ico" aria-hidden="true"><use href="#i-star"/></svg>Leaderboard</h2>
+      <h2 class="era"><svg class="ico" aria-hidden="true"><use href="#i-shofar"/></svg>Leaderboard</h2>
     </div>
-    <div class="row"><span class="tabs" role="group" aria-label="Which leaderboard"><button type="button" data-lbtab="puzzle" id="lb-tab-p" aria-pressed="true">Puzzle 1</button><button type="button" data-lbtab="all" id="lb-tab-a" aria-pressed="false">All time</button></span></div>
+    <div class="row"><span class="tabs" role="group" aria-label="Which leaderboard"><button type="button" data-lbtab="puzzle" id="lb-tab-p" aria-pressed="true">This week</button><button type="button" data-lbtab="all" id="lb-tab-a" aria-pressed="false">All time</button></span></div>
     <p class="quip good" id="lb-status" role="status">Loading the leaderboard…</p>
     <ol class="lb-list" id="lb-list"></ol>
     <div id="lb-auth">
@@ -440,9 +523,9 @@ dialog h2{padding-right:46px}
   <details name="about" open>
     <summary><svg class="ico" aria-hidden="true"><use href="#i-dreidel"/></svg>How to play</summary>
     <div class="sec">
-  <p>There are three Yids to a puzzle: a <b>Today Yid</b>, a <b>Yester Yid</b> and a <b>Really Old Yid</b>. Everyone gets the same three.</p>
-  <p>Each one comes with three clues. Name them on the first clue for <b>54</b> points, the second for <b>36</b>, the third for <b>18</b>. A wrong guess flips the next clue. Take all the time you want.</p>
-  <p>Then the bonus: the three share a connection to one another that you have to figure out. We call it <b>the thread</b>, and guessing it is worth <b>18</b> more. A perfect day is 180, which is ten times chai.</p>
+  <p>Every week there are three new Yids: a <b>Today Yid</b>, a <b>Yester Yid</b> and a <b>Really Old Yid</b>. Everyone gets the same three. Missed a week? Find it under <b>Past weeks</b>.</p>
+  <p>Each one comes with three clues. Name them on the first clue for <b>54</b> points, the second for <b>36</b>, the third for <b>18</b>. Start typing a name and pick from the list, or type your own. A wrong guess flips the next clue. Take all the time you want.</p>
+  <p>Then the bonus: the three share a connection to one another that you have to figure out. We call it <b>the thread</b>, and guessing it is worth <b>18</b> more. A perfect score is 180, which is ten times chai.</p>
     </div>
   </details>
   <details name="about">
@@ -467,6 +550,18 @@ dialog h2{padding-right:46px}
   <button class="btn" type="button" data-close>Back to the game</button>
 </dialog>
 
+<dialog id="dlg-weeks" class="about" aria-labelledby="weeks-h">
+  <button class="x" type="button" data-close aria-label="Close">✕</button>
+  <h2 id="weeks-h"><svg class="ico" aria-hidden="true"><use href="#i-candles"/></svg>Past weeks</h2>
+  <p>Catch up on the Yids you missed. Your scores still count toward the all-time leaderboard.</p>
+  <ul class="weeks" id="weeks-list"></ul>
+  <button class="btn" type="button" data-close>Back to the game</button>
+</dialog>
+
+<script>
+/* ---------- the name list for the guess dropdown: Jews, Jewish-adjacent folks and plenty of other famous people ---------- */
+const NAMES = "A. B. Yehoshua|A. D. Gordon|A. J. Jacobs|A. J. Liebling|A. M. Klein|Aaron|Aaron Aaronsohn|Aaron Ciechanover|Aaron Copland|Aaron Judge|Aaron Krickstein|Aaron Sorkin|Aaron Spelling|Abaye|Abba Eban|Abba Kovner|Abbi Abrams|Abbi Jacobson|Abbie Hoffman|Abby Elliott|Abby Lee Miller|Abe Attell|Abe Beame|Abe Fortas|Abe Weissman|Abednego|Abel|Abigail|Abner|Abraham|Abraham Cahan|Abraham Flexner|Abraham Geiger|Abraham ibn Ezra|Abraham Maslow|Abraham Ribicoff|Absalom|Aby Warburg|Achan|Achinoam Nini|Action Bronson|Ada Yonath|Adam|Adam Arkin|Adam Brody|Adam Duritz|Adam Fox|Adam Goldberg|Adam Grant|Adam Guettel|Adam Horovitz|Adam Levine|Adam Neumann|Adam Sandler|Adam Schefter|Adam Schiff|Adam Silver|Adam Yauch|Adeena Sussman|Adele|Adena Friedman|Adolph Green|Adolph Ochs|Adolph Sutro|Adolph Zukor|Adonijah|Adrian Wojnarowski|Adrienne Rich|Agatha Christie|Ahad Ha'am|Aharon Appelfeld|Aidy Bryant|A'ja Wilson|Akiva Eger|Akiva Shtisel|Al Davis|Al Franken|Al Hirschfeld|Al Jaffee|Al Jolson|Al Michaels|Al Pacino|Al Rosen|Al Sherman|Alan Arkin|Alan Dershowitz|Alan Greenspan|Alan Jay Lerner|Alan King|Alan Menken|Alana Haim|Alanis Morissette|Albert Brooks|Albert Einstein|Albert Sabin|Albert Warner|Alec Berg|Alex Borstein|Alex Bregman|Alex Morgan|Alex Trebek|Alexander Jannaeus|Alfred Dreyfus|Alfred Kazin|Alfred Newman|Alfred Stieglitz|Ali Marpet|Ali Stroker|Ali Wong|Alice Herz-Sommer|Alice Waters|Alicia Silverstone|Alison Brie|Alison Roman|Allan Sherman|Allard Lowenstein|Allegra Goodman|Allen Ginsberg|Alon Shaya|Alton Brown|Alvy Singer|Aly Raisman|Alyson Hannigan|Amar'e Stoudemire|Amedeo Modigliani|America Ferrera|Amnon|Amos|Amos Oz|Amos Tversky|Amram|Amy Alcott|Amy Pascal|Amy Poehler|Amy Schumer|Amy Sherman-Palladino|Amy Winehouse|Anderson Cooper|Andrea Dworkin|Andrea Mitchell|Andrew Cuomo|Andrew Garfield|Andrew Goodman|Andrew Lack|Andrew Rannells|Andrew Viterbi|Andy Cohen|Andy Grove|Andy Kaufman|Andy Ram|Andy Samberg|Andy Warhol|Angelina Jolie|Anish Kapoor|Anna Freud|Anna Sui|Anna Wintour|Anne Bancroft|Anne Frank|Anne Hathaway|Anne Meara|Anne Roiphe|Anne Wojcicki|Annie Hall|Annie Leibovitz|Annie Murphy|Anouk Aimée|Anthony Bourdain|Anthony Ervin|Anthony Fauci|Anthony Ramos|Antiochus|Antonio Banderas|Antony Blinken|Anya Taylor-Joy|Anzia Yezierska|Aretha Franklin|Ari Aster|Ari Emanuel|Ari Gold|Ari Melber|Ari Weinzweig|Ariana DeBose|Ariana Grande|Ariel Sharon|Arik Einstein|Arlen Specter|Arno Penzias|Arnold Schoenberg|Arnold Wesker|Art Garfunkel|Art Modell|Art Shamsky|Art Spiegelman|Arthur Blank|Arthur Goldberg|Arthur Miller|Arthur Rubinstein|Arthur Schwartz|Arthur Sulzberger|Arthur Szyk|Artie Shaw|Asenath|Asher|Asher Roth|Ashlee Simpson|Ashley Olsen|Ashton Kutcher|Asser Levy|Assi Dayan|Athaliah|Audra McDonald|Audrey Hepburn|Austin Butler|Ava Daniels|Avi Arad|Avicii|Avigdor|Avihu|Aviram|Avital Sharansky|Avraham Fried|Avram Hershko|Avril Lavigne|Avrom Sutzkever|Awkwafina|Ayelet Gundar-Goshen|Ayelet Waldman|Ayelet Zurer|Ayn Rand|Ayo Edebiri|Aziz Ansari|Baal Shem Tov|Baba Sali|Babe Ruth|Bad Bunny|Balaam|Balak|Banksy|Bar Kokhba|Bar Refaeli|Barak|Barbara Boxer|Barbara Kruger|Barbara Tuchman|Barbara Walters|Barbra Streisand|Bari Weiss|Barnett Newman|Barney Balaban|Barney Dreyfuss|Barney Frank|Barney Ross|Barney Sedran|Baron Edmond de Rothschild|Barry Diller|Barry Gibb|Barry Goldberg|Barry Levinson|Barry Manilow|Barry Mann|Baruch ben Neriah|Baruch Blumberg|Baruch Spinoza|Bathsheba|Batman|Battling Levinsky|Batya|Bea Arthur|Beanie Feldstein|Beate Klarsfeld|Béla Schick|Bella Abzug|Belshazzar|Ben Affleck|Ben Bernanke|Ben Cohen|Ben Folds|Ben Grimm|Ben Hecht|Ben Platt|Ben Savage|Ben Shahn|Ben Shapiro|Ben Silbermann|Ben Sira|Ben Stiller|Ben Wyatt|Benedict Cumberbatch|Benj Pasek|Benjamin|Benjamin Cardozo|Benjamin Disraeli|Benjamin Ferencz|Benjamin Netanyahu|Benjamin of Tudela|Benjamin Spock|Benny Blanco|Benny Friedman|Benny Goodman|Benny Leonard|Benny Safdie|Benoit Mandelbrot|Benson Boone|Berl Katznelson|Bernadette Peters|Bernard-Henri Lévy|Bernard Lewis|Bernard Lown|Bernard Malamud|Bernie Marcus|Bernie Sanders|Bette Davis|Bette Midler|Betty Comden|Betty Friedan|Betty White|Beverly Goldberg|Beverly Sills|Beyoncé|Bezalel|Bigthan and Teresh|Bilhah|Bill Ackman|Bill Finger|Bill Gates|Bill Graham|Bill Hader|Bill Kristol|Bill Lawrence|Bill Maher|Bill Murray|Billie Eilish|Billie Jean King|Billy Crystal|Billy Eichner|Billy Idol|Billy Joel|Billy Wilder|Bing Crosby|Blake Lively|Blu Greenberg|Blythe Danner|Boaz|Bob Barker|Bob Costas|Bob Dylan|Bob Iger|Bob Kane|Bob Marley|Bob Odenkirk|Bob Saget|Bobbi Brown|Bobby Fischer|Bobby Flay|Bobby Murphy|Bon Jovi|Bonnie Bernstein|Boris Gelfand|Boris Pasternak|Boris Schatz|Bowen Yang|Brad Ausmus|Brad Garrett|Brad Gilbert|Brad Lander|Brad Pitt|Brett Goldstein|Brian Chesky|Brian Cox|Brian Epstein|Brian Grazer|Brian Greene|Brian Schatz|Brigitte Bardot|Britney Spears|Bruce Paltrow|Bruce Springsteen|Bruno Kreisky|Bruno Mars|Bruno Schulz|Bruriah|Bud Selig|Buddy Hackett|Buddy Myer|Buddy Rich|Burt Bacharach|Buster Keaton|Busy Philipps|Cain|Caitlin Clark|Caleb|Calvin Harris|Calvin Klein|Calvin Trillin|Camille Pissarro|Captain America|Cardi B|Carl Icahn|Carl Laemmle|Carl Levin|Carl Reiner|Carl Sagan|Carli Lloyd|Carlos Alcaraz|Carly Simon|Carmy Berzatto|Carol Burnett|Carole King|Carrie Fisher|Carrie Underwood|Cary Grant|Casimir Funk|Catherine O'Hara|Catherine Zeta-Jones|Celia Cruz|Celine Dion|Chaim Grade|Chaim Herzog|Chaim Potok|Chaim Soutine|Chaim Weizmann|Chappell Roan|Charles Dickens|Charles Revson|Charles Strouse|Charli XCX|Charlie Chaplin|Charlize Theron|Charlotte Gainsbourg|Charlotte York|Chatam Sofer|Chava|Chelsea Handler|Chevy Chase|Chico Marx|Chiune Sugihara|Chloe Fineman|Chofetz Chaim|Chris Evans|Chris Hemsworth|Chris Pratt|Chris Rock|Chris Stein|Christopher Nolan|Chuck Barris|Chuck Lorre|Chuck Schumer|Chuck Todd|Cillian Murphy|Cindy Sherman|Clairo|Clara Lemlich|Clark Gable|Clark Kent|Claude Monet|Claude Shannon|Claudia Roden|Claudia Sheinbaum|Clifford Odets|Clive Davis|Cobie Smulders|Coco Chanel|Coco Gauff|Colin Jost|Colleen Hoover|Conan Gray|Conan O'Brien|Connie Chung|Constance Wu|Corrie ten Boom|Cosmo Kramer|Courteney Cox|Craig Breslow|Craig Taubman|Cristiano Ronaldo|Curly Howard|Cy Coleman|Cynthia Erivo|Cynthia Nixon|Cynthia Ozick|Cynthia Weil|Cyrus the Great|D. B. Weiss|Dahlia Ravikovitch|Dan|Dan Ariely|Dan Aykroyd|Dan Harmon|Dan Levy|Dan Patrick|Dan Schneider|Dan Shechtman|Dan Snyder|Dana Bash|Dana International|Dani Karavan|Daniel|Daniel Barenboim|Daniel Boorstin|Daniel Boulud|Daniel Craig|Daniel Dae Kim|Daniel Ek|Daniel Goldman|Daniel Handler|Daniel Kahneman|Daniel Kaluuya|Daniel Libeskind|Daniel Mendoza|Daniel Palladino|Daniel Radcliffe|Daniela Amodei|Danielle Haim|Danny Elfman|Danny Kaye|Danny Meyer|Danny Schayes|Dara Horn|Dara Torres|Dario Amodei|Darius Milhaud|Darren Aronofsky|Darren Criss|Darren Star|Dathan|Daughters of Zelophehad|Dave Brubeck|Dave Chappelle|Dave Coulier|Dave Franco|Dave Matthews|Daveed Diggs|David Beckham|David Ben-Gurion|David Benioff|David Bowie|David Brooks|David Chang|David Crane|David Dubinsky|David Geffen|David Gross|David Grossman|David Guetta|David Hyde Pierce|David Kohan|David Lee Roth|David Letterman|David Levy Yulee|David Mamet|David O. Selznick|David Schwimmer|David Sedaris|David Solomon|David Stern|David Zaslav|David Zucker|Dean Kremer|Dean Martin|Deb Perelman|Debbie Friedman|Debbie Harry|Debbie Reynolds|Debbie Wasserman Schultz|Deborah|Deborah Birx|Deborah Lipstadt|Deborah Vance|Debra Messing|Delia Ephron|Delilah|Demi Lovato|Deni Avdija|Denis Shapovalov|Denis Villeneuve|Dennis Gabor|Dennis Prager|Denzel Washington|Derek Jeter|Desi Arnaz|Dev Patel|Diana Taurasi|Diana Vreeland|Diane Arbus|Diane Keaton|Diane Sawyer|Diane von Furstenberg|Dianne Feinstein|Dick Clark|Dick Savitt|Dick Schaap|Dick Van Dyke|Dick Wolf|Diego Luna|Diego Maradona|Diego Schwartzman|Dinah|Dinah Shore|Diplo|Dmitriy Salita|Doc Pomus|Doja Cat|Dolly Levi|Dolly Parton|Dolph Schayes|Don Rickles|Doña Gracia Nasi|Donna Karan|Doris Burke|Doris Kearns Goodwin|Doris Roberts|Dorit Rabinyan|Dorothy Fields|Dorothy Parker|Dorothy Zbornak|Doug Emhoff|Doug Morris|Dov Charney|Dov Gruner|Dov Landau|Doval'e Glickman|Dr. Dre|Dr. Luke|Drake|Drake Bell|Drew Weissman|Dua Lipa|Duke Ellington|Dustin Hoffman|Dwight Schrute|Ebon Moss-Bachrach|Ed Asner|Ed Koch|Ed Levine|Ed Sheeran|Eddie Cantor|Eddie Fisher|Eddie Murphy|Eden Golan|Edie Windsor|Edith Eger|Edith Stein|Edward G. Robinson|Edward Mosberg|Edward Teller|Edward Witten|Ego Nwodim|Ehud|Ehud Barak|Ehud Olmert|Einat Admony|El Lissitzky|Elaine Benes|Elaine May|Elazar|Elena Kagan|Eli|Eli Broad|Eli Cohen|Eli Wallach|Elie Wiesel|Eliezer Ben-Yehuda|Eliezer of Damascus|Elijah|Eliot Spitzer|Elisha|Elisha ben Abuya|Elisheva|Elissa Slotkin|Eliyahu Golomb|Elizabeth Holtzman|Elizabeth Olsen|Elizabeth Taylor|Elkanah|Ella Fitzgerald|Ellen DeGeneres|Ellie Greenwich|Elliot Handler|Elliott Gould|Elliott Maddox|Elmer Bernstein|Elon Musk|Else Lasker-Schüler|Elton John|Elvis Presley|Emanuel Ax|Emanuel Celler|Emanuel Lasker|Emanuel Ringelblum|Emeril Lagasse|Émile Durkheim|Emily Blunt|Emily Hampshire|Emily Henry|Emily Mortimer|Emily Oster|Eminem|Emma Goldman|Emma Lazarus|Emma Seligman|Emma Stone|Emma Watson|Emmanuel Levinas|Emmanuel Macron|Emmy Noether|Emmy Rossum|Enoch|Ephraim|Eric Cantor|Eric Kandel|Eric Ripert|Erica Jong|Erich Fromm|Erik Erikson|Erik Larson|Ernest Bloch|Ernest Hemingway|Ernestine Rose|Ernie Grunfeld|Ernst Gombrich|Ernst Lubitsch|Erving Goffman|Esau|Este Haim|Estée Lauder|Estelle Getty|Esther Bejarano|Esther Freud|Esther Rada|Esty Shapiro|Etgar Keret|Ethan Coen|Etty Hillesum|Eugene Levy|Eugene Meyer|Eugene Mirman|Eugene Wigner|Eva Green|Eva Hesse|Eva Longoria|Eva Mozes Kor|Evan Spiegel|Eve|Evgeny Kissin|Eyal Golan|Eyal Shani|Eydie Gormé|Ezekiel|Ezekiel Emanuel|Ezer Weizman|Ezra|Ezra Klein|Ezra Koenig|F. Scott Fitzgerald|Fagin|Fanny Brice|Fanny Mendelssohn|Felix Frankfurter|Felix Klein|Felix Mendelssohn|Felix Warburg|Ferdinand Lassalle|Finneas|Fiona Apple|Florence Pugh|Fran Drescher|Fran Fine|Fran Lebowitz|Francis Ford Coppola|Frank Gehry|Frank Loesser|Frank Lowy|Frank Sinatra|Frank Wilczek|Franz Boas|Franz Kafka|Franz Rosenzweig|Fred Armisen|Fred Astaire|Fred Ebb|Fred Savage|Fred Zinnemann|Freddie Mercury|Freddie Roman|Frederick Loewe|Frida Kahlo|Fritz Haber|Fritz Lang|Fruma-Sarah|Gabe Carimi|Gabe Kapler|Gabrielle Giffords|Gabrielle Zevin|Gad|Gael García Bernal|Gal Gadot|Garry Kasparov|Garry Marshall|Garry Shandling|Gary Bettman|Gary Shteyngart|Geddy Lee|Gena Turgel|Gene Shalit|Gene Simmons|Gene Wilder|Geoff Schwartz|Georg Cantor|George Burns|George Clooney|George Costanza|George Crumb|George Cukor|George Gershwin|George Harrison|George Lucas|George Soros|George Wendt|Georgia O'Keeffe|Geraldo Rivera|Gérard Depardieu|Gerda Weissmann Klein|Gerry Goffin|Gershom|Gershom Mendes Seixas|Gershom Scholem|Gersonides|Gertrude Berg|Gertrude Elion|Giacomo Meyerbeer|Giannis Antetokounmpo|Gideon|Gil Marks|Gil Shaham|Gil Shwed|Gila Almagor|Gilbert Gottfried|Gilda Radner|Gina Gershon|Gina Rodriguez|Ginger Rogers|Giorgio Armani|Giti Weiss|Glenn Close|Gloria Estefan|Gloria Steinem|Glückel of Hameln|Golda Meir|Golde|Goldie Hawn|Goliath|Gordon Ramsay|Grace Adler|Grace Aguilar|Grace Kelly|Grace Paley|Gracie Abrams|Gracie Allen|Greg Berlanti|Greg Camarillo|Greg Daniels|Gregory Pincus|Greta Garbo|Greta Gerwig|Grigori Perelman|Groucho Marx|Gummo Marx|Gus Kahn|Gustav Hertz|Gustav Mahler|Guy Fieri|Gwyneth Paltrow|H. A. Rey|Habakkuk|Hagar|Haggai|Hailey Bieber|Haim Saban|Hal David|Hal Linden|Haley Joel Osment|Halsey|Ham|Haman|Hanan Ben Ari|Hank Aaron|Hank Greenberg|Hannah|Hannah and Her Seven Sons|Hannah Arendt|Hannah Einbinder|Hannah G. Solomon|Hannah Gadsby|Hannah Horvath|Hannah Rovina|Hannah Szenes|Hannah Waddingham|Hans Krebs|Hans Zimmer|Harbonah|Harlan Ellison|Harley Quinn|Harold Arlen|Harold Pinter|Harold Ramis|Harpo Marx|Harrison Bader|Harrison Ford|Harry Cohn|Harry Goldenblatt|Harry Nilsson|Harry Styles|Harry Warner|Harry Winston|Harvey Kurtzman|Harvey Milk|Hasan Minhaj|Hasdai ibn Shaprut|Hayim Nahman Bialik|Haym Salomon|Hayyim Vital|Hedy Lamarr|Heinrich Graetz|Heinrich Heine|Heinrich Hertz|Helen Frankenthaler|Helen Hunt|Helena Bonham Carter|Helena Rubinstein|Henny Youngman|Henrietta Szold|Henry Ford|Henry Golding|Henry Kissinger|Henry Kravis|Henry Waxman|Henry Winkler|Herb Alpert|Herb Lubalin|Herbert Bayard Swope|Herbert Lehman|Herbert Marcuse|Herman J. Mankiewicz|Herman Wouk|Hermann Minkowski|Herod Agrippa|Hezekiah|Hikaru Nakamura|Hilary Duff|Hillel|Hodel|Holofernes|Honi the Circle Maker|Hoodie Allen|Hosea|Howard Ashman|Howard Cosell|Howard Hamlin|Howard Hughes|Howard Jacobson|Howard Schultz|Howard Stern|Howard Wolowitz|Hugh Jackman|Hugo Gryn|Huldah|Humphrey Bogart|Hur|I. J. Singer|I. L. Peretz|Ian Kinsler|Ida Nudel|Ida Straus|Idan Raichel|Idina Menzel|Idris Elba|Ike Perlmutter|Ilan Goldfajn|Ilan Ramon|Ilana Glazer|Ilana Kloss|Ilana Wexler|Ilya Ehrenburg|Ilya Kabakov|Ilya Sutskever|Ima Shalom|Imogene Coca|Imre Kertész|Ina Garten|Ingrid Bergman|Ira Gershwin|Ira Levin|Irena Sendler|Irène Némirovsky|Iris Apatow|Irving Azoff|Irving Berlin|Irving Caesar|Irving Howe|Irving Kristol|Irving Thalberg|Irwin Jacobs|Isaac|Isaac Abendana|Isaac Abravanel|Isaac Asimov|Isaac Babel|Isaac Bashevis Singer|Isaac Herzog|Isaac Leeser|Isaac Luria|Isaac Mayer Wise|Isaac Mizrahi|Isaac Stern|Isaiah|Isaiah Berlin|Ishay Ribo|Ishmael|Isidor Straus|Isla Fisher|Issachar|Isser Harel|Itzhak Perlman|Itzik Manger|Ivan Reitman|Ivanka Trump|J. B. Pritzker|J Balvin|J. D. Salinger|J. J. Abrams|J. K. Rowling|J. Robert Oppenheimer|Jack Antonoff|Jack Benny|Jack Black|Jack Carter|Jack Dorsey|Jack Hughes|Jack Kirby|Jack Klugman|Jack McFarland|Jack Nicholson|Jack Steinberger|Jack Warner|Jackie Hoffman|Jackie Mason|Jackie Robinson|Jacky Rosen|Jacob|Jacob Elordi|Jacob Javits|Jacob Lew|Jacob Schiff|Jacqueline Susann|Jacques Derrida|Jacques Offenbach|Jake Cohen|Jake Gyllenhaal|Jake Paltrow|Jake Retzlaff|Jake Tapper|Jakob Chychrun|Jakob Dylan|James Caan|James Cameron|James Dean|James Franco|Jamie Buchman|Jamie Dimon|Jamie Geller|Jamie Lee Curtis|Jamie Oliver|Jamie Raskin|Jan Peerce|Jane Austen|Jane Birkin|Janet Yellen|Janis Ian|Jann Wenner|Jannik Sinner|Janusz Korczak|Japheth|Jared Diamond|Jared Kushner|Jared Polis|Jascha Heifetz|Jason Alexander|Jason Biggs|Jason Gay|Jason Kelce|Jason Lezak|Jason Marquis|Jason Reitman|Jason Robert Brown|Jason Schwartzman|Jason Segel|Jason Sudeikis|Jason Zucker|Javier Bardem|Javier Milei|Jay Fiedler|Jay Glazer|Jay Leno|Jay Livingston|Jay-Z|JC Chasez|Jean-Michel Basquiat|Jean-Paul Belmondo|Jean Ralphio|Jean Smart|Jed Bartlet|Jeff Barry|Jeff Bezos|Jeff Goldblum|Jeff Greene|Jeff Halpern|Jeff Koons|Jeff Schaffer|Jeff Zucker|Jeffrey Goldberg|Jeffrey Katzenberg|Jeffrey Lurie|Jeffrey Yoskowitz|Jehoash|Jehu|Jenji Kohan|Jenna Lyons|Jenna Ortega|Jennette McCurdy|Jennifer Aniston|Jennifer Coolidge|Jennifer Doudna|Jennifer Grey|Jennifer Lawrence|Jennifer Lopez|Jennifer Weiner|Jenny Lewis|Jenny Slate|Jensen Huang|Jephthah|Jeremiah|Jeremy Allen White|Jeremy Schaap|Jeremy Strong|Jeremy Swift|Jeroboam|Jerome Kern|Jerome Weidman|Jerry Bock|Jerry Bruckheimer|Jerry Goldsmith|Jerry Greenfield|Jerry Herman|Jerry Leiber|Jerry Lewis|Jerry Nadler|Jerry Orbach|Jerry Reinsdorf|Jerry Rubin|Jerry Seinfeld|Jerry Siegel|Jerry Springer|Jerry Stiller|Jerry Weintraub|Jerry Wexler|Jerry Zucker|Jesse|Jesse Eisenberg|Jesse Lasky|Jessica Alba|Jessica Lessin|Jessica Meir|Jessica (Merchant of Venice)|Jessica Simpson|Jessie Mueller|Jethro|Jezebel|Jill Soloway|Jim Abrahams|Jim Carrey|Jim Dine|Jim Halpert|Jim Nantz|Jim Parsons|Jim Simons|Jimmy Fallon|Jimmy Iovine|Jimmy Kimmel|Jimmy McGill|Jimmy Stewart|Joab|Joan Crawford|Joan Nathan|Joan Rivers|Joanne Williams|Joanne Woodward|Joaquin Phoenix|Job|Joc Pederson|Jodi Picoult|Jodie Comer|Joe Buck|Joe DiMaggio|Joe Jonas|Joe Lieberman|Joe Namath|Joe Shuster|Joel|Joel Coen|Joel Grey|Joel Kim Booster|Joel Silver|Joey Bishop|Joey Ramone|Joey Soloway|John Cho|John Garfield|John Goodman|John Hyrcanus|John Kander|John Leguizamo|John Lennon|John Mayer|John Mulaney|John Oliver|John Ratzenberger|John Stamos|John von Neumann|John Wayne|John Williams|John Zorn|Johnny Carson|Johnny Cash|Johnny Depp|Johnny Galecki|Johnny Marks|Jon Glaser|Jon Karl|Jon Lovitz|Jon Miller|Jon Ossoff|Jon Stewart|Jonah|Jonah Hill|Jonah Platt|Jonas Salk|Jonathan|Jonathan Erlich|Jonathan Groff|Jonathan Haidt|Jonathan Lipnicki|Jonathan Richman|Jonathan Safran Foer|Joni Mitchell|Jordan Farmar|Jordan Peele|Jorie Graham|José Andrés|Joseph|Joseph Brodsky|Joseph Heller|Joseph Karo|Joseph L. Mankiewicz|Joseph Nasi|Joseph Pulitzer|Joseph Roth|Joseph Stiglitz|Joseph Trumpeldor|Josephus|Josh Gad|Josh Groban|Josh Harris|Josh Lyman|Josh Peck|Josh Radnor|Josh Rosen|Josh Safdie|Josh Shapiro|Joshua|Joshua Bell|Joshua Cohen|Joshua Russ Tupper|Josiah|Joyce Brothers|Judah|Judah Halevi|Judah Loew|Judah Maccabee|Judah P. Benjamin|Judah Touro|Judd Apatow|Judd Hirsch|Judge Judy|Judit Polgár|Judith|Judith Butler|Judith Montefiore|Judith Resnik|Judy Blume|Judy Chicago|Judy Garland|Judy Heumann|Judy Holliday|Jule Styne|Jules Feiffer|Julia Child|Julia Glushko|Julia Louis-Dreyfus|Julia Roberts|Julian Edelman|Julie Andrews|Julius Rosenwald|Juno Temple|Justin Bieber|Justin Paul|Justin Timberlake|Justine Lupe|Kadya Molodowsky|Kaley Cuoco|Kanye West|Kareem Abdul-Jabbar|Karen Walker|Karl Marx|Karl Popper|Karol G|Kat Dennings|Katalin Karikó|Kate Hudson|Kate McKinnon|Katharine Graham|Katharine Hepburn|Kathleen Kennedy|Katie Couric|Katie Ledecky|Katy Perry|Ke Huy Quan|Keanu Reeves|Keith Haring|Keith Richards|Kelli O'Hara|Kelly Clarkson|Kelsey Grammer|Ken Holtzman|Ken Jennings|Ken Jeong|Ken Rosenthal|Kendrick Lamar|Kenneth Arrow|Kenneth Cole|Kenneth Feinberg|Kenny G|Kenny Vance|Kerri Strug|Kerry Washington|Kesha|Kevin Bacon|Kevin Durant|Kevin Feige|Kevin Hart|Kevin Jonas|Kevin Systrom|Kevin Youkilis|Khalid|Kieran Culkin|Kim Cattrall|Kim Kardashian|King Ahab|King Ahasuerus|King Darius|King David|King Herod|King Manasseh|King Saul|King Solomon|Kip Thorne|Kirk Cameron|Kirk Douglas|Kirstie Alley|Kitty Hart-Moxon|Kitty Pryde|Kobe Bryant|Korach|Kris Jenner|Kristen Bell|Kristen Wiig|Kristin Chenoweth|Kristin Davis|Krusty the Clown|Kumail Nanjiani|Kunal Nayyar|Kurt Cobain|Kurt Weill|Kyle Broflovski|Kylie Jenner|Kyra Sedgwick|Laban|Lady Gaga|Lana Del Rey|Lance Bass|Larry Bird|Larry Brown|Larry Charles|Larry David|Larry Ellison|Larry Fine|Larry King|Larry Kramer|Larry Page|Larry Rivers|Larry Sherry|Larry Summers|Laura Benanti|Laura Nyro|Lauren Bacall|Laurie Metcalf|Lawrence Kasdan|Lawrence Krauss|Lazar Wolf|Lea Michele|Lea Salonga|Lea Thompson|Leah|Leah Goldberg|Leah Koenig|Leah Rabin|LeBron James|Lee Adams|Lee J. Cobb|Lee Krasner|Lee Zeldin|Lemony Snicket|Lena Dunham|Lenny Bruce|Lenny Kravitz|Lenny Krayzelburg|Leo Bloom|Leo Melamed|Leo Strauss|Leo Szilard|Leon Black|Léon Blum|Leon Lederman|Leon Levy|Leon Pinsker|Leon Trotsky|Leon Uris|Leon Wieseltier|Leonard Bernstein|Leonard Cohen|Leonard Kleinrock|Leonard Lauder|Leonard Nimoy|Leonard Stern|Leonardo da Vinci|Leonardo DiCaprio|Leopold Bloom|Leopold Zunz|Les Wexner|Lesley Stahl|Leslie Knope|Leslie Mann|Leslie Nielsen|Leslie Odom Jr.|Leslie Wexner|Letty Cottin Pogrebin|Levi|Levi Eshkol|Levi Strauss|Levi Yitzchak of Berditchev|Levon Aronian|Lew Wasserman|Lil Dicky|Lil Yachty|Lillian Hellman|Lillian Wald|Lily Ebert|Lin-Manuel Miranda|Linda Cardellini|Linda Cohn|Linda Lavin|Lindsay Lohan|Lionel Messi|Lionel Trilling|Lior Lev Sercarz|Lior Raz|Lipa Schmeltzer|Lisa Edelstein|Lisa Kudrow|Lisa Loeb|Lisa Randall|Lise Meitner|Liz Alpern|Liza Minnelli|Lizzo|Lizzy Caplan|Lloyd Blankfein|Logan Lerman|Logic|Lois Lane|Lorde|Lorenz Hart|Lorne Michaels|Lot|Lot's Wife|Lotte Lenya|Lou Gehrig|Lou Reed|Louis Armstrong|Louis B. Mayer|Louis Brandeis|Louis Kahn|Louise Glück|Louise Nevelson|Lucian Freud|Lucille Ball|Lucille Bluth|Lucy Liu|Ludwig Wittgenstein|Luke Combs|Luke Hughes|Lupita Nyong'o|Lyle Alzado|Lyor Cohen|Mac Miller|Madeleine Albright|Madonna|Maggie Gyllenhaal|Magic Johnson|Magneto|Maimonides|Maira Kalman|Malachi|Malcolm Gladwell|Malcolm Glazer|Mama Cass Elliot|Man Ray|Manasseh|Mandy Patinkin|Manoah|Manya Shochat|Marc Andreessen|Marc Anthony|Marc Bolan|Marc Chagall|Marc Jacobs|Marcel Proust|Marcus Loew|Margaret Cho|Margaret Qualley|Margot Frank|Margot Robbie|Margret Rey|Mariah Carey|Mariamne|Marilyn Monroe|Marin Hinkle|Marissa Mayer|Mark Bittman|Mark Cuban|Mark Green|Mark Knopfler|Mark Levin|Mark Ronson|Mark Rothko|Mark Spitz|Mark Twain|Mark Wilf|Mark Zuckerberg|Marlee Matlin|Marlene Dietrich|Marlon Brando|Marshall Goldberg|Marshmello|Marta Kauffman|Martha Nussbaum|Martha Stewart|Martin Buber|Martin Landau|Martin Scorsese|Martin Short|Marv Albert|Marvin Gaye|Marvin Hamlisch|Mary Antin|Mary-Kate Olsen|Mary Rodgers|Mary Tyler Moore|Mathieu Schneider|Matisyahu|Matt Damon|Matt LeBlanc|Matt Stone|Mattathias|Matthew Perry|Matthew Weiner|Matty Matheson|Maude Apatow|Maurice Sendak|Maury Povich|Max Baer|Max Bialystock|Max Born|Max Factor|Max Fried|Max Horkheimer|Max Liebermann|Max Martin|Max Mutchnick|Max Nordau|Max Steiner|Maya Angelou|Maya Rudolph|Mayer Amschel Rothschild|Mayim Bialik|Megan Rapinoe|Megan Thee Stallion|Meir Dagan|Meir Shalev|Mel Allen|Mel Brooks|Mel Tormé|Melchizedek|Melissa Clark|Melissa Gilbert|Melissa Rauch|Melissa Rivers|Melvin Schwartz|Menachem Begin|Menasseh ben Israel|Mendele Mocher Sforim|Mephibosheth|Merrick Garland|Meryl Streep|Meshach|Methuselah|Meyer Guggenheim|Meyer London|Mezz Mezzrow|Mia Hamm|Micah|Michael Aloni|Michael Bloomberg|Michael Bluth|Michael Bolton|Michael Cera|Michael Chabon|Michael Che|Michael Curtiz|Michael DeBakey|Michael Dell|Michael Douglas|Michael Eisner|Michael Giacchino|Michael Jackson|Michael Jordan|Michael Kaminsky|Michael Kors|Michael Landon|Michael Mann|Michael Ovitz|Michael Patrick King|Michael Phelps|Michael Richards|Michael Schwerner|Michael Scott|Michael Solomonov|Michael Walzer|Michael Wilbon|Michal|Michelangelo|Michelle Yeoh|Mick Jagger|Mickey Drexler|Mickey Katz|Mickey Mantle|Micky Arison|Midge Maisel|Miep Gies|Mike Cammalleri|Mike D|Mike Epstein|Mike Greenberg|Mike Lieberthal|Mike Nichols|Mike Rossman|Mike Schur|Mike Stoller|Mike Tyson|Mike Wallace|Mikhail Botvinnik|Mikhail Tal|Mila Kunis|Mildred Cohn|Miley Cyrus|Milla Jovovich|Milos Forman|Milton Berle|Milton Friedman|Milton Glaser|Mindy Kaling|Ming-Na Wen|Miranda Cosgrove|Miriam|Miriam Adelson|Mitch Albom|Mitchell Feigenbaum|Mitchell Parish|Mitchell Schwartz|Mo Ostin|Moe Berg|Moe Howard|Molly Bloom|Molly Goldberg|Molly Picon|Molly Shannon|Molly Yeh|Monica Geller|Monty Hall|Moon Knight|Moran Atias|Mordecai|Mordecai Richler|Mordechai Anielewicz|Mordechai Ben David|Morgan Freeman|Morgan Pressel|Morgan Wallen|Morley Safer|Morris Louis|Mort Sahl|Mort Shuman|Mort Zuckerman|Morty Seinfeld|Moses|Moses Cordovero|Moses de León|Moses Hess|Moses Isserles|Moses Mendelssohn|Moses Montefiore|Moshe Dayan|Moshe Levi|Moshe Safdie|Moshe Sharett|Motel the Tailor|Mrs. Maisel|Muhammad Ali|Muriel Rukeyser|Murray Gell-Mann|Murray Goldberg|Murray Perahia|Myron Cohen|Naboth|Nachmanides|Nachum Ish Gamzu|Nadav|Naftali Bennett|Nahum|Nan Goldin|Nancy Silverton|Naomi|Naomi Shemer|Naphtali|Nat Holman|Nat King Cole|Natalie Portman|Natan Alterman|Natan Sharansky|Natasha Lyonne|Nathan Englander|Nathan Handwerker|Nathan Mayer Rothschild|Nathan Straus|Nathan the Prophet|Nebuchadnezzar|Nechama Leibowitz|Nehemiah|Neil deGrasse Tyson|Neil Diamond|Neil Gaiman|Neil Patrick Harris|Neil Sedaka|Neil Simon|Neil Young|Nelly Sachs|Neshama Carlebach|Netta Barzilai|Newman|Nicholas Winton|Nick Jonas|Nick Kroll|Nick Lachey|Nick Mohammed|Nicki Minaj|Nicolas Sarkozy|Nicole Holofcener|Nicole Kidman|Nicole Krauss|Niels Bohr|Nigella Lawson|Niki Russ Federman|Nikolaus Pevsner|Nimrod|Ninet Tayeb|Nissim Black|Nita Lowey|Noa Kirel|Noa Tishby|Noah|Noah Baumbach|Noah Kahan|Noah Reid|Noah Roklov|Noam Chomsky|Nora Ephron|Norbert Wiener|Norm Sherry|Norman Lear|Norman Mailer|Norman Podhoretz|Novak Djokovic|Obadiah|Obed|Ofra Haza|Og|Oliver Hudson|Oliver Sacks|Oliver Stone|Olivia Colman|Olivia Rodrigo|Omer Adam|Omri Casspi|Onkelos|Oprah Winfrey|Orde Wingate|Ori Pfeffer|Orpah|Oscar Hammerstein II|Oscar Isaac|Oscar Straus|Osip Mandelstam|Oskar Schindler|Othniel|Ottessa Moshfegh|Otto Frank|Otto Kahn|Otto Loewi|Otto Preminger|Otto Warburg|Pablo Picasso|Paddy Chayefsky|Padma Lakshmi|Pam Beesly|Paris Hilton|Pat Sajak|Patricia Heaton|Patrick Mahomes|Patti LuPone|Paul Buchman|Paul Celan|Paul Ehrlich|Paul Erdős|Paul Krugman|Paul McCartney|Paul Mescal|Paul Muni|Paul Newman|Paul Offit|Paul Rand|Paul Reiser|Paul Rudd|Paul Samuelson|Paul Simon|Paul Stanley|Paul Warburg|Paul Wellstone|Paula Abdul|Paula Shoyer|Pauline Newman|Pedro Pascal|Peggy Guggenheim|Peggy Lipton|Peggy Noonan|Pelé|Penélope Cruz|Penina Moïse|Peninnah|Penny Marshall|Penny Pritzker|Perchik|Perez|Perry Farrell|Pete Davidson|Peter Boyle|Peter Falk|Peter Parker|Peter Revson|Peter Sarsgaard|Peter Shaffer|Peter Singer|Peter Thiel|Peter Yarrow|Peyton Manning|Pharaoh|Phil Dunster|Phil Rosenthal|Phil Spector|Philip Glass|Philip Guston|Philip Roth|Philo of Alexandria|Phoebe Bridgers|Phoebe Waller-Bridge|Pierre Mendès France|Pinchas|Pinchas Zukerman|Pink|Post Malone|Potiphar|Primo Levi|Prince|Puah|Queen Berenice|Queen Esther|Queen of Sheba|Queen Salome Alexandra|Queen Vashti|Quentin Tarantino|Quinn Hughes|R. L. Stine|Rabba Sara Hurwitz|Rabban Gamliel|Rabban Yochanan ben Zakkai|Rabbeinu Gershom|Rabbeinu Tam|Rabbi Abba Hillel Silver|Rabbi Abraham Cooper|Rabbi Abraham Joshua Heschel|Rabbi Abraham Twerski|Rabbi Adin Steinsaltz|Rabbi Aharon Kotler|Rabbi Aharon Lichtenstein|Rabbi Akiva|Rabbi Angela Buchdahl|Rabbi Arthur Hertzberg|Rabbi Arthur Waskow|Rabbi Aryeh Kaplan|Rabbi Avi Weiss|Rabbi Ben-Zion Uziel|Rabbi Benny Lau|Rabbi Chaim Soloveitchik|Rabbi Chanina ben Dosa|Rabbi Danya Ruttenberg|Rabbi David Wolpe|Rabbi Delphine Horvilleur|Rabbi Dov Linzer|Rabbi Elazar ben Azariah|Rabbi Elchanan Wasserman|Rabbi Elie Kaunfer|Rabbi Eliezer ben Hurcanus|Rabbi Elijah Benamozegh|Rabbi Elliot Dorff|Rabbi Haim David Halevi|Rabbi Harold Kushner|Rabbi Hayyim Angel|Rabbi Hershel Schachter|Rabbi Irving Greenberg|Rabbi Irwin Kula|Rabbi Jacob|Rabbi Jill Jacobs|Rabbi Joachim Prinz|Rabbi Jonathan Sacks|Rabbi Joseph B. Soloveitchik|Rabbi Joseph Telushkin|Rabbi Judah HaNasi|Rabbi Judah Magnes|Rabbi Judith Hauptman|Rabbi Lawrence Kushner|Rabbi Leo Baeck|Rabbi Lord Immanuel Jakobovits|Rabbi Louis Finkelstein|Rabbi Manis Friedman|Rabbi Meir|Rabbi Meir Soloveichik|Rabbi Menachem Froman|Rabbi Mordecai Kaplan|Rabbi Moshe Feinstein|Rabbi Nachman of Breslov|Rabbi Naftali Zvi Yehuda Berlin|Rabbi Ovadia Yosef|Rabbi Regina Jonas|Rabbi Sally Priesand|Rabbi Sandy Eisenberg Sasso|Rabbi Shalom Sharabi|Rabbi Sharon Brous|Rabbi Shimon bar Yochai|Rabbi Shlomo Carlebach|Rabbi Shlomo Goren|Rabbi Shlomo Riskin|Rabbi Shmuley Boteach|Rabbi Solomon Schechter|Rabbi Stephen Wise|Rabbi Susan Talve|Rabbi Tarfon|Rabbi Tovia Singer|Rabbi Yaakov Kamenetsky|Rabbi Yehoshua ben Chananya|Rabbi Yehuda Amital|Rabbi Yehuda Ashlag|Rabbi Yishmael|Rabbi Yisrael Meir Lau|Rabbi Yisrael Salanter|Rabbi Yochanan|Rabbi Zalman Schachter-Shalomi|Rabbi Zeira|Rachael Ray|Rachel|Rachel Berry|Rachel Bilson|Rachel Bloom|Rachel Bluwstein|Rachel Brosnahan|Rachel Green|Rachel Maddow|Rachel Sennott|Rachel the Poet|Rachel Weisz|Rachel Yanait Ben-Zvi|Rachel Zegler|Rafael Nadal|Rafi Eitan|Rahab|Rahel Varnhagen|Rahm Emanuel|Ralph Lauren|Randall Park|Randy Edelman|Randy Fine|Randy Newman|Raoul Wallenberg|Raphael Lemkin|Rashbam|Rashi|Rashida Jones|Rav|Rav Abraham Isaac Kook|Rav Ashi|Rav Huna|Rava|Ray Charles|Ray Dalio|Ray Evans|Ray Romano|Rebbe Menachem Mendel Schneerson|Rebbetzin Esther Jungreis|Rebecca|Rebecca Gratz|Rebecca Makkai|Rebecca of York|Rebecca Yarros|Red Auerbach|Red Holzman|Ree Drummond|Reese Witherspoon|Regina Resnik|Regina Spektor|Rehoboam|Reid Hoffman|Resh Lakish|Reuben|Reuven Rivlin|Reuven Rubin|Rhea Perlman|Rhea Seehorn|Richard Avedon|Richard Blumenthal|Richard Dreyfuss|Richard Feynman|Richard Lewis|Richard M. Sherman|Richard Rodgers|Richard Serra|Richard Tucker|Richie Jerimovich|Rick Rubin|Ricky Martin|Rihanna|Ringo Starr|Rita Levi-Montalcini|Rita Moreno|River Phoenix|Riz Ahmed|Rob Lowe|Rob Reiner|Rob Schneider|Robert Aumann|Robert B. Sherman|Robert Badinter|Robert Capa|Robert Caro|Robert De Niro|Robert Downey Jr.|Robert Kraft|Robert Langer|Robert Merrill|Robert Nozick|Robert Rubin|Robert Smigel|Roberta Kaplan|Roberta Peters|Robin Williams|Rocky Colavito|Rod Carew|Rodney Dangerfield|Roger Federer|Roman Kent|Ron Blomberg|Ron Chernow|Ron Howard|Ron Leibman|Ron Mix|Ron Rifkin|Ron Silver|Ron Swanson|Ron Wyden|Rona Jaffe|Rona Ramon|Ronald Lauder|Ronald Perelman|Ronit Elkabetz|Rosa Luxemburg|Rosalind Franklin|Rosalyn Yalow|Rose Pesotta|Rose Schneiderman|Rose Weissman|Roseanne Barr|Ross Geller|Roy Kent|Roy Lichtenstein|Roz Chast|Rudolf Virchow|Rupert Grint|Rupert Murdoch|Russ Feingold|Ruth|Ruth Asawa|Ruth Bader Ginsburg|Ruth Dayan|Ruth Gruber|Ruth Handler|Ruth Messinger|Ruth Nussenzweig|Ruth Porat|Ruth Reichl|Ruth Rogers|Ruth Westheimer|Ryan Braun|Ryan Coogler|Ryan Gosling|Ryan Lavarnway|Ryan Murphy|Ryan Reynolds|Ryan Seacrest|Ryan Turell|S. Y. Agnon|Saadia Gaon|Sabrina Carpenter|Sacha Baron Cohen|Safra Catz|Sage Rosenfels|Sally Rooney|Salma Hayek|Salvador Dalí|Sam Altman|Sam Raimi|Sam Warner|Sam Zell|Samin Nosrat|Sammy Cahn|Sammy Davis Jr.|Samson|Samson Raphael Hirsch|Samuel|Samuel Goldwyn|Samuel Gompers|Samuel Hirsch|Samuel ibn Naghrillah|Samuel Reshevsky|Sandra Bullock|Sandra Oh|Sandy Cohen|Sandy Koufax|Sandy Levin|Sanford Weill|Sara Bareilles|Sara Gilbert|Sara Levy|Sara Netanyahu|Sarah|Sarah Aaronsohn|Sarah Jessica Parker|Sarah Levy|Sarah Michelle Gellar|Sarah Schenirer|Sarah Sherman|Sarah Silverman|Sarah Snook|Sarit Hadad|Sasha Cohen|Sasha Roklov|Sasson Gabai|Satya Nadella|Saul Alinsky|Saul Bass|Saul Bellow|Saul Goodman|Saul Rogovin|Saul Steinberg|Sayed Kashua|Scarlett Johansson|Schmidt|Scooter Braun|Scott Feldman|Scott Rudin|Selena Gomez|Selman Waksman|Serach bat Asher|Serena Williams|Serge Gainsbourg|Serge Klarsfeld|Sergey Brin|Seth|Seth Cohen|Seth Green|Seth MacFarlane|Seth Meyers|Seth Rogen|Seymour Stein|Shabbetai Tzvi|Shadrach|Shahar Pe'er|Shai Agassi|Shakira|Shalom Hanoch|Shamgar|Shammai|Shams Charania|Shania Twain|Shaquille O'Neal|Shari Redstone|Shaul Tchernichovsky|Shawn Green|Sheila Broflovski|Shel Silverstein|Sheldon Adelson|Sheldon Glashow|Sheldon Harnick|Shelley Berman|Shelley Long|Shelley Winters|Shem|Shemp Howard|Sherry Lansing|Sherry Turkle|Sheryl Crow|Sheryl Sandberg|Shifra|Shimon Peres|Shira Haas|Shirley Temple|Shlomo Artzi|Shlomo Carlebach|Shmuel|Shneur Zalman of Liadi|Shohei Ohtani|Sholem Aleichem|Sholem Asch|Shonda Rhimes|Shulamit Aloni|Shulamith Firestone|Shulem Lemmer|Shulem Shtisel|Shylock|Si Newhouse|Sia|Sid Caesar|Sid Gordon|Sid Luckman|Sidney Hillman|Sidney Lumet|Sigmund Freud|Sigmund Romberg|Sihon|Simeon|Simon Cowell|Simon Flexner|Simon Helberg|Simon Schama|Simon the Just|Simon Wiesenthal|Simone Biles|Simone Signoret|Simone Veil|Simu Liu|Sisera|Skrillex|Slash|Sloane Crosley|Snoop Dogg|Sofia Coppola|Sofía Vergara|Sol LeWitt|Solomon ibn Gabirol|Solomon R. Guggenheim|Sophia Loren|Sophia Petrillo|Sophie Tucker|Spencer Horwitz|Spider-Man|Spike Jonze|Stacey Snider|Stan Getz|Stan Lee|Stanley Kubrick|Stanley Marcus|Stanley Milgram|Stefan Zweig|Stephanie Hsu|Stephen A. Smith|Stephen Breyer|Stephen Colbert|Stephen Curry|Stephen Jay Gould|Stephen King|Stephen Miller|Stephen Ross|Stephen Schwartz|Stephen Schwarzman|Stephen Sondheim|Steve Aoki|Steve Ballmer|Steve Carell|Steve Cohen|Steve Jobs|Steve Lawrence|Steve Martin|Steve Reich|Steve Stone|Steven Bochco|Steven Levitan|Steven Mnuchin|Steven Pinker|Steven Soderbergh|Steven Spielberg|Steven Weinberg|Steven Yeun|Stevie Wonder|Studs Terkel|Sue Bird|Summer Roberts|Sumner Redstone|Sundar Pichai|Superman|Susan Polgar|Susan Sontag|Susan Wojcicki|Susie Greene|Susie Myerson|Sutton Foster|Suzyn Waldman|Sydney Adamu|Sydney Sweeney|SZA|Taffy Brodesser-Akner|Taika Waititi|Tal Brody|Tamar|Taylor Swift|Ted Danson|Ted Koppel|Ted Lasso|Ted Williams|Teddy Kollek|Terence Tao|Tevye|The Thing|The Weeknd|Theda Bara|Theo Epstein|Theodor Adorno|Theodor Herzl|Theodore Bikel|Theodore von Kármán|Thomas Buergenthal|Thomas Friedman|Thomas Keller|Tibor Kalman|Tiffany Haddish|Tiger Woods|Tillie Olsen|Tim Cook|Tim Robinson|Timothée Chalamet|Timothy Simons|Tina Brown|Tina Fey|Tito Puente|Toby Flenderson|Toby Ziegler|Toheeb Jimoh|Tom Brady|Tom Cruise|Tom Ford|Tom Hanks|Tom Haverford|Tom Hiddleston|Tom Holland|Tom Lehrer|Tom Stoppard|Tommy Pickles|Tommy Ramone|Toni Morrison|Tony Curtis|Tony Kornheiser|Tony Kushner|Tony Shalhoub|Topol|Totie Fields|Tovah Feldshuh|Tracee Ellis Ross|Travis Kalanick|Travis Kelce|Travis Scott|Trevor Noah|Trey Parker|Tuvia Bielski|Tzeitel|Uncle Leo|Uri Geller|Uri Scheft|Uri Zvi Greenberg|Uriah P. Levy|Uriah the Hittite|Uriel da Costa|Usain Bolt|Uzi Narkiss|Uzziah|Vanessa Hudgens|Varian Fry|Vasily Grossman|Venus Williams|Vera Wang|Victor Berger|Victor Wembanyama|Victoria Justice|Viktor Frankl|Vilna Gaon|Vincent Chase|Vincent van Gogh|Vint Cerf|Viola Davis|Vivian Gornick|Vladimir Horowitz|Vladka Meed|Volodymyr Zelensky|Waldemar Haffkine|Wallace Shawn|Walt Disney|Walter Benjamin|Walter Isaacson|Walter Lippmann|Walter Matthau|Walther Rathenau|Warren Buffett|Wayne Gretzky|Weegee|Wendy Wasserstein|Wes Anderson|Whitney Houston|Will Eisner|Will Smith|Will Truman|William Finn|William Fox|William Shakespeare|William Shatner|William Wyler|Willie Mays|Winona Ryder|Witch of Endor|Witold Pilecki|Wolf Blitzer|Wolfgang Lotz|Wolfgang Pauli|Wolfgang Puck|Wonder Woman|Woody Allen|Woody Harrelson|Wyc Grousbeck|Yaacov Agam|Yaakov Shwekey|Yael|Yair Lapid|Yalta|Yayoi Kusama|Yefim Bronfman|Yehoram Gaon|Yehuda Amichai|Yehudi Menuhin|Yente the Matchmaker|Yentl|Yeshayahu Leibowitz|Yigael Yadin|Yigal Allon|Yip Harburg|Yitzhak Ben-Zvi|Yitzhak Navon|Yitzhak Rabin|Yitzhak Sadeh|Yitzhak Shamir|Yocheved|Yogi Berra|Yonatan Razel|Yoni Netanyahu|Yossele Rosenblatt|Yossi Vardi|Yotam Ottolenghi|Yuli Edelstein|Yuri Foreman|Yuval Noah Harari|Yuval Raphael|Yves Montand|Zac Efron|Zac Posen|Zach Bryan|Zach Hyman|Zalman Shazar|Zebulun|Zechariah|Ze'ev Jabotinsky|Zelda Schneurson Mishkovsky|Zendaya|Zephaniah|Zeppo Marx|Zeresh|Zero Mostel|Zerubbabel|Zeruya Shalev|Zilpah|Zipporah|Zivia Lubetkin|Zoë Kravitz|Zoey Deutch|Zohran Mamdani|Zus Bielski|Zygi Wilf".split("|");
+</script>
 <script>
 /* ---------- content: the puzzles ---------- */
 const VENMO_HANDLE = "ian-lever";
@@ -483,7 +578,8 @@ const P1 = {
         "He skipped college, turned pro straight out of high school in 2002 and was named Rookie of the Year. In 2010 he made his first trip to Israel to explore those roots.",
         "A six-time NBA All-Star with the Phoenix Suns and New York Knicks, he later won an Israeli championship with Maccabi Tel Aviv and completed an Orthodox conversion in 2020."
       ],
-      learn: "His Hebrew name is Yahoshafat ben Avraham. He also started a kosher wine label and a campus program that brings Black and Jewish students together."
+      learn: "His Hebrew name is Yahoshafat ben Avraham. He also started a kosher wine label and a campus program that brings Black and Jewish students together.",
+      read: ["Amar'e Stoudemire shares his Jewish journey, from young scholar to aspiring 'prophet'", "JTA", "https://www.jta.org/2020/12/23/culture/amare-stoudemire-shares-his-jewish-journey-from-young-scholar-to-aspiring-prophet"]
     },
     {
       era: "Yester Yid", icon: "reel", peek: "dreidel", color: "sun",
@@ -494,7 +590,8 @@ const P1 = {
         "A photographer spotted her working in a wartime factory, and a modeling career took off. In 1956 she studied with a Reform rabbi and converted on the day of her Jewish wedding to a famous playwright. Egypt banned her films in response.",
         "The star of Some Like It Hot and Gentlemen Prefer Blondes, forever pictured in a white dress over a subway grate. Her husbands included Joe DiMaggio and Arthur Miller."
       ],
-      learn: "After her divorce in 1961 she told her rabbi she was staying Jewish. She kept a prayer book and a menorah that played music."
+      learn: "After her divorce in 1961 she told her rabbi she was staying Jewish. She kept a prayer book and a menorah that played music.",
+      read: ["9 Stunning Jewish Facts About Marilyn Monroe", "Kveller", "https://www.kveller.com/9-stunning-jewish-facts-about-marilyn-monroe/"]
     },
     {
       era: "Really Old Yid", icon: "corn", peek: "mezuzah", color: "mint",
@@ -505,7 +602,8 @@ const P1 = {
         "Widowed young, she refused to go back home. She followed her mother-in-law Naomi to Bethlehem and gleaned leftover barley in the fields of a man named Boaz to keep them both fed.",
         "\"Your people shall be my people, and your God my God.\" A book of the Tanakh carries her name, and we read it every Shavuot."
       ],
-      learn: "She married Boaz, and their great-grandson was King David."
+      learn: "She married Boaz, and their great-grandson was King David.",
+      read: ["Ruth and Lovingkindness", "My Jewish Learning", "https://www.myjewishlearning.com/article/ruth-and-lovingkindness/"]
     }
   ],
   thread: {
@@ -543,7 +641,8 @@ const P2 = {
         "His first break was hosting on MTV Canada. Then he started a production company with his father, a comedy legend, and the two of them wrote a sitcom pilot together.",
         "He co-created Schitt's Creek and played David Rose. In 2020 the show swept the Emmy comedy awards, and he took home four of them in one night."
       ],
-      learn: "Schitt's Creek was a family business: his father Eugene played his dad, and his sister Sarah played Twyla, the waitress at the café."
+      learn: "Schitt's Creek was a family business: his father Eugene played his dad, and his sister Sarah played Twyla, the waitress at the café.",
+      read: ["18 Things to Know About Dan Levy", "Hey Alma", "https://www.heyalma.com/18-things-to-know-about-dan-levy/"]
     },
     {
       era: "Yester Yid", icon: "lens", peek: "star", color: "sun",
@@ -554,7 +653,8 @@ const P2 = {
         "After moving to Israel he married Nadia, an Iraqi-born Jew, and was recruited by Israeli intelligence. His cover began in Buenos Aires, where he posed as a wealthy Syrian businessman named Kamel Amin Thaabet.",
         "Israel's most famous spy. He charmed his way into the top of Syria's government in Damascus until he was caught and hanged in 1965. Sacha Baron Cohen played him in the Netflix series The Spy."
       ],
-      learn: "In 2025, sixty years after his death, the Mossad brought his Syrian file home to Israel: about 2,500 documents, photos and personal items. His burial place is still unknown."
+      learn: "In 2025, sixty years after his death, the Mossad brought his Syrian file home to Israel: about 2,500 documents, photos and personal items. His burial place is still unknown.",
+      read: ["Eli Cohen", "My Jewish Learning", "https://www.myjewishlearning.com/article/eli-cohen/"]
     },
     {
       era: "Really Old Yid", icon: "drop", peek: "pom", color: "mint",
@@ -565,7 +665,8 @@ const P2 = {
         "The Torah calls her a prophetess. When the sea closed behind the Israelites, she picked up a timbrel and led the women in song and dance.",
         "Sister of Moses and Aaron. Legend says a well followed the Israelites through the desert in her merit, and many families now set a cup of water with her name on the seder table."
       ],
-      learn: "Miriam's cup sits beside Elijah's at many seders. His holds wine; hers holds water, for the well."
+      learn: "Miriam's cup sits beside Elijah's at many seders. His holds wine; hers holds water, for the well.",
+      read: ["Miriam the Prophetess", "My Jewish Learning", "https://www.myjewishlearning.com/article/miriam-the-prophetess/"]
     }
   ],
   thread: {
@@ -592,8 +693,79 @@ const P2 = {
     ]
   }
 };
-const PUZZLES = [P1, P2];
-let PUZZLE = PUZZLES[0];
+const P3 = {
+  id: 3,
+  rounds: [
+    {
+      era: "Today Yid", icon: "phones", peek: "candles", color: "pink",
+      answer: "Benny Blanco",
+      aliases: ["benny blanco", "blanco", "benjamin levin", "benjamin joseph levin", "benny levin", "ben levin"],
+      clues: [
+        "Born Benjamin Levin in Reston, Virginia, in 1988. As a little kid he banged on pots and pans, got hooked on the rapper Nas at around age five, and dreamed of rapping himself, until he decided nobody wanted to hear from a chubby Jewish kid from Virginia.",
+        "So he made beats in his bedroom instead, rode five-hour buses to New York to chase record executives, and before he turned 22 had co-written hits for Katy Perry, Britney Spears and Kesha. He's held on tight to his Jewish identity along the way: he hosts the High Holidays for his friends, and once tweeted, \"being jewish is a state of mind… not a religious group.\"",
+        "One of pop's biggest hitmakers, he produced Maroon 5's \"Moves Like Jagger,\" Ed Sheeran's \"Castle on the Hill\" and his own hit \"Eastside\" with Halsey and Khalid. He wrote a cookbook called Open Wide, and in 2025 he married Selena Gomez."
+      ],
+      learn: "His cookbook includes his mom's kugel, which he calls his favorite Jewish recipe, even though he's said she's a terrible cook. If music hadn't worked out, he says he'd have been a chef.",
+      read: ["18 Things to Know About Jewish Songwriter and Producer Benny Blanco", "Hey Alma", "https://www.heyalma.com/18-things-to-know-about-jewish-songwriter-and-producer-benny-blanco/"]
+    },
+    {
+      era: "Yester Yid", icon: "note", peek: "menorah", color: "sun",
+      answer: "Irving Berlin",
+      aliases: ["irving berlin", "berlin", "israel beilin", "israel baline", "izzy baline", "izzy beilin"],
+      clues: [
+        "Born Israel Beilin in 1888 in the Russian Empire, the son of a cantor. When he was five, his family fled the pogroms for a tenement on New York's Lower East Side.",
+        "After his father died, the teenager struck out on his own, singing for coins in Bowery saloons and working as a singing waiter in Chinatown. A printer's mistake on his first published song gave him the name he kept. In 1911, \"Alexander's Ragtime Band\" made him a star, even though he never learned to read music.",
+        "He's considered one of America's greatest songwriters. Fellow composer Jerome Kern said he \"has no place in American music. He is American music.\" He wrote more than 1,000 songs, including \"Puttin' on the Ritz,\" \"White Christmas,\" \"There's No Business Like Show Business\" and \"God Bless America,\" which he wrote as a soldier in 1918 and shared with the world twenty years later."
+      ],
+      learn: "He could only play the piano in one key, F-sharp, which is nearly all black keys. So he had a special piano with a lever that shifted the keyboard into other keys. He lived to 101.",
+      read: ["A Jewish Immigrant Wrote This Quintessential American Song", "Kveller", "https://www.kveller.com/a-jewish-immigrant-wrote-this-quintessential-american-song/"]
+    },
+    {
+      era: "Really Old Yid", icon: "crown", peek: "wine", color: "mint",
+      answer: "Queen Esther",
+      aliases: ["queen esther", "esther", "ester", "hadassah", "hadasa", "esther hamalka", "esther the queen"],
+      clues: [
+        "An orphan from the tribe of Benjamin, raised by an older cousin as if she were his own daughter. They lived in exile, far from the Land of Israel, in the capital of a great empire.",
+        "She had two names: a Hebrew one meaning \"myrtle,\" and another the Talmud links to the word for \"star.\" When the king went looking for a new queen she was brought to the palace, and on her cousin's advice she told no one there who her people were.",
+        "She fasted for three days, then risked her life to go to King Ahasuerus uninvited and expose Haman's plot. We read her megillah on Purim."
+      ],
+      learn: "Her book never mentions God by name. The rabbis found a hint in her name anyway: Esther sounds like hester, Hebrew for \"hidden\" (Chullin 139b).",
+      read: ["All About Esther", "My Jewish Learning", "https://www.myjewishlearning.com/article/esther/"]
+    }
+  ],
+  thread: {
+    title: "Interfaith power couples",
+    prompt: "Benny, Irving and Esther have something in common. What ties them together?",
+    keywords: ["inter faith", "interfaith", "inter marri", "intermarri", "intermarry", "mixed marri", "mixed faith", "mixed religion", "mixed couple", "mixed relationship", "non jew", "nonjew", "not jewish", "werent jewish", "wasnt jewish", "isnt jewish", "arent jewish", "not a jew", "not jews", "outside the tribe", "outside of the tribe", "outside the faith", "outside their faith", "outside his faith", "outside her faith", "outside judaism", "outside the religion", "outside their religion", "outside the jewish", "married out", "marry out", "marrying out", "different faith", "different religion", "different faiths", "different religions", "another faith", "another religion", "other faith", "other religion", "power couple", "married gentile", "married a gentile", "married goy", "married a goy", "married christian", "married a christian", "married catholic", "married a catholic", "married shiksa", "married a shiksa", "married a non", "married non", "married someone not", "jewish and non", "jew and non"],
+    words: ["interfaith", "intermarried", "intermarriage", "intermarriages", "intermarry", "intermarrying", "interreligious", "multifaith", "gentile", "gentiles", "goy", "goyim", "goyish", "shiksa", "shiksas", "shegetz", "nonjewish", "exogamy", "exogamous"],
+    alt: {
+      quip: "The name thread! We'll take it. Read on for the one we had in mind.",
+      keywords: ["changed name", "changed names", "changed their name", "changed his name", "changed her name", "change their name", "change names", "name change", "name changes", "name changed", "names changed", "new name", "new names", "different name", "different names", "other name", "other names", "another name", "two names", "multiple names", "stage name", "stage names", "birth name", "birth names", "real name", "real names", "pen name", "original name", "original names", "assumed name", "fake name", "born with a different", "born with another", "born under", "not their real", "not their birth"],
+      words: ["renamed", "pseudonym", "pseudonyms", "alias", "aliases", "nickname", "nicknames", "rebranded", "monikers"]
+    },
+    body: [
+      ["star", "<b>Each of them is half of a famous interfaith couple.</b> Benny Blanco married Selena Gomez in 2025. Irving Berlin married Ellin Mackay, a Catholic heiress, at New York City Hall in 1926. Her father opposed the match, and the marriage lasted 62 years. And Esther became queen to Ahasuerus, king of Persia."],
+      ["crown", "<b>Esther's story is its own.</b> The Megillah says she was taken to the palace rather than choosing the match, and the Talmud describes her as passive in it (Sanhedrin 74b). What tradition celebrates is her courage in the place she found herself. As Mordecai asks her: \"Who knows whether you came to royalty for just such a time as this?\" (Esther 4:14)."],
+      ["wine", "<b><i>Ani l'dodi v'dodi li.</i></b> \"I am my beloved's and my beloved is mine\" (Song of Songs 6:3). The rabbis read it as the love between God and the Jewish people, and its first letters spell <i>Elul</i>. Couples engrave it in wedding rings and ketubot as a picture of a partnership where each one gives and each one receives. Judaism has prized partnership from the very start: \"It is not good for a person to be alone\" (Genesis 2:18)."],
+      ["mezuzah", "<b>A conversation held with love.</b> For generations, Jews have thought hard and felt deeply about interfaith marriage, and different denominations have grappled with the question in their own ways. Underneath the different answers is something shared: deep care for Jewish families and for the Jewish future. For one heartfelt perspective, watch Rabbi Angela Buchdahl, a Reform rabbi at New York's Central Synagogue who grew up in an interfaith family, give her Yom Kippur sermon <a href=\"https://www.youtube.com/watch?v=rhFSYRXrgf0\" target=\"_blank\" rel=\"noopener\">\"Your People Are My People\"</a>. The title borrows Ruth's famous words. And if you're curious where your own community lands, your rabbi would probably love the question."],
+      ["candles", "<b>The trend.</b> In Pew's 2020 survey, 61% of U.S. Jews who married since 2010 have a spouse who isn't Jewish, up from 18% of those who married before 1980. Many of those couples are bringing Jewish life into their homes, from Shabbat dinners to seders, and more and more Jewish communities are opening their doors to partners and their families. And some partners eventually choose Judaism themselves. Remember Week 1?"],
+      ["pom", "<b>Bonus thread, also accepted:</b> all three went by a name other than the one they were born with. Benjamin Levin became Benny Blanco. Israel Beilin became Irving Berlin, thanks partly to a printer's mistake. And Hadassah is the queen we know as Esther (Esther 2:7)."],
+      ["challah", "<i>Love stories run all through Jewish history, from Ruth and Boaz onward, and the debate over interfaith marriage is at least a hundred years old. We're not here to settle it. We're here to honor the partnerships in our story and make room for every family at the table.</i>"]
+    ],
+    sources: [
+      ["Irving Berlin's 1926 interfaith marriage sparked a Jewish debate that, 100 years later, hasn't gone away", "JTA", "https://www.jta.org/2026/01/02/culture/irving-berlins-1926-interfaith-marriage-sparked-a-jewish-debate-that-100-years-later-hasnt-gone-away"],
+      ["Is Intermarriage Against Jewish Law?", "My Jewish Learning", "https://www.myjewishlearning.com/article/is-intermarriage-against-jewish-law/"],
+      ["Intermarriage and the American Jewish Community", "My Jewish Learning", "https://www.myjewishlearning.com/article/intermarriage-and-the-american-jewish-community/"],
+      ["Am I My Beloved's?", "My Jewish Learning", "https://www.myjewishlearning.com/article/am-i-my-beloveds/"],
+      ["The Month of the Bride", "Chabad.org", "https://www.chabad.org/56888"],
+      ["US-based Conservative movement apologizes, signals new approach on intermarriage", "The Times of Israel", "https://www.timesofisrael.com/us-based-conservative-movement-apologizes-signals-new-approach-on-intermarriage/"],
+      ["Jewish Americans in 2020: Marriage, families and children", "Pew Research Center", "https://www.pewresearch.org/religion/2021/05/11/marriage-families-and-children/"]
+    ]
+  }
+};
+const PUZZLES = [P1, P2, P3];
+const CURRENT = PUZZLES[PUZZLES.length-1];
+let PUZZLE = CURRENT;
 
 const POINTS = [54, 36, 18];
 const BONUS = 18;
@@ -636,8 +808,13 @@ function lev(a,b){
 }
 function slack(len){ return len>=9?2:len>=5?1:0; }
 function matchName(guess, aliases){
-  const g=norm(guess); if(!g) return false;
+  const g=norm(String(guess).replace(/\([^)]*\)/g," ")); if(!g) return false;
   return aliases.some(a=>{ const t=norm(a); return g===t || lev(g,t)<=slack(t.length); });
+}
+function threadHit(guess, thread){
+  if(matchThread(guess,thread)) return "main";
+  if(thread.alt&&matchThread(guess,thread.alt)) return "alt";
+  return "";
 }
 function matchThread(guess, thread){
   const g=norm(guess); if(!g) return false;
@@ -651,7 +828,7 @@ function rankFor(score){ return RANKS.find(r=>score>=r.min); }
 function shareText(state){
   const t=total(state);
   const rk=rankFor(t), E=["\u{1F4F1}","\u{1F4DC}","\u{1F3FA}"];
-  const lines=["\u2721\uFE0F Geshmak! No. "+PUZZLE.id+": "+t+"/180"+(t===180?" \u{1F389}":""), rk.emoji+" "+rk.name, ""];
+  const lines=["\u2721\uFE0F Geshmak! Week "+PUZZLE.id+": "+t+"/180"+(t===180?" \u{1F389}":""), rk.emoji+" "+rk.name, ""];
   state.rounds.forEach((r,i)=>{ lines.push(E[i]+" "+PUZZLE.rounds[i].era+": "+roundPoints(r)+"/54"); });
   lines.push("\u{1F9F5} The thread: "+(state.bonus==="won"?BONUS:0)+"/18");
   lines.push("", "Can you name the Yid? \u{1F56F}\uFE0F\u{1F35E}\u{1F377}");
@@ -670,7 +847,7 @@ function keyFor(id){ return "geshmak-puzzle-"+id; }
 function rawState(id){ try{ const s=JSON.parse(ls(keyFor(id))); if(s&&s.rounds&&s.rounds.length===3){ if(s.started===undefined) s.started=true; return s; } }catch(e){} return null; }
 let seenIntro = ls("geshmak-intro")==="1" || PUZZLES.some(p=>{ const s=rawState(p.id); return s&&s.started; });
 function loadState(id){ const s=rawState(id); if(s){ if(seenIntro) s.started=true; return s; } const f=freshState(); f.started=seenIntro; return f; }
-PUZZLE = PUZZLES.find(p=>String(p.id)===ls("geshmak-current")) || PUZZLES[0];
+PUZZLE = CURRENT;
 let state=loadState(PUZZLE.id);
 function save(){ lsSet(keyFor(PUZZLE.id),JSON.stringify(state)); }
 function finished(s){ return s.rounds.every(r=>r.status!=="playing") && s.bonus!=="playing"; }
@@ -682,10 +859,25 @@ function activeIndex(){ return state.rounds.findIndex(r=>r.status==="playing"); 
 /* ---------- render ---------- */
 const game=document.getElementById("game");
 const SHORT=["Today","Yester","Really Old"];
+const PAST = PUZZLES.filter(p=>p!==CURRENT).reverse();
+function stateOf(p){ return p.id===PUZZLE.id?state:rawState(p.id); }
 function renderSwitch(){
-  document.getElementById("switch").innerHTML=PUZZLES.map(p=>
-    { const s=p.id===PUZZLE.id?state:rawState(p.id), fin=!!(s&&finished(s));
-      return '<button type="button" data-puzzle="'+p.id+'" aria-pressed="'+(p.id===PUZZLE.id)+'"'+(fin?' aria-label="Puzzle '+p.id+', finished"':'')+'>Puzzle '+p.id+(fin?'<span class="ck" aria-hidden="true">\u2713</span>':'')+'</button>'; }).join("");
+  const s=stateOf(CURRENT), fin=!!(s&&finished(s)), onPast=PUZZLE!==CURRENT;
+  document.getElementById("switch").innerHTML=
+    '<button type="button" data-puzzle="'+CURRENT.id+'" aria-pressed="'+!onPast+'"'+(fin?' aria-label="This week, finished"':'')+'>This week'+(fin?'<span class="ck" aria-hidden="true">\u2713</span>':'')+'</button>'+
+    (PAST.length?'<button type="button" data-open="dlg-weeks" aria-pressed="'+onPast+'">Past weeks</button>':'');
+  const wl=document.getElementById("weekline");
+  wl.className="weekline"+(onPast?" past":" cur");
+  wl.innerHTML=onPast
+    ? '<span class="wk">'+ico("candles")+'<span><b>Week '+PUZZLE.id+'</b> from the archive</span></span><button class="btn ghost" type="button" data-puzzle="'+CURRENT.id+'">Back to this week</button>'
+    : '<svg class="ico deco l" aria-hidden="true"><use href="#i-dreidel"/></svg><h2 class="wk-title">Week '+PUZZLE.id+'</h2><svg class="ico deco r" aria-hidden="true"><use href="#i-star"/></svg>';
+}
+function renderWeeks(){
+  document.getElementById("weeks-list").innerHTML=PAST.map(p=>{
+    const s=stateOf(p);
+    const note=s&&finished(s)?"Finished \u00b7 "+total(s)+" / 180":s&&s.rounds.some(r=>r.status!=="playing")?"In progress":"Not played yet";
+    return '<li><button type="button" data-puzzle="'+p.id+'">'+ico(s&&finished(s)?"star":"dreidel")+'<span>Week '+p.id+'</span><small>'+note+'</small></button></li>';
+  }).join("");
 }
 function renderBoard(){
   const act=state.started?activeIndex():-2;
@@ -709,7 +901,7 @@ function introHTML(){
     '<li><span class="worth">36</span><span>Name them on the <b>second clue</b></span></li>'+
     '<li><span class="worth">18</span><span>Name them on the <b>third clue</b></span></li>'+
     '<li><span class="worth bonus">+18</span><span><b>Bonus: the thread.</b> Guess the connection that brings all three together</span></li>'+
-    '<li><span class="worth max">180</span><span>A perfect day. That\'s ten times chai.</span></li>'+
+    '<li><span class="worth max">180</span><span>A perfect score. That\'s ten times chai.</span></li>'+
     '</ul>'+
     '<p style="margin:0">A wrong guess flips the next clue, which costs you 18.</p>'+
     '<p class="sub">What your total makes you</p>'+
@@ -776,6 +968,7 @@ function render(focusId){
     if(done){
       html+='<div class="answer pop">'+esc(R.answer)+'</div>';
       html+='<p class="learn">'+ico("challah")+'<span><b>Nosh on this:</b> '+esc(R.learn)+'</span></p>';
+      if(R.read) html+='<a class="read" href="'+esc(R.read[2])+'" target="_blank" rel="noopener">'+ico("book")+'<span class="t"><span>'+esc(R.read[0])+'</span><small>Read more on '+esc(R.read[1])+' ↗</small></span></a>';
     } else if(isAct){
       html+='<ol class="clues">';
       R.clues.forEach((c,j)=>{
@@ -784,7 +977,8 @@ function render(focusId){
       });
       html+='</ol>';
       html+='<form data-form="guess"><label class="sr" for="guess-'+i+'">Your guess for the '+esc(R.era)+'</label>'+
-            '<input type="text" id="guess-'+i+'" name="geshmak-answer-'+i+'" autocomplete="off" autocorrect="off" spellcheck="false" enterkeyhint="go" data-1p-ignore data-lpignore="true" data-bwignore data-form-type="other" autocapitalize="words" placeholder="Who is it?">'+
+            '<div class="combo"><input type="text" id="guess-'+i+'" name="geshmak-answer-'+i+'" autocomplete="off" autocorrect="off" spellcheck="false" enterkeyhint="go" data-1p-ignore data-lpignore="true" data-bwignore data-form-type="other" autocapitalize="words" placeholder="Start typing a name…" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="sugg-'+i+'">'+
+            '<ul class="sugg" id="sugg-'+i+'" role="listbox" aria-label="Possible Yids" hidden></ul></div>'+
             '<button class="btn" type="submit">Guess</button></form>';
       html+=missesHTML(r.misses);
       html+=confirming?sureHTML("giveup-yes"):'<div class="row">'+(r.clue<2
@@ -792,14 +986,14 @@ function render(focusId){
             : '<button class="btn ghost" type="button" data-act="giveup">I give up, tell me</button>')+'</div>';
       html+='<p class="quip'+(state.quipGood?' good':'')+'" role="status">'+esc(state.quip)+'</p>';
     } else {
-      html+='<p class="wait">'+ico("menorah")+'Three clues, coming up after the one above.</p>';
+      html+='<p class="wait">'+ico(["bagel","torah","book"][i]||"bagel")+'Three clues, coming up after the one above.</p>';
     }
     html+=ico(R.peek,"peek")+'</section>';
   });
 
   if(act!==-1){
     html+='<section class="card c-grape locked" aria-label="Bonus: the thread"><div class="band"><h2 class="era">'+ico("menorah")+'Bonus: the thread</h2><span class="pts">+18</span></div>'+
-      '<p class="wait">'+ico("star")+'<span><b>The thread</b> is the connection that brings all three Yids together. Name them, then guess it for 18 more.</span></p>'+ico("star","peek")+'</section>';
+      '<p class="wait">'+ico("dreidel")+'<span><b>The thread</b> is the connection that brings all three Yids together. Name them, then guess it for 18 more.</span></p>'+ico("pom","peek")+'</section>';
   }
   if(act===-1){
     const T=PUZZLE.thread;
@@ -811,7 +1005,7 @@ function render(focusId){
         '<button class="btn" type="submit">Guess</button></form>'+
         missesHTML(state.tmisses)+
         (confirming?sureHTML("reveal-yes"):'<div class="row"><button class="btn ghost" type="button" data-act="reveal">Just tell me</button></div>')+
-        '<p class="quip'+(state.quipGood?' good':'')+'" role="status">'+esc(state.quip)+'</p>'+ico("star","peek")+'</section>';
+        '<p class="quip'+(state.quipGood?' good':'')+'" role="status">'+esc(state.quip)+'</p>'+ico("bagel","peek")+'</section>';
     } else {
       const t=total(state), rk=rankFor(t);
       html+='<section class="card c-grape thread pop" aria-label="The thread"><div class="band"><h2 class="era">'+ico("menorah")+esc(T.title)+'</h2>'+
@@ -819,7 +1013,7 @@ function render(focusId){
         T.body.map(p=>'<p class="fact">'+ico(p[0])+'<span>'+p[1]+'</span></p>').join("")+
         (T.sources&&T.sources.length?'<div class="more"><p class="sub">Want to learn more? Check out these sources!</p><ul>'+
           T.sources.map(s=>'<li><a href="'+esc(s[2])+'" target="_blank" rel="noopener">'+esc(s[0])+'</a> <span>'+esc(s[1])+'</span></li>').join("")+'</ul></div>':'')+
-        ico("star","peek")+'</section>';
+        ico("shofar","peek")+'</section>';
       html+='<section class="card c-sky" aria-label="Your result"><div class="band"><h2 class="era">'+ico("wine")+'Your score</h2><span class="pts">'+t+' / 180</span></div>'+
         '<div class="rank pop">'+ico(rk.icon)+esc(rk.name)+'</div>'+
         '<p class="quip good" role="status">'+esc(t===180?QUIPS.perfect:state.quip)+'</p>'+
@@ -830,7 +1024,8 @@ function render(focusId){
         '</div>'+
         '<div class="join" id="score-join"></div>'+
         '<div class="row"><button class="btn" type="button" data-act="share">Share my score</button>'+
-        PUZZLES.filter(p=>p.id!==PUZZLE.id).map(p=>'<button class="btn ghost" type="button" data-puzzle="'+p.id+'">Play Puzzle '+p.id+'</button>').join("")+'</div>'+
+        (PUZZLE!==CURRENT?'<button class="btn ghost" type="button" data-puzzle="'+CURRENT.id+'">Back to this week</button>':'')+
+        (PAST.some(p=>p!==PUZZLE)?'<button class="btn ghost" type="button" data-open="dlg-weeks">'+(PUZZLE===CURRENT?'Play past weeks':'More past weeks')+'</button>':'')+'</div>'+
         '<p class="quip good" id="share-note" role="status"></p>'+ico("dreidel","peek")+'</section>';
       html+='<section class="card chai" aria-label="Support the game"><h2>Like the game?</h2>'+
         '<div class="hands">'+ico("hand","wiggle")+
@@ -879,7 +1074,7 @@ function boardRows(){
 }
 function renderLB(){
   const tp=document.getElementById("lb-tab-p"), ta=document.getElementById("lb-tab-a");
-  tp.textContent="Puzzle "+PUZZLE.id; tp.setAttribute("aria-pressed",lb.tab==="puzzle"); ta.setAttribute("aria-pressed",lb.tab==="all");
+  tp.textContent=PUZZLE===CURRENT?"This week":"Week "+PUZZLE.id; tp.setAttribute("aria-pressed",lb.tab==="puzzle"); ta.setAttribute("aria-pressed",lb.tab==="all");
   const list=document.getElementById("lb-list"); list.textContent="";
   let msg="";
   if(lb.status==="loading") msg="Loading the leaderboard…";
@@ -1029,6 +1224,65 @@ document.getElementById("lb").addEventListener("click",e=>{
   lb.tab=b.dataset.lbtab; subscribeRows();
 });
 
+/* ---------- guess dropdown ---------- */
+const NAME_INDEX = NAMES.map(n=>{ const k=norm(n.replace(/\([^)]*\)/g," ")); return {n:n,k:k,t:k.split(" ")}; });
+function suggest(q){
+  const g=norm(q); if(g.length<2) return [];
+  const qt=g.split(" "), hits=[];
+  NAME_INDEX.forEach(e=>{
+    let sc=-1;
+    if(e.k.startsWith(g)) sc=0;
+    else if(qt.every(w=>e.t.some(t=>t.startsWith(w)))) sc=1;
+    if(sc>=0) hits.push({e:e,sc:sc});
+  });
+  hits.sort((a,b)=>a.sc-b.sc||a.e.n.length-b.e.n.length||a.e.n.localeCompare(b.e.n));
+  return hits.slice(0,touchy()?6:8).map(h=>h.e);
+}
+function boldName(n,q){
+  const qt=norm(q).split(" ").filter(Boolean);
+  return n.split(" ").map(w=>{ const k=norm(w); return qt.some(t=>k&&k.startsWith(t))?"<b>"+esc(w)+"</b>":esc(w); }).join(" ");
+}
+const combo={input:null,items:[],active:-1};
+function comboList(inp){ return document.getElementById(inp.getAttribute("aria-controls")); }
+function comboClose(inp){
+  inp=inp||combo.input; if(!inp) return;
+  const ul=comboList(inp); if(ul){ ul.hidden=true; ul.innerHTML=""; }
+  inp.setAttribute("aria-expanded","false"); inp.removeAttribute("aria-activedescendant");
+  combo.items=[]; combo.active=-1;
+}
+function comboPaint(){
+  const inp=combo.input, ul=comboList(inp);
+  ul.querySelectorAll("li[role=option]").forEach((li,j)=>li.setAttribute("aria-selected",j===combo.active?"true":"false"));
+  if(combo.active>=0){ const id=ul.id+"-o"+combo.active; inp.setAttribute("aria-activedescendant",id); const li=document.getElementById(id); if(li) li.scrollIntoView({block:"nearest"}); }
+  else inp.removeAttribute("aria-activedescendant");
+}
+function comboOpen(inp){
+  combo.input=inp; const ul=comboList(inp); if(!ul) return;
+  const q=inp.value; combo.items=suggest(q); combo.active=-1;
+  if(norm(q).length<2){ comboClose(inp); return; }
+  ul.innerHTML=combo.items.length
+    ? combo.items.map((e,j)=>'<li role="option" id="'+ul.id+'-o'+j+'" aria-selected="false" data-pick="'+j+'">'+boldName(e.n,q)+'</li>').join("")
+    : '<li class="none" role="presentation">No match on our list. You can still guess it.</li>';
+  ul.hidden=false; inp.setAttribute("aria-expanded","true"); comboPaint();
+}
+function comboPick(j){
+  const inp=combo.input, e=combo.items[j]; if(!inp||!e) return;
+  inp.value=e.n; comboClose(inp); inp.focus();
+}
+game.addEventListener("input",e=>{ if(e.target.matches('input[role="combobox"]')) comboOpen(e.target); });
+game.addEventListener("keydown",e=>{
+  const inp=e.target; if(!inp.matches||!inp.matches('input[role="combobox"]')) return;
+  const open=inp.getAttribute("aria-expanded")==="true", n=combo.items.length;
+  if(e.key==="ArrowDown"){ e.preventDefault(); if(!open){ comboOpen(inp); } if(combo.items.length){ combo.active=(combo.active+1)%combo.items.length; comboPaint(); } }
+  else if(e.key==="ArrowUp"){ if(open&&n){ e.preventDefault(); combo.active=combo.active<=0?n-1:combo.active-1; comboPaint(); } }
+  else if(e.key==="Enter"){ if(open&&combo.active>=0){ e.preventDefault(); comboPick(combo.active); } else comboClose(inp); }
+  else if(e.key==="Escape"){ if(open){ e.preventDefault(); comboClose(inp); } }
+  else if(e.key==="Tab"){ comboClose(inp); }
+});
+game.addEventListener("pointerdown",e=>{ const li=e.target.closest(".sugg li"); if(li) e.preventDefault(); });
+game.addEventListener("click",e=>{ const li=e.target.closest("[data-pick]"); if(li){ comboPick(Number(li.dataset.pick)); } });
+game.addEventListener("focusout",e=>{ if(e.target.matches&&e.target.matches('input[role="combobox"]')){ const inp=e.target; setTimeout(()=>{ if(document.activeElement!==inp) comboClose(inp); },150); } });
+
 /* ---------- actions ---------- */
 function toLB(){
   const c=document.getElementById("lb"); let smooth=true; try{ smooth=!matchMedia("(prefers-reduced-motion: reduce)").matches; }catch(e){}
@@ -1036,11 +1290,13 @@ function toLB(){
 }
 function switchPuzzle(id){
   const p=PUZZLES.find(z=>z.id===id); if(!p||p.id===PUZZLE.id) return;
-  PUZZLE=p; lsSet("geshmak-current",String(id)); state=loadState(id); confirming=false;
+  PUZZLE=p; state=loadState(id); confirming=false;
   render(); if(lb.tab==='puzzle') subscribeRows(); else renderLB(); window.scrollTo(0,0);
 }
 document.addEventListener("click",e=>{
-  const b=e.target.closest("[data-puzzle]"); if(b) switchPuzzle(Number(b.dataset.puzzle));
+  const b=e.target.closest("[data-puzzle]"); if(!b) return;
+  const d=b.closest("dialog"); if(d) d.close();
+  switchPuzzle(Number(b.dataset.puzzle));
 });
 function finishRound(i,status,quip,good){
   state.rounds[i].status=status; state.quip=quip; state.quipGood=good; confirming=false;
@@ -1081,7 +1337,8 @@ game.addEventListener("submit",e=>{
     }
   } else {
     if(!state.tmisses) state.tmisses=[];
-    if(matchThread(val,PUZZLE.thread)) finishBonus("won",QUIPS.thread,true);
+    const hit=threadHit(val,PUZZLE.thread);
+    if(hit) finishBonus("won",hit==="alt"?PUZZLE.thread.alt.quip:QUIPS.thread,true);
     else if(tried(state.tmisses)){ state.quip=QUIPS.again; state.quipGood=false; save(); render("thread-guess"); }
     else { state.tmisses.push(shown); state.quip=pick(QUIPS.wrong); state.quipGood=false; save(); render("thread-guess"); }
   }
@@ -1106,9 +1363,12 @@ game.addEventListener("click",e=>{
     } else copy();
   }
 });
-document.querySelectorAll("[data-open]").forEach(b=>b.addEventListener("click",()=>{
-  const d=document.getElementById(b.dataset.open); if(d.showModal) d.showModal(); else d.setAttribute("open","");
-}));
+document.addEventListener("click",e=>{
+  const b=e.target.closest("[data-open]"); if(!b) return;
+  const d=document.getElementById(b.dataset.open); if(!d) return;
+  if(d.id==="dlg-weeks") renderWeeks();
+  if(d.showModal) d.showModal(); else d.setAttribute("open","");
+});
 document.querySelectorAll("[data-close]").forEach(b=>b.addEventListener("click",()=>b.closest("dialog").close()));
 document.querySelectorAll("dialog").forEach(d=>d.addEventListener("click",e=>{ if(e.target===d) d.close(); }));
 document.getElementById("contact").addEventListener("click",()=>{
