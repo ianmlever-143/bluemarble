@@ -77,6 +77,7 @@ h1 span{color:var(--sun)}
 .chips{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
 .chip.lbchip{background:var(--sky)}
 #lb{scroll-margin-top:16px}
+@media (max-width:440px){.chips .chip{padding-left:10px;padding-right:12px;font-size:15px}.chips .chip .ico{width:24px;height:24px}}
 /* all three clues, after a Yid is revealed */
 .allclues summary{cursor:pointer;list-style:none;display:flex;align-items:center;gap:10px;padding:10px 14px;border:2px solid var(--ink);border-radius:16px;background:#fff;font-family:var(--display);font-weight:600}
 .allclues summary::-webkit-details-marker{display:none}
@@ -102,6 +103,35 @@ h1 span{color:var(--sun)}
 .lb-list .nm{overflow-wrap:anywhere}
 .lb-list .sc{font-weight:700;font-size:19px;font-variant-numeric:tabular-nums}
 #lb-auth{display:flex;flex-direction:column;gap:10px}
+/* groups */
+.scopes{display:flex;gap:8px;flex-wrap:wrap}
+.scopes button{border:2px solid var(--ink);border-radius:999px;background:#fff;color:var(--ink);font-family:var(--display);font-weight:700;font-size:14px;padding:6px 13px;cursor:pointer;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.scopes button[aria-pressed="true"]{background:var(--ink);color:var(--sun)}
+.scopes button.add{background:var(--sun);border-style:dashed}
+.chip.grpchip{background:var(--pink)}
+#groups{scroll-margin-top:16px}
+.byline{margin:0;font-family:var(--display);font-weight:600;font-size:17px;line-height:1.35}
+.grp-body{display:flex;flex-direction:column;gap:12px}
+.grp-body > p{margin:0}
+.gform{display:flex;flex-direction:column;gap:8px;border:2px solid var(--ink);border-radius:16px;padding:12px;background:var(--cream)}
+.lb-note{margin:0;font-size:14px;color:#5A5590}
+.gform input,.invite input{flex:1 1 180px;min-width:0;border:3px solid var(--ink);background:#fff;border-radius:16px;padding:11px 14px;font:inherit;font-size:16px}
+.ghead{display:flex;align-items:baseline;justify-content:space-between;gap:4px 12px;flex-wrap:wrap}
+.ghead h3{margin:0;font-family:var(--title);font-weight:400;font-size:26px;line-height:1.1;overflow-wrap:anywhere}
+.ghead small{font-family:var(--body);font-weight:500;font-size:14px;color:#5A5590}
+.grp-body .links{display:flex;gap:8px 16px;flex-wrap:wrap}
+.rankline{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;width:100%;text-align:left;border:2px solid var(--ink);border-radius:16px;background:var(--sun);color:var(--ink);padding:9px 14px;font-family:var(--display);font-weight:700;font-size:15px;cursor:pointer}
+.rankline .rk-more{font-weight:600;font-size:14px;white-space:nowrap}
+.ranks{display:flex;flex-direction:column;gap:8px;border:2px dashed var(--ink);border-radius:16px;padding:12px;background:var(--cream)}
+.ranks .lb-list li{background:#fff}
+.ranks .lb-list li.me{background:var(--sun)}
+.lb-list li.waiting{background:#fff;color:#5A5590}
+.lb-list li.waiting .sc{font-size:15px}
+.invite{position:relative;display:flex;flex-direction:column;gap:10px;background:var(--sun);border:3px solid var(--ink);border-radius:22px;box-shadow:5px 5px 0 var(--ink);padding:14px 16px 16px}
+.invite h2{margin:0;display:flex;align-items:center;gap:10px;font-family:var(--title);font-weight:400;font-size:24px;line-height:1.15}
+.invite h2 .ico{width:40px;height:40px;flex:none}
+.invite p{margin:0}
+.invite form{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
 #lb-auth form{flex-direction:column;gap:8px;border:2px solid var(--ink);border-radius:16px;padding:12px;background:var(--cream)}
 #lb-auth input[type=email],#lb-auth input[type=password]{border:3px solid var(--ink);background:#fff;border-radius:16px;padding:11px 14px}
 .linkbtn{align-self:flex-start;background:none;border:0;padding:2px 0;color:var(--ink);font-family:var(--display);font-weight:600;font-size:14px;text-decoration:underline;cursor:pointer}
@@ -463,6 +493,7 @@ dialog h2{padding-right:46px}
     <div class="chips">
       <button class="chip" type="button" data-open="dlg-about"><svg class="ico" aria-hidden="true"><use href="#i-challah"/></svg>About</button>
       <button class="chip lbchip" type="button" id="lb-chip"><svg class="ico" aria-hidden="true"><use href="#i-shofar"/></svg>Leaderboard</button>
+      <button class="chip grpchip" type="button" id="grp-chip"><svg class="ico" aria-hidden="true"><use href="#i-wine"/></svg>Groups</button>
       <span class="switch" role="group" aria-label="Choose a week" id="switch"></span>
     </div>
   </header>
@@ -471,17 +502,29 @@ dialog h2{padding-right:46px}
     <svg class="ico"><use href="#i-star"/></svg><svg class="ico"><use href="#i-wine"/></svg><svg class="ico"><use href="#i-menorah"/></svg><svg class="ico"><use href="#i-pom"/></svg><svg class="ico"><use href="#i-mezuzah"/></svg><svg class="ico"><use href="#i-dreidel"/></svg><svg class="ico"><use href="#i-candles"/></svg>
   </div>
 
+  <section class="invite" id="invite" aria-live="polite" hidden></section>
+
   <div class="weekline" id="weekline"></div>
 
   <div class="board" id="board" role="status" aria-label="Scoreboard"></div>
 
   <main id="game"></main>
 
+  <section class="card c-pink" id="groups" aria-labelledby="grp-title">
+    <div class="band">
+      <h2 class="era" id="grp-title"><svg class="ico" aria-hidden="true"><use href="#i-wine"/></svg><span>Start a group</span></h2>
+    </div>
+    <p class="byline">Get competitive with Geshmak and see how you stack up against your friends or mishpacha.</p>
+    <div class="grp-body" id="grp-body"></div>
+    <svg class="ico peek" aria-hidden="true"><use href="#i-dreidel"/></svg>
+  </section>
+
   <section class="card c-sky" id="lb" aria-label="Leaderboard">
     <div class="band">
       <h2 class="era"><svg class="ico" aria-hidden="true"><use href="#i-shofar"/></svg>Leaderboard</h2>
     </div>
-    <div class="row"><span class="tabs" role="group" aria-label="Which leaderboard"><button type="button" data-lbtab="puzzle" id="lb-tab-p" aria-pressed="true">This week</button><button type="button" data-lbtab="all" id="lb-tab-a" aria-pressed="false">All time</button></span></div>
+    <div class="row"><span class="tabs" role="group" aria-label="Which leaderboard"><button type="button" data-lbtab="puzzle" id="lb-tab-p" aria-pressed="true">This week</button><button type="button" data-lbtab="all" id="lb-tab-a" aria-pressed="false">Total</button><button type="button" data-lbtab="avg" id="lb-tab-v" aria-pressed="false">Average</button></span></div>
+    <p class="lb-note" id="lb-note" hidden></p>
     <p class="quip good" id="lb-status" role="status">Loading the leaderboard…</p>
     <ol class="lb-list" id="lb-list"></ol>
     <div id="lb-auth">
@@ -539,6 +582,7 @@ dialog h2{padding-right:46px}
   <p>Every week there are three new Yids: a <b>Today Yid</b>, a <b>Yester Yid</b> and a <b>Really Old Yid</b>. Everyone gets the same three. Missed a week? Find it under <b>Past weeks</b>.</p>
   <p>Each one comes with three clues. Name them on the first clue for <b>54</b> points, the second for <b>36</b>, the third for <b>18</b>. Start typing a name and pick from the list, or type your own. A wrong guess flips the next clue. Take all the time you want.</p>
   <p>Then the bonus: the three share a connection to one another that you have to figure out. We call it <b>the thread</b>, and guessing it is worth <b>18</b> more. A perfect score is 180, which is ten times chai.</p>
+  <p><b>Play with friends.</b> Start a group on the leaderboard, send your friends the invite link, and see how you stack up every week.</p>
     </div>
   </details>
   <details name="about">
@@ -555,8 +599,8 @@ dialog h2{padding-right:46px}
     <div class="sec">
   <p><b>I love being Jewish and I love making games!</b></p>
   <p>I'm Ian, and I made Geshmak! for three reasons:</p>
-  <p class="fact"><svg class="ico" aria-hidden="true"><use href="#i-star"/></svg><span><b>To build Jewish connection.</b> Play it, share it, argue about it at dinner.</span></p>
-  <p class="fact"><svg class="ico" aria-hidden="true"><use href="#i-wine"/></svg><span><b>To celebrate how awesome it is to be Jewish.</b> We show up everywhere: sports, science, food, fashion, film, scripture.</span></p>
+  <p class="fact"><svg class="ico" aria-hidden="true"><use href="#i-star"/></svg><span><b>To build Jewish connection.</b> Play it, share it, talk about it over Shabbat dinner!</span></p>
+  <p class="fact"><svg class="ico" aria-hidden="true"><use href="#i-wine"/></svg><span><b>To celebrate how awesome it is to be Jewish.</b> We show up everywhere: sports, science, food, fashion, film, and more!</span></p>
   <p class="fact"><svg class="ico" aria-hidden="true"><use href="#i-pom"/></svg><span><b>To deepen Jewish learning.</b> A bite at a time, with an appreciation that there's always more to learn and discover.</span></p>
     </div>
   </details>
@@ -1072,7 +1116,29 @@ let fb=null, fbLoading=null, rowsTimer=null, rowsSeq=0, lbWanted=false, writing=
    - the leaderboard is read once (top 10), not streamed live, and only when someone looks at it
    - results are cached on the device for 2 minutes, so reloads and tab flips don't re-read
    - your own rank comes from one cheap count query instead of downloading everyone's scores */
-const LB_TOP=10, LB_TTL=120000;
+const LB_TOP=10, LB_TTL=120000, RANK_TTL=600000;
+/* small cache on this device, so reloads and repeat visits don't re-read Firebase */
+function cacheGet(key,ttl){ try{ const c=JSON.parse(localStorage.getItem("gk:"+key)||"null"); return c&&Date.now()-c.at<ttl?c:null; }catch(e){ return null; } }
+function cacheSet(key,obj){ obj.at=Date.now(); try{ localStorage.setItem("gk:"+key,JSON.stringify(obj)); }catch(e){} return obj; }
+function cacheDrop(prefixes){ try{ Object.keys(localStorage).filter(k=>prefixes.some(p=>k.indexOf("gk:"+p)===0)).forEach(k=>localStorage.removeItem(k)); }catch(e){} }
+/* if a read hits a busy server, wait a moment and try once more */
+async function withRetry(fn){
+  try{ return await fn(); }
+  catch(e){
+    const c=e&&e.code||"";
+    if(["unavailable","deadline-exceeded","resource-exhausted","internal","aborted"].indexOf(c)<0) throw e;
+    await new Promise(r=>setTimeout(r,1000+Math.random()*1500));
+    return await fn();
+  }
+}
+/* if the same read is already on its way, share it instead of asking twice */
+const inflight={};
+function once(key,fn){
+  if(inflight[key]) return inflight[key];
+  const p=Promise.resolve().then(fn); inflight[key]=p;
+  p.then(()=>{ delete inflight[key]; },()=>{ delete inflight[key]; });
+  return p;
+}
 function cleanName(s){ return String(s||"").replace(/\s+/g," ").trim().slice(0,24); }
 function defaultName(u){
   const d=cleanName(u&&u.displayName); if(!d) return "";
@@ -1085,19 +1151,33 @@ function localScores(){
   PUZZLES.forEach(p=>{ const s=p.id===PUZZLE.id?state:rawState(p.id); if(s&&finished(s)) out[String(p.id)]=total(s); });
   return out;
 }
+/* one player's score for a tab: this week, total of all weeks, or average per week (needs 2+ weeks) */
+function tabScore(p,tab){
+  let n=0,t=0,wk=null;
+  p=p&&typeof p==="object"?p:{};
+  PUZZLES.forEach(z=>{
+    const v=p[String(z.id)];
+    if(typeof v==="number"&&isFinite(v)){ const c=Math.max(0,Math.min(180,Math.round(v))); n++; t+=c; if(z.id===PUZZLE.id) wk=c; }
+  });
+  if(tab==="puzzle") return {ok:wk!==null,score:wk,n:n};
+  if(tab==="all") return {ok:n>0,score:t,n:n};
+  return {ok:n>=2,score:n>=2?Math.round(t/n*10)/10:null,n:n};
+}
+function fmtScore(v){ return typeof v==="number"?(Number.isInteger(v)?String(v):v.toFixed(1)):""; }
+function tabNote(tab){
+  return tab==="all"?"Every week's score, added up.":tab==="avg"?"Average score per week, once you've finished 2 weeks.":"";
+}
 function boardRows(){
   return lb.rows.map(r=>{
-    const p=r.p&&typeof r.p==="object"?r.p:{}; let n=0,score=0;
-    PUZZLES.forEach(z=>{
-      const v=p[String(z.id)];
-      if(typeof v==="number"&&isFinite(v)&&(lb.tab==="all"||z.id===PUZZLE.id)){ n++; score+=Math.max(0,Math.min(180,Math.round(v))); }
-    });
-    return {id:r.id,name:cleanName(r.name)||"Mystery Yid",n:n,score:score};
-  }).filter(r=>r.n>0).sort((a,b)=>b.score-a.score||a.name.localeCompare(b.name));
+    const x=tabScore(r.p,lb.tab);
+    return {id:r.id,name:cleanName(r.name)||"Mystery Yid",ok:x.ok,score:x.score};
+  }).filter(r=>r.ok).sort((a,b)=>b.score-a.score||a.name.localeCompare(b.name));
 }
 function renderLB(){
-  const tp=document.getElementById("lb-tab-p"), ta=document.getElementById("lb-tab-a");
-  tp.textContent=PUZZLE===CURRENT?"This week":"Week "+PUZZLE.id; tp.setAttribute("aria-pressed",lb.tab==="puzzle"); ta.setAttribute("aria-pressed",lb.tab==="all");
+  const tp=document.getElementById("lb-tab-p");
+  tp.textContent=PUZZLE===CURRENT?"This week":"Week "+PUZZLE.id;
+  [["lb-tab-p","puzzle"],["lb-tab-a","all"],["lb-tab-v","avg"]].forEach(x=>document.getElementById(x[0]).setAttribute("aria-pressed",lb.tab===x[1]));
+  const note=document.getElementById("lb-note"); note.textContent=tabNote(lb.tab); note.hidden=!note.textContent;
   const list=document.getElementById("lb-list"); list.textContent="";
   let msg="";
   if(lb.status==="loading") msg="Loading the leaderboard…";
@@ -1112,11 +1192,12 @@ function renderLB(){
       const li=document.createElement("li"), mine=lb.user&&r.id===lb.user.uid; if(mine) li.className="me";
       const a=document.createElement("span"); a.className="pos"; a.textContent=r.pos;
       const b=document.createElement("span"); b.className="nm"; b.textContent=r.name+(mine?" (you)":"");
-      const c=document.createElement("span"); c.className="sc"; c.textContent=r.score;
+      const c=document.createElement("span"); c.className="sc"; c.textContent=fmtScore(r.score);
       li.append(a,b,c); list.appendChild(li);
     });
     if(lb.status==="slow") msg="Still trying to reach the leaderboard. This may be out of date.";
-    else if(!rows.length) msg=lb.tab==="puzzle"?"No scores for this puzzle yet. Finish it and be the first.":"No scores yet. Finish a puzzle and be the first.";
+    else if(!rows.length) msg=lb.tab==="puzzle"?"No scores for this puzzle yet. Finish it and be the first.":lb.tab==="avg"?"No averages yet. Finish 2 weeks to get one.":"No scores yet. Finish a puzzle and be the first.";
+    else if(lb.tab==="avg"&&lb.user&&!me&&!lb.me&&tabScore(localScores(),"avg").n<2) msg="Finish 2 weeks to get your average on the board.";
     else if(!lb.user&&Object.keys(localScores()).length) msg="Sign in below to put your score on the board.";
   }
   document.getElementById("lb-status").textContent=msg;
@@ -1157,7 +1238,7 @@ function submitScores(){
   if(!fb||!lb.user||!myName) return;
   const uid=lb.user.uid, name=myName;
   /* skip the round trip entirely if this device already saved exactly these scores */
-  const sig=uid+"|"+name+"|"+JSON.stringify(localScores());
+  const sig="v2|"+uid+"|"+name+"|"+JSON.stringify(localScores());
   if(ls("geshmak-synced")===sig) return;
   writing=writing.then(async()=>{
     try{
@@ -1168,26 +1249,30 @@ function submitScores(){
       const mine=localScores();
       Object.keys(mine).forEach(k=>{ if(typeof p[k]!=="number"){ p[k]=mine[k]; changed=true; } });
       const keys=Object.keys(p); if(!keys.length) return;
+      const nums=keys.filter(k=>typeof p[k]==="number").map(k=>Math.max(0,Math.min(180,Math.round(p[k]))));
+      const t=nums.reduce((s,v)=>s+v,0), n=nums.length, a=n>=2?Math.round(t/n*10)/10:null;
+      if(cur.n!==n||(a===null?("a" in cur):cur.a!==a)) changed=true;
       if(!changed){ lsSet("geshmak-synced",sig); return; }
-      const t=keys.reduce((s,k)=>s+(typeof p[k]==="number"?Math.max(0,Math.min(180,Math.round(p[k]))):0),0);
-      await fb.F.setDoc(ref,{name:name,p:p,t:t,updated:Date.now()});
+      const out={name:name,p:p,t:t,n:n,updated:Date.now()}; if(a!==null) out.a=a;
+      await fb.F.setDoc(ref,out);
       lsSet("geshmak-synced",sig);
+      cacheDrop(["geshmak-lb:"]);
       if(lbWanted) loadRows(true);
+      if(curGroup()) loadGroupRows(true);
     }catch(e){ lb.msg="Couldn't save your score to the board. Try again in a bit."; renderAuth(); }
   });
 }
-function lbField(){ return lb.tab==="all"?"t":"p."+PUZZLE.id; }
+function lbField(){ return lb.tab==="all"?"t":lb.tab==="avg"?"a":"p."+PUZZLE.id; }
 function myScoreFor(field){
-  const mine=localScores();
-  if(field==="t"){ const v=Object.values(mine); return v.length?v.reduce((a,b)=>a+b,0):null; }
-  const k=field.slice(2); return typeof mine[k]==="number"?mine[k]:null;
+  const x=tabScore(localScores(),field==="t"?"all":field==="a"?"avg":"puzzle");
+  return x.ok?x.score:null;
 }
 async function loadRows(force){
   lbWanted=true;
   if(!fb){ if(lb.status!=="off") startFB(); renderLB(); return; }
   const field=lbField(), key="geshmak-lb:"+field, seq=++rowsSeq;
   if(!force){
-    try{ const c=JSON.parse(sessionStorage.getItem(key)||"null"); if(c&&Date.now()-c.at<LB_TTL&&(!lb.user||c.uid===lb.user.uid)){ lb.rows=c.rows; lb.me=c.me; lb.status="ready"; renderLB(); return; } }catch(e){}
+    const c=cacheGet(key,LB_TTL); if(c&&(!lb.user||c.uid===lb.user.uid)){ lb.rows=c.rows; lb.me=c.me; lb.status="ready"; renderLB(); return; }
   }
   if(!lb.rows.length) lb.status="loading";
   renderLB();
@@ -1195,17 +1280,16 @@ async function loadRows(force){
   rowsTimer=setTimeout(()=>{ if(seq===rowsSeq&&lb.status==="loading"){ lb.status="slow"; renderLB(); } },10000);
   try{
     const F=fb.F, col=F.collection(fb.db,"scores");
-    const snap=await F.getDocs(F.query(col,F.orderBy(field,"desc"),F.limit(LB_TOP)));
-    const rows=snap.docs.map(d=>Object.assign({id:d.id},d.data()||{}));
+    const rows=await once("lb:"+field,()=>withRetry(()=>F.getDocs(F.query(col,F.orderBy(field,"desc"),F.limit(LB_TOP)))).then(snap=>snap.docs.map(d=>Object.assign({id:d.id},d.data()||{}))));
     let me=null;
     const mineScore=myScoreFor(field), count=F.getCount||F.getCountFromServer;
     if(lb.user&&mineScore!==null&&!rows.some(r=>r.id===lb.user.uid)&&rows.length>=LB_TOP&&count){
-      try{ const c=await count(F.query(col,F.where(field,">",mineScore))); me={score:mineScore,pos:(c.data().count||0)+1}; }catch(e){}
+      try{ const c=await once("lbme:"+field+":"+mineScore,()=>count(F.query(col,F.where(field,">",mineScore)))); me={score:mineScore,pos:(c.data().count||0)+1}; }catch(e){}
     }
     if(seq!==rowsSeq) return;
     clearTimeout(rowsTimer);
     lb.rows=rows; lb.me=me; lb.status="ready"; renderLB();
-    try{ sessionStorage.setItem(key,JSON.stringify({at:Date.now(),uid:lb.user?lb.user.uid:"",rows:rows,me:me})); }catch(e){}
+    cacheSet(key,{uid:lb.user?lb.user.uid:"",rows:rows,me:me});
   }catch(e){ if(seq!==rowsSeq) return; clearTimeout(rowsTimer); lb.status=lb.rows.length?"ready":"error"; renderLB(); }
 }
 async function onUser(u){
@@ -1228,21 +1312,35 @@ function startFB(){
       const m=await Promise.all([import(FB_BASE+"firebase-app.js"),import(FB_BASE+"firebase-auth.js"),import(FB_BASE+"firebase-firestore-lite.js")]);
       const app=m[0].initializeApp(FIREBASE_CONFIG);
       fb={Au:m[1],F:m[2],auth:m[1].getAuth(app),db:m[2].getFirestore(app)};
-      fb.Au.onAuthStateChanged(fb.auth,async u=>{ await onUser(u); if(lbWanted) loadRows(); },()=>{});
-    }catch(e){ lb.status="off"; renderLB(); }
+      fb.Au.onAuthStateChanged(fb.auth,async u=>{
+        authKnown=true;
+        const changed=(u?u.uid:"")!==(lb.user?lb.user.uid:"");
+        if(changed){ grp.list=null; grp.rows={}; }
+        await onUser(u);
+        if(u&&grp.pendingCreate){ const nm=grp.pendingCreate; grp.pendingCreate=""; await gGuard(()=>createGroup(nm)); }
+        if(u&&grp.pendingJoin){ const id=grp.pendingJoin; grp.pendingJoin=""; await joinGroup(id); }
+        else if(grp.invite===null&&inviteId) await fetchInvite();
+        else renderInvite();
+        if(grp.wanted) ensureGroups(); else renderGroups();
+        if(lbWanted) loadRows();
+      },()=>{});
+    }catch(e){ lb.status="off"; renderLB(); renderGroups(); if(inviteId){ grp.invite={err:"off"}; renderInvite(); } }
   })();
   return fbLoading;
 }
 function initLB(){
   /* load Firebase once the page has settled, so the game paints first */
   const go=()=>startFB();
-  if("requestIdleCallback" in window) requestIdleCallback(go,{timeout:2500}); else setTimeout(go,1200);
+  if(inviteId){ renderInvite(); go(); }
+  else if("requestIdleCallback" in window) requestIdleCallback(go,{timeout:2500}); else setTimeout(go,1200);
   /* read the leaderboard only when it's about to come into view */
   const el=document.getElementById("lb");
   if("IntersectionObserver" in window){
     const io=new IntersectionObserver(es=>{ if(es.some(e=>e.isIntersecting)){ io.disconnect(); loadRows(); } },{rootMargin:"400px 0px"});
     io.observe(el);
-  } else loadRows();
+    const gio=new IntersectionObserver(es=>{ if(es.some(e=>e.isIntersecting)){ gio.disconnect(); ensureGroups(); } },{rootMargin:"300px 0px"});
+    gio.observe(document.getElementById("groups"));
+  } else { loadRows(); ensureGroups(); }
 }
 function show(id,yes){ document.getElementById(id).hidden=!yes; }
 document.getElementById("lb-google").addEventListener("click",()=>guard(async()=>{
@@ -1284,12 +1382,414 @@ document.getElementById("lb").addEventListener("click",e=>{
   lb.tab=b.dataset.lbtab; lb.rows=[]; lb.me=null; loadRows();
 });
 
+/* ---------- groups: play with friends ---------- */
+const GROUP_MAX_MEMBERS=11, GROUP_MAX=5;
+const grp={list:null,rows:{},sel:ls("geshmak-group")||"",tab:"puzzle",status:"",seq:0,invite:null,pendingJoin:"",pendingCreate:"",form:"",leaving:"",busy:false,note:"",noteBad:false,wanted:false,rank:{},rankSeq:0,showRank:false};
+const RANK_TOP=10, RANK_MIN_PLAYERS=3;
+let authKnown=false, inviteId="";
+try{ const m=location.search.match(/[?&]g=([A-Za-z0-9]{6,24})/); if(m) inviteId=m[1]; }catch(e){}
+function newGroupId(){
+  const a="abcdefghijkmnpqrstuvwxyz23456789", r=new Uint8Array(12);
+  try{ crypto.getRandomValues(r); }catch(e){ for(let i=0;i<12;i++) r[i]=Math.floor(Math.random()*256); }
+  return Array.from(r,x=>a[x%a.length]).join("");
+}
+function inviteURL(id){ return location.origin+location.pathname+"?g="+id; }
+function cleanGroup(s){ return String(s||"").replace(/\s+/g," ").trim().slice(0,40); }
+function curGroup(){ return grp.list?grp.list.find(g=>g.id===grp.sel)||null:null; }
+function selectGroup(id){ grp.sel=id||""; lsSet("geshmak-group",grp.sel); }
+function clearInviteParam(){ try{ history.replaceState(null,"",location.pathname+location.hash); }catch(e){} inviteId=""; }
+function dropGroupCache(){ cacheDrop(["geshmak-groups:","geshmak-lbg:","geshmak-rank:"]); }
+function say(msg,bad){ grp.note=msg; grp.noteBad=!!bad; }
+function groupErr(e){
+  const c=e&&e.code||"";
+  if(c==="geshmak/full") return "That group is full. Groups max out at 11 people.";
+  if(c==="geshmak/toomany") return "You're already in 5 groups, the most you can join. Leave one first.";
+  if(c==="geshmak/notfound") return "That group doesn't exist anymore.";
+  if(c==="permission-denied") return "Couldn't save that. Groups may not be switched on yet.";
+  if(c==="unavailable"||c==="auth/network-request-failed") return "Couldn't reach the server. Check your connection and try again.";
+  return "Something went wrong. Try again in a bit.";
+}
+async function gGuard(fn){
+  if(grp.busy) return;
+  grp.busy=true; say(""); renderGroups(); renderInvite();
+  try{ await fn(); }catch(e){ say(groupErr(e),true); }
+  grp.busy=false; renderGroups(); renderInvite();
+}
+
+/* ---------- reading groups (cached for 2 minutes, like the leaderboard) ---------- */
+async function loadGroups(force){
+  if(!fb||!lb.user){ grp.list=null; return; }
+  const key="geshmak-groups:"+lb.user.uid;
+  if(!force){ const c=cacheGet(key,LB_TTL); if(c){ grp.list=c.list; return; } }
+  try{
+    const F=fb.F, uid=lb.user.uid;
+    const list=await once("groups:"+uid,()=>withRetry(()=>F.getDocs(F.query(F.collection(fb.db,"groups"),F.where("members","array-contains",uid),F.limit(10)))).then(snap=>snap.docs.map(d=>Object.assign({id:d.id},d.data()||{}))));
+    grp.list=list.sort((a,b)=>(a.created||0)-(b.created||0));
+    cacheSet(key,{list:grp.list});
+  }catch(e){ if(!grp.list) grp.list=[]; }
+}
+async function ensureGroups(force){
+  grp.wanted=true;
+  if(!fb){ if(lb.status!=="off") startFB(); renderGroups(); return; }
+  if(!authKnown){ renderGroups(); return; }
+  if(!lb.user){ grp.list=[]; renderGroups(); return; }
+  if(grp.list===null||force) await loadGroups(force);
+  if(!curGroup()) selectGroup(grp.list&&grp.list.length?grp.list[0].id:"");
+  renderGroups();
+  if(curGroup()) loadGroupRows(force);
+}
+async function loadGroupRows(force){
+  const g=curGroup(); if(!g) return;
+  const key="geshmak-lbg:"+g.id, seq=++grp.seq;
+  if(!force){
+    const c=cacheGet(key,LB_TTL); if(c){ grp.rows[g.id]=c.rows; grp.status="ready"; renderGroups(); loadRankings(); return; }
+  }
+  grp.status=grp.rows[g.id]?"ready":"loading"; renderGroups();
+  try{
+    const F=fb.F, col=F.collection(fb.db,"scores"), ids=(g.members||[]).slice(0,GROUP_MAX_MEMBERS);
+    const docs=await once("lbg:"+g.id+":"+ids.join(","),()=>withRetry(async()=>{
+      if(F.documentId){
+        const snap=await F.getDocs(F.query(col,F.where(F.documentId(),"in",ids)));
+        return snap.docs.map(d=>Object.assign({id:d.id},d.data()||{}));
+      }
+      const snaps=await Promise.all(ids.map(id=>F.getDoc(F.doc(fb.db,"scores",id))));
+      return snaps.filter(x=>x.exists()).map(x=>Object.assign({id:x.id},x.data()||{}));
+    }));
+    if(seq!==grp.seq) return;
+    grp.rows[g.id]=docs; grp.status="ready"; renderGroups();
+    cacheSet(key,{rows:docs});
+    await syncStats(g,docs); loadRankings();
+  }catch(e){ if(seq!==grp.seq) return; grp.status=grp.rows[g.id]?"ready":"error"; renderGroups(); }
+}
+
+/* ---------- group vs. group ----------
+   Each week a group's score is the average of its members who finished that week (3+ needed).
+   Total adds up those weekly scores; Average is their mean once there are 2+ ranked weeks.
+   Members keep these numbers fresh whenever they open the group board, so ranking groups
+   is one small query instead of reading every player. */
+function rankField(tab){ tab=tab||grp.tab; return tab==="all"?"st":tab==="avg"?"sa":"sw."+PUZZLE.id; }
+function round1(v){ return Math.round(v*10)/10; }
+function groupStats(g,docs){
+  const byId={}; (docs||[]).forEach(d=>{ byId[d.id]=d; });
+  const sw={};
+  PUZZLES.forEach(z=>{
+    const v=(g.members||[]).map(uid=>{ const p=(byId[uid]||{}).p; return p&&typeof p[String(z.id)]==="number"?Math.max(0,Math.min(180,Math.round(p[String(z.id)]))):null; }).filter(x=>x!==null);
+    if(v.length>=RANK_MIN_PLAYERS) sw[String(z.id)]=round1(v.reduce((a,b)=>a+b,0)/v.length);
+  });
+  const ws=Object.values(sw), st=round1(ws.reduce((a,b)=>a+b,0));
+  return {sw:sw,st:ws.length?st:null,sa:ws.length>=2?round1(st/ws.length):null};
+}
+function statFor(g,tab){
+  const v=tab==="all"?g.st:tab==="avg"?g.sa:(g.sw||{})[String(PUZZLE.id)];
+  return typeof v==="number"?v:null;
+}
+async function syncStats(g,docs){
+  if(!fb||!lb.user||g.hide||(g.members||[]).indexOf(lb.user.uid)<0) return;
+  const x=groupStats(g,docs);
+  const same=JSON.stringify(x.sw)===JSON.stringify(g.sw||{})&&x.st===(typeof g.st==="number"?g.st:null)&&x.sa===(typeof g.sa==="number"?g.sa:null);
+  if(same) return;
+  const F=fb.F, upd={sw:x.sw,su:Date.now()};
+  upd.st=x.st===null?F.deleteField():x.st; upd.sa=x.sa===null?F.deleteField():x.sa;
+  try{
+    await F.updateDoc(F.doc(fb.db,"groups",g.id),upd);
+    g.sw=x.sw; if(x.st===null) delete g.st; else g.st=x.st; if(x.sa===null) delete g.sa; else g.sa=x.sa;
+    grp.rank={}; dropGroupCache(); renderGroups();
+  }catch(e){}
+}
+async function loadRankings(force){
+  if(!fb||!lb.user) return;
+  const field=rankField(), key="geshmak-rank:"+field, seq=++grp.rankSeq;
+  const c=grp.rank[field];
+  if(!force&&c&&Date.now()-c.at<RANK_TTL) return;
+  if(!force){ const s2=cacheGet(key,RANK_TTL); if(s2){ grp.rank[field]=s2; renderGroups(); return; } }
+  if(!c) { grp.rank[field]={at:0,rows:null,status:"loading"}; renderGroups(); }
+  try{
+    const F=fb.F;
+    const rows=await once("rank:"+field,()=>withRetry(()=>F.getDocs(F.query(F.collection(fb.db,"groups"),F.orderBy(field,"desc"),F.limit(RANK_TOP)))).then(snap=>snap.docs.map(d=>{ const x=d.data()||{}; const v=field.indexOf("sw.")===0?(x.sw||{})[field.slice(3)]:x[field]; return {id:d.id,name:cleanGroup(x.name)||"A group",score:typeof v==="number"?Math.max(0,Math.min(field==="st"?180*PUZZLES.length:180,v)):null}; }).filter(r=>r.score!==null)));
+    if(seq!==grp.rankSeq&&grp.rank[field]&&grp.rank[field].rows) return;
+    grp.rank[field]=cacheSet(key,{rows:rows,status:"ready"});
+  }catch(e){ grp.rank[field]={at:Date.now(),rows:(c&&c.rows)||null,status:(c&&c.rows)?"ready":"error"}; }
+  renderGroups();
+}
+function tabPhrase(tab){ return tab==="all"?"for total score":tab==="avg"?"for average score":(PUZZLE===CURRENT?"this week":"for Week "+PUZZLE.id); }
+function myRank(g){
+  const r=grp.rank[rankField()]; if(!r||!r.rows) return null;
+  const i=r.rows.findIndex(x=>x.id===g.id); return i<0?0:i+1;
+}
+function rankLine(g){
+  if(g.hide) return "Hidden from the group rankings";
+  const pos=myRank(g), mine=statFor(g,grp.tab);
+  if(pos) return "\u{1F3C6} #"+pos+" in the group rankings "+tabPhrase(grp.tab);
+  if(mine!==null&&pos===0) return "Group score "+fmtScore(mine)+", just outside the top "+RANK_TOP;
+  if(mine!==null) return "Group score "+fmtScore(mine)+" "+tabPhrase(grp.tab);
+  return grp.tab==="avg"?"Get ranked: 2 weeks with 3+ players":"Get ranked: 3+ players need to finish"+(grp.tab==="puzzle"?" this week":" a week");
+}
+function rankNote(tab){
+  return tab==="all"?"Each group's weekly scores, added up.":tab==="avg"?"Each group's average weekly score, once it has 2 ranked weeks.":"Average score of the members who finished. Groups need 3+ players to be ranked.";
+}
+
+/* ---------- group rankings ---------- */
+function waitLabel(tab){ return tab==="avg"?"needs 2 weeks":tab==="all"?"hasn't played":"still playing"; }
+function groupBoard(g){
+  const byId={}; (grp.rows[g.id]||[]).forEach(d=>{ byId[d.id]=d; });
+  return (g.members||[]).map(uid=>{
+    const d=byId[uid]||{}, x=tabScore(d.p,grp.tab);
+    const name=cleanName(d.name)||cleanName((g.names||{})[uid])||"Mystery Yid";
+    return {id:uid,name:name,ok:x.ok,score:x.score};
+  }).sort((a,b)=>(b.ok-a.ok)||((b.score||0)-(a.score||0))||a.name.localeCompare(b.name));
+}
+function groupShareText(g){
+  const rows=groupBoard(g), played=rows.filter(r=>r.ok), waiting=rows.filter(r=>!r.ok), medals=["\u{1F947}","\u{1F948}","\u{1F949}"];
+  const label=grp.tab==="all"?"Total":grp.tab==="avg"?"Average":"Week "+PUZZLE.id;
+  let t="✡️ Geshmak! "+label+" · "+cleanGroup(g.name)+"\n";
+  if(played.length) played.forEach((r,i)=>{ t+=(medals[i]||(i+1)+".")+" "+r.name+" "+fmtScore(r.score)+"\n"; });
+  else t+="Nobody's on the board yet. Who's first?\n";
+  if(waiting.length) t+="⏳ "+(grp.tab==="avg"?"Need 2 weeks for an average":grp.tab==="all"?"Haven't played yet":"Still playing")+": "+waiting.map(r=>r.name).join(", ")+"\n";
+  const pos=g.hide?null:myRank(g);
+  if(pos) t+="\u{1F3C6} #"+pos+" in the Geshmak! group rankings "+tabPhrase(grp.tab)+"\n";
+  return t+"Think you can beat us? Join the group: "+inviteURL(g.id);
+}
+function shareOut(txt,note,brag){
+  const ok=()=>{ note.textContent="Copied! "+brag; };
+  const no=()=>{ note.textContent="Couldn't copy automatically. Here it is to copy by hand: "+txt.replace(/\n+/g," · "); };
+  const copy=()=>{ try{ navigator.clipboard.writeText(txt).then(ok,no); }catch(err){ no(); } };
+  if(touchy()&&navigator.share){
+    try{ navigator.share({text:txt}).then(()=>{ note.textContent="Shared! "+brag; },err=>{ if(!err||err.name!=="AbortError") copy(); }); }catch(err){ copy(); }
+  } else copy();
+}
+
+/* ---------- the groups card ---------- */
+function renderGroups(){
+  const el=document.getElementById("grp-body"), tt=document.querySelector("#grp-title span");
+  if(!el) return;
+  const list=grp.list||[], g=curGroup(), dis=grp.busy?" disabled":"";
+  tt.textContent=list.length?"Your groups":"Start a group";
+  let h="";
+  if(!fb) h=lb.status==="off"?'<p class="quip">Groups couldn\'t load here. Your scores are still saved on this device.</p>':'<p class="lb-lab">Loading groups…</p>';
+  else if(!authKnown||(lb.user&&grp.list===null)) h='<p class="lb-lab">Loading your groups…</p>';
+  else {
+    const creating=grp.form==="new"||!list.length;
+    if(list.length){
+      h+='<div class="scopes" role="group" aria-label="Your groups">'+list.map(x=>'<button type="button" data-gsel="'+esc(x.id)+'" aria-pressed="'+(!creating&&x.id===grp.sel)+'">'+esc(cleanGroup(x.name)||"My group")+'</button>').join("")+
+        (list.length<GROUP_MAX?'<button type="button" class="add" data-gact="new" aria-pressed="'+creating+'">+ New group</button>':'')+'</div>';
+    }
+    if(creating){
+      const needName=!lb.user||!myName;
+      h+='<p>Enter your group\'s name, like <i>Beth El Ritual Committee</i>, <i>Capitol Camps CIT Class of 2012</i>, <i>Goldberg Mishpacha</i>, or more! Then invite up to 10 others to join.</p>'+
+        '<form class="gform" data-gform="new">'+
+        (needName?'<label class="lb-lab" for="grp-myname">Your name, so your friends know it\'s you</label><input type="text" id="grp-myname" maxlength="24" autocomplete="nickname" placeholder="Ian L."'+dis+'>':'')+
+        '<label class="lb-lab" for="grp-gname">Group name</label><input type="text" id="grp-gname" maxlength="40" autocomplete="off" placeholder="Goldberg Mishpacha"'+dis+'>'+
+        '<div class="row"><button class="btn" type="submit"'+dis+'>Start my group</button>'+(list.length?'<button class="btn ghost" type="button" data-gact="cancel">Cancel</button>':'')+'</div></form>'+
+        (!lb.user?'<button class="linkbtn" type="button" data-gact="signin">Have an account? Sign in with Google or email first</button>':'');
+    } else if(g){
+      const n=(g.members||[]).length, owner=lb.user&&g.owner===lb.user.uid;
+      h+='<div class="ghead"><h3>'+esc(cleanGroup(g.name))+'</h3><small>'+n+' of '+GROUP_MAX_MEMBERS+' members</small></div>';
+      if(grp.form==="rename"){
+        h+='<form class="gform" data-gform="rename"><label class="lb-lab" for="grp-rename">Rename your group</label><input type="text" id="grp-rename" maxlength="40" autocomplete="off"'+dis+'>'+
+          '<div class="row"><button class="btn" type="submit"'+dis+'>Save name</button><button class="btn ghost" type="button" data-gact="cancel">Cancel</button></div></form>';
+      }
+      h+='<div class="row"><span class="tabs" role="group" aria-label="Which group ranking">'+
+        [["puzzle",PUZZLE===CURRENT?"This week":"Week "+PUZZLE.id],["all","Total"],["avg","Average"]].map(t=>'<button type="button" data-gtab="'+t[0]+'" aria-pressed="'+(grp.tab===t[0])+'">'+t[1]+'</button>').join("")+'</span></div>';
+      if(tabNote(grp.tab)) h+='<p class="lb-note">'+tabNote(grp.tab)+'</p>';
+      if(!grp.rows[g.id]&&grp.status==="error") h+='<p class="quip">The group board couldn\'t load right now. Try again in a bit.</p>';
+      else if(!grp.rows[g.id]) h+='<p class="lb-lab">Loading the group board…</p>';
+      else {
+        const rows=groupBoard(g); let pos=0;
+        h+='<ol class="lb-list">'+rows.map(r=>{
+          const mine=lb.user&&r.id===lb.user.uid;
+          return '<li class="'+(mine?"me":"")+(r.ok?"":" waiting")+'"><span class="pos">'+(r.ok?(++pos):"⏳")+'</span><span class="nm">'+esc(r.name)+(mine?" (you)":"")+'</span><span class="sc">'+(r.ok?fmtScore(r.score):waitLabel(grp.tab))+'</span></li>';
+        }).join("")+'</ol>';
+        if(!rows.some(r=>r.ok)) h+='<p class="lb-lab">'+(grp.tab==="puzzle"?"Nobody in the group has finished this week yet. Be the first!":grp.tab==="avg"?"Nobody has 2 weeks in yet. Keep playing!":"Nobody in the group has finished a puzzle yet. Be the first!")+'</p>';
+      }
+      h+='<button type="button" class="rankline" data-gact="ranks" aria-expanded="'+grp.showRank+'" aria-controls="grp-ranks"><span>'+esc(rankLine(g))+'</span><span class="rk-more"><u>'+(grp.showRank?"Hide group rankings":"See group rankings")+'</u> '+(grp.showRank?"\u25B4":"\u25BE")+'</span></button>';
+      if(grp.showRank){
+        const R=grp.rank[rankField()];
+        h+='<div class="ranks" id="grp-ranks"><p class="lb-lab">Top groups '+esc(tabPhrase(grp.tab))+'</p><p class="lb-note">'+rankNote(grp.tab)+'</p>';
+        if(!R||(!R.rows&&R.status!=="error")) h+='<p class="lb-lab">Loading the group rankings\u2026</p>';
+        else if(!R.rows) h+='<p class="quip">The group rankings couldn\'t load right now. Try again in a bit.</p>';
+        else if(!R.rows.length) h+='<p class="lb-lab">No groups are ranked yet. Get 3 friends to finish and yours could be first!</p>';
+        else {
+          const mineIds=list.map(x=>x.id);
+          h+='<ol class="lb-list">'+R.rows.map((r,i)=>'<li class="'+(r.id===g.id?"me":"")+'"><span class="pos">'+(i+1)+'</span><span class="nm">'+esc(r.name)+(mineIds.indexOf(r.id)>=0?" (yours)":"")+'</span><span class="sc">'+fmtScore(r.score)+'</span></li>').join("");
+          const ms=statFor(g,grp.tab);
+          if(!g.hide&&ms!==null&&!R.rows.some(r=>r.id===g.id)) h+='<li class="me"><span class="pos">\u2014</span><span class="nm">'+esc(cleanGroup(g.name))+' (yours)</span><span class="sc">'+fmtScore(ms)+'</span></li>';
+          h+='</ol>';
+        }
+        h+='</div>';
+      }
+      h+='<div class="row"><button class="btn" type="button" data-gact="share"'+dis+'>Share group results</button>'+
+        (n<GROUP_MAX_MEMBERS?'<button class="btn ghost" type="button" data-gact="invite"'+dis+'>Invite friends</button>':'')+'</div>'+
+        '<div class="links">'+(owner?'<button class="linkbtn" type="button" data-gact="rename">Rename group</button><button class="linkbtn" type="button" data-gact="hide">'+(g.hide?"Show in group rankings":"Hide from group rankings")+'</button>':'')+
+        '<button class="linkbtn" type="button" data-gact="leave">'+(grp.leaving===g.id?"Tap again to leave "+esc(cleanGroup(g.name)):"Leave group")+'</button></div>';
+    }
+  }
+  h+='<p class="quip'+(grp.noteBad?"":" good")+'" role="status" data-gnote>'+esc(grp.note)+'</p>';
+  if(el.dataset.h===h) return;
+  /* keep whatever someone was typing when the card redraws */
+  const vals={}, foc=document.activeElement&&el.contains(document.activeElement)?document.activeElement.id:"";
+  el.querySelectorAll("input").forEach(x=>{ vals[x.id]=x.value; });
+  el.innerHTML=h; el.dataset.h=h;
+  el.querySelectorAll("input").forEach(x=>{ if(x.id in vals) x.value=vals[x.id]; });
+  if(foc){ const f=document.getElementById(foc); if(f) f.focus(); }
+}
+
+/* ---------- writing groups ---------- */
+async function createGroup(name){
+  const F=fb.F, uid=lb.user.uid, id=newGroupId();
+  if(grp.list===null) await loadGroups();
+  if((grp.list||[]).length>=GROUP_MAX) throw {code:"geshmak/toomany"};
+  const data={name:name,owner:uid,members:[uid],names:{},created:Date.now()};
+  data.names[uid]=myName||"Mystery Yid";
+  await F.setDoc(F.doc(fb.db,"groups",id),data);
+  grp.list=(grp.list||[]).concat([Object.assign({id:id},data)]); dropGroupCache();
+  grp.form=""; grp.wanted=true; selectGroup(id); grp.rows[id]=null;
+  say("Your group is ready! Tap Invite friends to send the link.");
+  submitScores(); loadGroupRows(true);
+}
+async function setHidden(g,hide){
+  const F=fb.F, upd={hide:hide};
+  if(hide){ upd.sw=F.deleteField(); upd.st=F.deleteField(); upd.sa=F.deleteField(); upd.su=F.deleteField(); }
+  await F.updateDoc(F.doc(fb.db,"groups",g.id),upd);
+  g.hide=hide; if(hide){ delete g.sw; delete g.st; delete g.sa; }
+  grp.rank={}; dropGroupCache();
+  say(hide?"Your group is hidden from the group rankings.":"Your group is back in the group rankings.");
+  if(!hide&&grp.rows[g.id]) await syncStats(g,grp.rows[g.id]);
+  if(grp.showRank) loadRankings(true);
+}
+async function renameGroup(g,name){
+  await fb.F.updateDoc(fb.F.doc(fb.db,"groups",g.id),{name:name});
+  g.name=name; dropGroupCache(); grp.form=""; say("Renamed!");
+}
+async function leaveGroup(g){
+  const F=fb.F, uid=lb.user.uid, upd={members:F.arrayRemove(uid)};
+  upd["names."+uid]=F.deleteField();
+  await F.updateDoc(F.doc(fb.db,"groups",g.id),upd);
+  grp.list=(grp.list||[]).filter(x=>x.id!==g.id); delete grp.rows[g.id]; dropGroupCache();
+  grp.leaving=""; selectGroup(grp.list.length?grp.list[0].id:"");
+  say("You left "+cleanGroup(g.name)+".");
+  if(curGroup()) loadGroupRows();
+}
+async function fetchInvite(){
+  if(!inviteId||!fb) return;
+  try{
+    const s=await fb.F.getDoc(fb.F.doc(fb.db,"groups",inviteId));
+    grp.invite=s.exists()?Object.assign({id:inviteId},s.data()||{}):{err:"notfound"};
+  }catch(e){ grp.invite={err:"error"}; }
+  if(grp.invite&&!grp.invite.err&&lb.user&&(grp.invite.members||[]).indexOf(lb.user.uid)>=0){
+    grp.invite.state="member"; selectGroup(inviteId);
+  }
+  renderInvite();
+}
+async function joinGroup(id){
+  await gGuard(async()=>{
+    const F=fb.F, uid=lb.user.uid, ref=F.doc(fb.db,"groups",id);
+    const s=await F.getDoc(ref); if(!s.exists()) throw {code:"geshmak/notfound"};
+    const g=Object.assign({id:id},s.data()||{}), members=g.members||[];
+    if(members.indexOf(uid)<0){
+      if(members.length>=GROUP_MAX_MEMBERS) throw {code:"geshmak/full"};
+      if(grp.list===null) await loadGroups(true);
+      if((grp.list||[]).length>=GROUP_MAX) throw {code:"geshmak/toomany"};
+      const upd={members:F.arrayUnion(uid)}; upd["names."+uid]=myName||"Mystery Yid";
+      await F.updateDoc(ref,upd);
+      g.members=members.concat([uid]); g.names=Object.assign({},g.names||{}); g.names[uid]=myName||"Mystery Yid";
+    }
+    grp.list=(grp.list||[]).filter(x=>x.id!==id).concat([g]); dropGroupCache();
+    grp.invite=Object.assign(g,{state:"joined"}); selectGroup(id); clearInviteParam();
+    grp.wanted=true; grp.form="";
+    submitScores(); loadGroupRows(true);
+  });
+  if(grp.note&&grp.noteBad&&grp.invite&&grp.invite.state!=="joined"){ grp.invite.joinErr=grp.note; }
+  renderInvite();
+}
+
+/* ---------- invite banner (opened from an invite link) ---------- */
+function renderInvite(){
+  const el=document.getElementById("invite");
+  if(!inviteId&&!(grp.invite&&grp.invite.state==="joined")){ el.hidden=true; return; }
+  el.hidden=false;
+  const I=grp.invite, ico='<svg class="ico" aria-hidden="true"><use href="#i-wine"/></svg>';
+  let h="";
+  if(!I) h='<h2>'+ico+'You\'re invited!</h2><p>Loading your group invite…</p>';
+  else if(I.err) h='<h2>'+ico+'Hmm, that invite didn\'t work</h2><p>'+(I.err==="notfound"?"This group doesn't exist anymore. Ask your friend for a fresh link.":"We couldn't load the group right now. Try the link again in a bit.")+'</p><div class="row"><button class="btn ghost" type="button" data-inv="dismiss">Just play</button></div>';
+  else if(I.state==="joined"||I.state==="member") h='<h2>'+ico+'You\'re in '+esc(cleanGroup(I.name))+'!</h2><p>'+(I.state==="joined"?"Welcome to the group. ":"")+'Play this week\'s Yids, then see how you stack up on the group board.</p><div class="row"><button class="btn" type="button" data-inv="board">See the group board</button><button class="btn ghost" type="button" data-inv="dismiss">Got it</button></div>';
+  else {
+    const n=(I.members||[]).length;
+    h='<h2>'+ico+'Join '+esc(cleanGroup(I.name))+'</h2><p>'+(n===1?"Your friend is":n+" friends are")+' playing Geshmak! together. Join the group to see how you stack up every week.</p>';
+    if(n>=GROUP_MAX_MEMBERS) h+='<p class="quip">This group is full (11 people max), but you can still play and start your own group.</p><div class="row"><button class="btn ghost" type="button" data-inv="dismiss">Just play</button></div>';
+    else if(lb.user&&myName) h+='<div class="row"><button class="btn" type="button" data-inv="join"'+(grp.busy?" disabled":"")+'>Join the group</button><button class="btn ghost" type="button" data-inv="dismiss">No thanks</button></div>';
+    else h+='<form data-inv-form><label class="lb-lab" for="inv-name" style="flex-basis:100%">Your name, so your friends know it\'s you</label><input type="text" id="inv-name" maxlength="24" autocomplete="nickname" placeholder="Ian L."'+(grp.busy||!fb?" disabled":"")+'><button class="btn" type="submit"'+(grp.busy||!fb?" disabled":"")+'>Join the group</button></form>'+
+      '<div class="row"><button class="linkbtn" type="button" data-inv="signin">Or sign in with Google or email</button><button class="linkbtn" type="button" data-inv="dismiss">No thanks</button></div>';
+    if(I.joinErr) h+='<p class="quip" role="status">'+esc(I.joinErr)+'</p>';
+  }
+  if(el.dataset.h===h) return;
+  const keep=el.querySelector("input"), val=keep?keep.value:"", had=keep&&document.activeElement===keep;
+  el.innerHTML=h; el.dataset.h=h;
+  const inp=el.querySelector("input"); if(inp){ inp.value=val||(myName||""); if(had) inp.focus(); }
+}
+document.getElementById("invite").addEventListener("click",e=>{
+  const b=e.target.closest("[data-inv]"); if(!b) return;
+  const a=b.dataset.inv;
+  if(a==="dismiss"){ clearInviteParam(); grp.invite=null; renderInvite(); }
+  else if(a==="board"){ const id=grp.invite&&grp.invite.id; clearInviteParam(); grp.invite=null; renderInvite(); if(id) selectGroup(id); ensureGroups(); toGroups(); }
+  else if(a==="join"){ if(grp.invite) joinGroup(grp.invite.id); }
+  else if(a==="signin"){ if(grp.invite) grp.pendingJoin=grp.invite.id; loadRows(); toLB(); }
+});
+document.getElementById("invite").addEventListener("submit",e=>{
+  e.preventDefault();
+  const v=cleanName(e.target.querySelector("input").value); if(!v||!fb||!grp.invite) return;
+  setMyName(v); document.getElementById("lb-nameinput").value=myName;
+  grp.pendingJoin=grp.invite.id;
+  if(lb.user){ const id=grp.pendingJoin; grp.pendingJoin=""; joinGroup(id); }
+  else gGuard(()=>fb.Au.signInAnonymously(fb.auth));
+});
+
+/* ---------- groups card actions ---------- */
+const grpCard=document.getElementById("groups");
+grpCard.addEventListener("click",e=>{
+  const sel=e.target.closest("[data-gsel]");
+  if(sel){ const v=sel.dataset.gsel; grp.form=""; grp.leaving=""; say(""); if(v!==grp.sel||grp.form){ selectGroup(v); } renderGroups(); loadGroupRows(); return; }
+  const tb=e.target.closest("[data-gtab]");
+  if(tb){ grp.tab=tb.dataset.gtab; renderGroups(); loadRankings(); return; }
+  const b=e.target.closest("[data-gact]"); if(!b) return;
+  const a=b.dataset.gact, g=curGroup();
+  if(a==="new"){ grp.form="new"; grp.leaving=""; say(""); renderGroups(); const f=document.getElementById("grp-myname")||document.getElementById("grp-gname"); if(f) f.focus(); }
+  else if(a==="cancel"){ grp.form=""; say(""); renderGroups(); }
+  else if(a==="ranks"){ grp.showRank=!grp.showRank; renderGroups(); if(grp.showRank) loadRankings(); }
+  else if(a==="hide"&&g){ gGuard(()=>setHidden(g,!g.hide)); }
+  else if(a==="signin"){ lb.msg="Sign in here, then scroll back up to start your group."; loadRows(); renderAuth(); toLB(); }
+  else if(a==="rename"&&g){ grp.form="rename"; say(""); renderGroups(); const f=document.getElementById("grp-rename"); if(f){ f.value=cleanGroup(g.name); f.focus(); } }
+  else if(a==="share"&&g){ shareOut(groupShareText(g),grpCard.querySelector("[data-gnote]"),"Send it to the group chat."); }
+  else if(a==="invite"&&g){ shareOut("Join my Geshmak! group “"+cleanGroup(g.name)+"” and see if you can name the Yid: "+inviteURL(g.id),grpCard.querySelector("[data-gnote]"),"Send the link to your friends."); }
+  else if(a==="leave"&&g){ if(grp.leaving!==g.id){ grp.leaving=g.id; renderGroups(); } else gGuard(()=>leaveGroup(g)); }
+});
+grpCard.addEventListener("submit",e=>{
+  e.preventDefault();
+  if(!fb||grp.busy) return;
+  const kind=e.target.dataset.gform;
+  if(kind==="rename"){
+    const g=curGroup(), v=cleanGroup(document.getElementById("grp-rename").value);
+    if(!g||!v){ say("Give your group a name first.",true); renderGroups(); return; }
+    gGuard(()=>renameGroup(g,v)); return;
+  }
+  const gname=cleanGroup((document.getElementById("grp-gname")||{}).value);
+  const nmEl=document.getElementById("grp-myname");
+  if(nmEl){
+    const nm=cleanName(nmEl.value);
+    if(!nm){ say("Add your name first, so your friends know it's you.",true); renderGroups(); nmEl.focus(); return; }
+    if(!gname){ say("Give your group a name first.",true); renderGroups(); return; }
+    setMyName(nm); document.getElementById("lb-nameinput").value=myName;
+  } else if(!gname){ say("Give your group a name first.",true); renderGroups(); return; }
+  if(lb.user) gGuard(()=>createGroup(gname));
+  else { grp.pendingCreate=gname; gGuard(()=>fb.Au.signInAnonymously(fb.auth)); }
+});
+
 /* ---------- guess dropdown ---------- */
-const NAME_INDEX = NAMES.map(n=>{ const k=norm(n.replace(/\([^)]*\)/g," ")); return {n:n,k:k,t:k.split(" ")}; });
+let NAME_INDEX=null;
+function nameIndex(){ return NAME_INDEX||(NAME_INDEX=NAMES.map(n=>{ const k=norm(n.replace(/\([^)]*\)/g," ")); return {n:n,k:k,t:k.split(" ")}; })); }
 function suggest(q){
   const g=norm(q); if(g.length<2) return [];
   const qt=g.split(" "), hits=[];
-  NAME_INDEX.forEach(e=>{
+  nameIndex().forEach(e=>{
     let sc=-1;
     if(e.k.startsWith(g)) sc=0;
     else if(qt.every(w=>e.t.some(t=>t.startsWith(w)))) sc=1;
@@ -1346,6 +1846,11 @@ game.addEventListener("focusout",e=>{ if(e.target.matches&&e.target.matches('inp
 /* ---------- actions ---------- */
 game.addEventListener("toggle",e=>{ const d=e.target; if(d.matches&&d.matches("details[data-ck]")) openClues[d.dataset.ck]=d.open; },true);
 document.getElementById("lb-chip").addEventListener("click",()=>{ loadRows(); toLB(); });
+document.getElementById("grp-chip").addEventListener("click",()=>{ ensureGroups(); toGroups(); });
+function toGroups(){
+  const c=document.getElementById("groups"); let smooth=true; try{ smooth=!matchMedia("(prefers-reduced-motion: reduce)").matches; }catch(e){}
+  try{ c.scrollIntoView({behavior:smooth?"smooth":"auto",block:"start"}); }catch(e){ c.scrollIntoView(); }
+}
 function toLB(){
   const c=document.getElementById("lb"); let smooth=true; try{ smooth=!matchMedia("(prefers-reduced-motion: reduce)").matches; }catch(e){}
   try{ c.scrollIntoView({behavior:smooth?"smooth":"auto",block:"start"}); }catch(e){ c.scrollIntoView(); }
@@ -1353,7 +1858,7 @@ function toLB(){
 function switchPuzzle(id){
   const p=PUZZLES.find(z=>z.id===id); if(!p||p.id===PUZZLE.id) return;
   PUZZLE=p; state=loadState(id); confirming=false;
-  render(); if(lb.tab==='puzzle'&&lbWanted){ lb.rows=[]; lb.me=null; loadRows(); } else renderLB(); window.scrollTo(0,0);
+  render(); renderGroups(); if(lb.tab==='puzzle'&&lbWanted){ lb.rows=[]; lb.me=null; loadRows(); } else renderLB(); window.scrollTo(0,0);
 }
 document.addEventListener("click",e=>{
   const b=e.target.closest("[data-puzzle]"); if(!b) return;
@@ -1415,15 +1920,7 @@ game.addEventListener("click",e=>{
   else if(a==="giveup-yes"){ finishRound(i,"lost",QUIPS.miss,false); }
   else if(a==="reveal-yes"){ finishBonus("lost",QUIPS.miss,false); }
   else if(a==="toboard"){ toLB(); }
-  else if(a==="share"){
-    const txt=shareText(state), note=document.getElementById("share-note");
-    const ok=()=>{ note.textContent="Copied! Go brag in the group chat."; };
-    const no=()=>{ note.textContent="Couldn't copy automatically. Here it is to copy by hand: "+txt.replace(/\n+/g," · "); };
-    const copy=()=>{ try{ navigator.clipboard.writeText(txt).then(ok,no); }catch(err){ no(); } };
-    if(touchy()&&navigator.share){
-      try{ navigator.share({text:txt}).then(()=>{ note.textContent="Shared! Go brag in the group chat."; },err=>{ if(!err||err.name!=="AbortError") copy(); }); }catch(err){ copy(); }
-    } else copy();
-  }
+  else if(a==="share"){ shareOut(shareText(state),document.getElementById("share-note"),"Go brag in the group chat."); }
 });
 document.addEventListener("click",e=>{
   const b=e.target.closest("[data-open]"); if(!b) return;
@@ -1441,7 +1938,7 @@ document.getElementById("reset").addEventListener("click",()=>{
   confirming=false;
   seenIntro=false; lsSet("geshmak-intro","0"); state=freshState(); save(); render(); renderLB(); window.scrollTo(0,0);
 });
-render(); renderLB(); initLB();
+render(); renderLB(); renderGroups(); initLB();
 </script>
 </body>
 </html>
