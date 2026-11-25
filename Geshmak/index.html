@@ -113,15 +113,47 @@ h1 span{color:var(--sun)}
 .byline{margin:0;font-family:var(--display);font-weight:600;font-size:17px;line-height:1.35}
 .grp-body{display:flex;flex-direction:column;gap:12px}
 .grp-body > p{margin:0}
+@media (max-width:520px){
+  #groups{padding:16px 14px 18px;gap:10px}
+  #groups .band{margin:-16px -14px 0;padding:8px 14px}
+  #groups .era{font-size:20px}
+  #groups .era .ico{width:36px;height:36px}
+  #groups .byline{font-size:15px;line-height:1.3}
+  #groups .grp-body{gap:10px}
+  #groups .grp-body > p{font-size:15px;line-height:1.4}
+  #groups .gform{padding:10px;gap:6px}
+  #groups .gform input{padding:9px 12px}
+  #groups .ghead h3{font-size:22px}
+  #groups .lb-list li{padding:4px 10px}
+  #groups .lb-list .sc{font-size:17px}
+  #groups .rankline{padding:7px 12px;font-size:14px}
+  #groups .btn{padding:7px 12px;font-size:15px;box-shadow:3px 3px 0 var(--ink)}
+  #groups .row{gap:8px}
+  #groups .peek{width:40px;height:40px}
+}
 .gform{display:flex;flex-direction:column;gap:8px;border:2px solid var(--ink);border-radius:16px;padding:12px;background:var(--cream)}
 .lb-note{margin:0;font-size:14px;color:#5A5590}
-.gform input,.invite input{flex:1 1 180px;min-width:0;border:3px solid var(--ink);background:#fff;border-radius:16px;padding:11px 14px;font:inherit;font-size:16px}
-.ghead{display:flex;align-items:baseline;justify-content:space-between;gap:4px 12px;flex-wrap:wrap}
+.gform input,.invite input{min-width:0;border:3px solid var(--ink);background:#fff;border-radius:16px;padding:11px 14px;font:inherit;font-size:16px}
+.invite input{flex:1 1 180px}
+#groups .gform input[type=text]{flex:none;width:100%;height:auto}
+.ghead{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.gname{display:flex;align-items:baseline;gap:4px 10px;flex-wrap:wrap;min-width:0}
+.gmenu-btn{flex:none;width:40px;height:40px;border:2px solid var(--ink);border-radius:50%;background:#fff;color:var(--ink);font-size:22px;line-height:1;cursor:pointer}
+.gmenu-btn[aria-expanded="true"]{background:var(--ink);color:var(--sun)}
+.gmenu{display:flex;flex-direction:column;border:2px solid var(--ink);border-radius:16px;overflow:hidden;background:#fff}
+.gmenu button{border:0;border-top:1px solid #E4E1F5;background:#fff;color:var(--ink);text-align:left;padding:11px 14px;font-family:var(--display);font-weight:600;font-size:15px;cursor:pointer}
+.gmenu button:first-child{border-top:0}
+.gmenu button:hover{background:var(--cream)}
+.gmenu button.danger{color:var(--bad)}
+.gnote:empty{display:none}
+#lb-status:empty{min-height:0}
+.gbtns .btn{flex:1 1 auto;justify-content:center}
 .ghead h3{margin:0;font-family:var(--title);font-weight:400;font-size:26px;line-height:1.1;overflow-wrap:anywhere}
 .ghead small{font-family:var(--body);font-weight:500;font-size:14px;color:#5A5590}
 .grp-body .links{display:flex;gap:8px 16px;flex-wrap:wrap}
-.rankline{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;width:100%;text-align:left;border:2px solid var(--ink);border-radius:16px;background:var(--sun);color:var(--ink);padding:9px 14px;font-family:var(--display);font-weight:700;font-size:15px;cursor:pointer}
-.rankline .rk-more{font-weight:600;font-size:14px;white-space:nowrap}
+.rankline{display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;text-align:left;border:2px solid var(--ink);border-radius:999px;background:var(--sun);color:var(--ink);padding:8px 16px;font-family:var(--display);font-weight:700;font-size:15px;cursor:pointer}
+.rankline.mine{cursor:default;margin:0;display:block;border-radius:16px}
+.rankline .rk-more{font-weight:600;font-size:14px;white-space:nowrap;text-decoration:underline;text-underline-offset:2px}
 .ranks{display:flex;flex-direction:column;gap:8px;border:2px dashed var(--ink);border-radius:16px;padding:12px;background:var(--cream)}
 .ranks .lb-list li{background:#fff}
 .ranks .lb-list li.me{background:var(--sun)}
@@ -514,7 +546,7 @@ dialog h2{padding-right:46px}
     <div class="band">
       <h2 class="era" id="grp-title"><svg class="ico" aria-hidden="true"><use href="#i-wine"/></svg><span>Start a group</span></h2>
     </div>
-    <p class="byline">Get competitive with Geshmak and see how you stack up against your friends or mishpacha.</p>
+    <p class="byline" id="grp-byline">Get competitive with Geshmak and see how you stack up against your friends or family.</p>
     <div class="grp-body" id="grp-body"></div>
     <svg class="ico peek" aria-hidden="true"><use href="#i-dreidel"/></svg>
   </section>
@@ -525,6 +557,7 @@ dialog h2{padding-right:46px}
     </div>
     <div class="row"><span class="tabs" role="group" aria-label="Which leaderboard"><button type="button" data-lbtab="puzzle" id="lb-tab-p" aria-pressed="true">This week</button><button type="button" data-lbtab="all" id="lb-tab-a" aria-pressed="false">Total</button><button type="button" data-lbtab="avg" id="lb-tab-v" aria-pressed="false">Average</button></span></div>
     <p class="lb-note" id="lb-note" hidden></p>
+    <p class="rankline mine" id="lb-place" role="status" hidden></p>
     <p class="quip good" id="lb-status" role="status">Loading the leaderboard…</p>
     <ol class="lb-list" id="lb-list"></ol>
     <div id="lb-auth">
@@ -1179,6 +1212,7 @@ function renderLB(){
   [["lb-tab-p","puzzle"],["lb-tab-a","all"],["lb-tab-v","avg"]].forEach(x=>document.getElementById(x[0]).setAttribute("aria-pressed",lb.tab===x[1]));
   const note=document.getElementById("lb-note"); note.textContent=tabNote(lb.tab); note.hidden=!note.textContent;
   const list=document.getElementById("lb-list"); list.textContent="";
+  const place=document.getElementById("lb-place"); place.hidden=true;
   let msg="";
   if(lb.status==="loading") msg="Loading the leaderboard…";
   else if(lb.status==="off") msg="The leaderboard couldn't load here. Your scores are still saved on this device.";
@@ -1197,8 +1231,13 @@ function renderLB(){
     });
     if(lb.status==="slow") msg="Still trying to reach the leaderboard. This may be out of date.";
     else if(!rows.length) msg=lb.tab==="puzzle"?"No scores for this puzzle yet. Finish it and be the first.":lb.tab==="avg"?"No averages yet. Finish 2 weeks to get one.":"No scores yet. Finish a puzzle and be the first.";
-    else if(lb.tab==="avg"&&lb.user&&!me&&!lb.me&&tabScore(localScores(),"avg").n<2) msg="Finish 2 weeks to get your average on the board.";
-    else if(!lb.user&&Object.keys(localScores()).length) msg="Sign in below to put your score on the board.";
+    /* your place, like the group rankings line */
+    const pos=me?me.pos:(lb.user&&lb.me?lb.me.pos:null), of=lb.total?" of "+lb.total.toLocaleString()+(lb.total===1?" player":" players"):"";
+    let pl="";
+    if(pos) pl="\u{1F3C6} You're #"+pos+of+" "+tabPhrase(lb.tab);
+    else if(lb.user&&myName) pl=lb.tab==="puzzle"?"Finish "+(PUZZLE===CURRENT?"this week's":"this")+" puzzle to get your place":lb.tab==="avg"?"Finish 2 weeks to get your place by average":"Finish a puzzle to get your place";
+    else if(Object.keys(localScores()).length) pl="Put your name on the board below to see your place";
+    if(pl){ place.textContent=pl; place.hidden=false; }
   }
   document.getElementById("lb-status").textContent=msg;
   renderAuth();
@@ -1272,7 +1311,7 @@ async function loadRows(force){
   if(!fb){ if(lb.status!=="off") startFB(); renderLB(); return; }
   const field=lbField(), key="geshmak-lb:"+field, seq=++rowsSeq;
   if(!force){
-    const c=cacheGet(key,LB_TTL); if(c&&(!lb.user||c.uid===lb.user.uid)){ lb.rows=c.rows; lb.me=c.me; lb.status="ready"; renderLB(); return; }
+    const c=cacheGet(key,LB_TTL); if(c&&(!lb.user||c.uid===lb.user.uid)){ lb.rows=c.rows; lb.me=c.me; lb.total=c.total||null; lb.status="ready"; renderLB(); return; }
   }
   if(!lb.rows.length) lb.status="loading";
   renderLB();
@@ -1281,15 +1320,18 @@ async function loadRows(force){
   try{
     const F=fb.F, col=F.collection(fb.db,"scores");
     const rows=await once("lb:"+field,()=>withRetry(()=>F.getDocs(F.query(col,F.orderBy(field,"desc"),F.limit(LB_TOP)))).then(snap=>snap.docs.map(d=>Object.assign({id:d.id},d.data()||{}))));
-    let me=null;
+    let me=null, total=null;
     const mineScore=myScoreFor(field), count=F.getCount||F.getCountFromServer;
+    if(count&&rows.length>=LB_TOP){
+      try{ const n=await once("lbn:"+field,()=>count(F.query(col,F.where(field,">=",0)))); total=n.data().count||null; }catch(e){}
+    } else total=rows.length;
     if(lb.user&&mineScore!==null&&!rows.some(r=>r.id===lb.user.uid)&&rows.length>=LB_TOP&&count){
       try{ const c=await once("lbme:"+field+":"+mineScore,()=>count(F.query(col,F.where(field,">",mineScore)))); me={score:mineScore,pos:(c.data().count||0)+1}; }catch(e){}
     }
     if(seq!==rowsSeq) return;
     clearTimeout(rowsTimer);
-    lb.rows=rows; lb.me=me; lb.status="ready"; renderLB();
-    cacheSet(key,{uid:lb.user?lb.user.uid:"",rows:rows,me:me});
+    lb.rows=rows; lb.me=me; lb.total=total; lb.status="ready"; renderLB();
+    cacheSet(key,{uid:lb.user?lb.user.uid:"",rows:rows,me:me,total:total});
   }catch(e){ if(seq!==rowsSeq) return; clearTimeout(rowsTimer); lb.status=lb.rows.length?"ready":"error"; renderLB(); }
 }
 async function onUser(u){
@@ -1384,7 +1426,7 @@ document.getElementById("lb").addEventListener("click",e=>{
 
 /* ---------- groups: play with friends ---------- */
 const GROUP_MAX_MEMBERS=11, GROUP_MAX=5;
-const grp={list:null,rows:{},sel:ls("geshmak-group")||"",tab:"puzzle",status:"",seq:0,invite:null,pendingJoin:"",pendingCreate:"",form:"",leaving:"",busy:false,note:"",noteBad:false,wanted:false,rank:{},rankSeq:0,showRank:false};
+const grp={list:null,rows:{},sel:ls("geshmak-group")||"",tab:"puzzle",status:"",seq:0,invite:null,pendingJoin:"",pendingCreate:"",form:"",leaving:"",busy:false,note:"",noteBad:false,wanted:false,rank:{},rankSeq:0,showRank:false,menu:false};
 const RANK_TOP=10, RANK_MIN_PLAYERS=3;
 let authKnown=false, inviteId="";
 try{ const m=location.search.match(/[?&]g=([A-Za-z0-9]{6,24})/); if(m) inviteId=m[1]; }catch(e){}
@@ -1399,7 +1441,11 @@ function curGroup(){ return grp.list?grp.list.find(g=>g.id===grp.sel)||null:null
 function selectGroup(id){ grp.sel=id||""; lsSet("geshmak-group",grp.sel); }
 function clearInviteParam(){ try{ history.replaceState(null,"",location.pathname+location.hash); }catch(e){} inviteId=""; }
 function dropGroupCache(){ cacheDrop(["geshmak-groups:","geshmak-lbg:","geshmak-rank:"]); }
-function say(msg,bad){ grp.note=msg; grp.noteBad=!!bad; }
+let sayTimer=null;
+function say(msg,bad){
+  grp.note=msg; grp.noteBad=!!bad; clearTimeout(sayTimer);
+  if(msg&&!bad) sayTimer=setTimeout(()=>{ if(grp.note===msg){ grp.note=""; renderGroups(); } },5000);
+}
 function groupErr(e){
   const c=e&&e.code||"";
   if(c==="geshmak/full") return "That group is full. Groups max out at 11 people.";
@@ -1517,12 +1563,11 @@ function myRank(g){
   const i=r.rows.findIndex(x=>x.id===g.id); return i<0?0:i+1;
 }
 function rankLine(g){
-  if(g.hide) return "Hidden from the group rankings";
+  if(g.hide) return "Hidden from group rankings";
   const pos=myRank(g), mine=statFor(g,grp.tab);
-  if(pos) return "\u{1F3C6} #"+pos+" in the group rankings "+tabPhrase(grp.tab);
-  if(mine!==null&&pos===0) return "Group score "+fmtScore(mine)+", just outside the top "+RANK_TOP;
-  if(mine!==null) return "Group score "+fmtScore(mine)+" "+tabPhrase(grp.tab);
-  return grp.tab==="avg"?"Get ranked: 2 weeks with 3+ players":"Get ranked: 3+ players need to finish"+(grp.tab==="puzzle"?" this week":" a week");
+  if(pos) return "\u{1F3C6} #"+pos+" of all groups";
+  if(mine!==null) return "\u{1F3C6} Group score "+fmtScore(mine);
+  return grp.tab==="avg"?"Unranked: needs 2 weeks":"Unranked: needs 3 players";
 }
 function rankNote(tab){
   return tab==="all"?"Each group's weekly scores, added up.":tab==="avg"?"Each group's average weekly score, once it has 2 ranked weeks.":"Average score of the members who finished. Groups need 3+ players to be ranked.";
@@ -1563,34 +1608,42 @@ function renderGroups(){
   const el=document.getElementById("grp-body"), tt=document.querySelector("#grp-title span");
   if(!el) return;
   const list=grp.list||[], g=curGroup(), dis=grp.busy?" disabled":"";
-  tt.textContent=list.length?"Your groups":"Start a group";
+  tt.textContent=list.length?(list.length>1?"Your groups":"Your group"):"Start a group";
+  document.getElementById("grp-byline").hidden=!!(list.length&&grp.form!=="new");
   let h="";
   if(!fb) h=lb.status==="off"?'<p class="quip">Groups couldn\'t load here. Your scores are still saved on this device.</p>':'<p class="lb-lab">Loading groups…</p>';
   else if(!authKnown||(lb.user&&grp.list===null)) h='<p class="lb-lab">Loading your groups…</p>';
   else {
-    const creating=grp.form==="new"||!list.length;
-    if(list.length){
-      h+='<div class="scopes" role="group" aria-label="Your groups">'+list.map(x=>'<button type="button" data-gsel="'+esc(x.id)+'" aria-pressed="'+(!creating&&x.id===grp.sel)+'">'+esc(cleanGroup(x.name)||"My group")+'</button>').join("")+
-        (list.length<GROUP_MAX?'<button type="button" class="add" data-gact="new" aria-pressed="'+creating+'">+ New group</button>':'')+'</div>';
+    const creating=grp.form==="new";
+    if(list.length>1&&!creating){
+      h+='<div class="scopes" role="group" aria-label="Your groups">'+list.map(x=>'<button type="button" data-gsel="'+esc(x.id)+'" aria-pressed="'+(x.id===grp.sel)+'">'+esc(cleanGroup(x.name)||"My group")+'</button>').join("")+'</div>';
     }
-    if(creating){
+    if(!creating&&!list.length){
+      h+='<div class="row"><button class="btn" type="button" data-gact="new">Start a group</button></div>';
+    } else if(creating){
       const needName=!lb.user||!myName;
-      h+='<p>Enter your group\'s name, like <i>Beth El Ritual Committee</i>, <i>Capitol Camps CIT Class of 2012</i>, <i>Goldberg Mishpacha</i>, or more! Then invite up to 10 others to join.</p>'+
+      h+='<p>Enter your group\'s name, like <i>Beth El Ritual Committee</i>, <i>Capital Camps CIT Summer 2012</i>, <i>Goldberg Mishpacha</i>, or more! Then invite up to 10 others to join.</p>'+
         '<form class="gform" data-gform="new">'+
         (needName?'<label class="lb-lab" for="grp-myname">Your name, so your friends know it\'s you</label><input type="text" id="grp-myname" maxlength="24" autocomplete="nickname" placeholder="Ian L."'+dis+'>':'')+
         '<label class="lb-lab" for="grp-gname">Group name</label><input type="text" id="grp-gname" maxlength="40" autocomplete="off" placeholder="Goldberg Mishpacha"'+dis+'>'+
-        '<div class="row"><button class="btn" type="submit"'+dis+'>Start my group</button>'+(list.length?'<button class="btn ghost" type="button" data-gact="cancel">Cancel</button>':'')+'</div></form>'+
+        '<div class="row"><button class="btn" type="submit"'+dis+'>Start my group</button><button class="btn ghost" type="button" data-gact="cancel">Cancel</button></div></form>'+
         (!lb.user?'<button class="linkbtn" type="button" data-gact="signin">Have an account? Sign in with Google or email first</button>':'');
     } else if(g){
       const n=(g.members||[]).length, owner=lb.user&&g.owner===lb.user.uid;
-      h+='<div class="ghead"><h3>'+esc(cleanGroup(g.name))+'</h3><small>'+n+' of '+GROUP_MAX_MEMBERS+' members</small></div>';
+      h+='<div class="ghead"><div class="gname">'+(list.length>1?'':'<h3>'+esc(cleanGroup(g.name))+'</h3>')+'<small>'+n+'/'+GROUP_MAX_MEMBERS+' members</small></div>'+
+        '<button type="button" class="gmenu-btn" data-gact="menu" aria-expanded="'+grp.menu+'" aria-controls="grp-menu" aria-label="Group options">\u22EF</button></div>';
+      if(grp.menu){
+        h+='<div class="gmenu" id="grp-menu">'+
+          (list.length<GROUP_MAX?'<button type="button" data-gact="new">+ Start another group</button>':'')+
+          (owner?'<button type="button" data-gact="rename">Rename group</button><button type="button" data-gact="hide">'+(g.hide?"Show in group rankings":"Hide from group rankings")+'</button>':'')+
+          '<button type="button" data-gact="leave" class="danger">'+(grp.leaving===g.id?"Tap again to leave":"Leave group")+'</button></div>';
+      }
       if(grp.form==="rename"){
         h+='<form class="gform" data-gform="rename"><label class="lb-lab" for="grp-rename">Rename your group</label><input type="text" id="grp-rename" maxlength="40" autocomplete="off"'+dis+'>'+
           '<div class="row"><button class="btn" type="submit"'+dis+'>Save name</button><button class="btn ghost" type="button" data-gact="cancel">Cancel</button></div></form>';
       }
       h+='<div class="row"><span class="tabs" role="group" aria-label="Which group ranking">'+
         [["puzzle",PUZZLE===CURRENT?"This week":"Week "+PUZZLE.id],["all","Total"],["avg","Average"]].map(t=>'<button type="button" data-gtab="'+t[0]+'" aria-pressed="'+(grp.tab===t[0])+'">'+t[1]+'</button>').join("")+'</span></div>';
-      if(tabNote(grp.tab)) h+='<p class="lb-note">'+tabNote(grp.tab)+'</p>';
       if(!grp.rows[g.id]&&grp.status==="error") h+='<p class="quip">The group board couldn\'t load right now. Try again in a bit.</p>';
       else if(!grp.rows[g.id]) h+='<p class="lb-lab">Loading the group board…</p>';
       else {
@@ -1599,12 +1652,11 @@ function renderGroups(){
           const mine=lb.user&&r.id===lb.user.uid;
           return '<li class="'+(mine?"me":"")+(r.ok?"":" waiting")+'"><span class="pos">'+(r.ok?(++pos):"⏳")+'</span><span class="nm">'+esc(r.name)+(mine?" (you)":"")+'</span><span class="sc">'+(r.ok?fmtScore(r.score):waitLabel(grp.tab))+'</span></li>';
         }).join("")+'</ol>';
-        if(!rows.some(r=>r.ok)) h+='<p class="lb-lab">'+(grp.tab==="puzzle"?"Nobody in the group has finished this week yet. Be the first!":grp.tab==="avg"?"Nobody has 2 weeks in yet. Keep playing!":"Nobody in the group has finished a puzzle yet. Be the first!")+'</p>';
       }
-      h+='<button type="button" class="rankline" data-gact="ranks" aria-expanded="'+grp.showRank+'" aria-controls="grp-ranks"><span>'+esc(rankLine(g))+'</span><span class="rk-more"><u>'+(grp.showRank?"Hide group rankings":"See group rankings")+'</u> '+(grp.showRank?"\u25B4":"\u25BE")+'</span></button>';
+      h+='<button type="button" class="rankline" data-gact="ranks" aria-expanded="'+grp.showRank+'" aria-controls="grp-ranks"><span>'+esc(rankLine(g))+'</span><span class="rk-more">'+(grp.showRank?"Close \u25B4":"All groups \u25BE")+'</span></button>';
       if(grp.showRank){
         const R=grp.rank[rankField()];
-        h+='<div class="ranks" id="grp-ranks"><p class="lb-lab">Top groups '+esc(tabPhrase(grp.tab))+'</p><p class="lb-note">'+rankNote(grp.tab)+'</p>';
+        h+='<div class="ranks" id="grp-ranks"><p class="lb-note">'+rankNote(grp.tab)+'</p>';
         if(!R||(!R.rows&&R.status!=="error")) h+='<p class="lb-lab">Loading the group rankings\u2026</p>';
         else if(!R.rows) h+='<p class="quip">The group rankings couldn\'t load right now. Try again in a bit.</p>';
         else if(!R.rows.length) h+='<p class="lb-lab">No groups are ranked yet. Get 3 friends to finish and yours could be first!</p>';
@@ -1617,13 +1669,11 @@ function renderGroups(){
         }
         h+='</div>';
       }
-      h+='<div class="row"><button class="btn" type="button" data-gact="share"'+dis+'>Share group results</button>'+
-        (n<GROUP_MAX_MEMBERS?'<button class="btn ghost" type="button" data-gact="invite"'+dis+'>Invite friends</button>':'')+'</div>'+
-        '<div class="links">'+(owner?'<button class="linkbtn" type="button" data-gact="rename">Rename group</button><button class="linkbtn" type="button" data-gact="hide">'+(g.hide?"Show in group rankings":"Hide from group rankings")+'</button>':'')+
-        '<button class="linkbtn" type="button" data-gact="leave">'+(grp.leaving===g.id?"Tap again to leave "+esc(cleanGroup(g.name)):"Leave group")+'</button></div>';
+      h+='<div class="row gbtns"><button class="btn" type="button" data-gact="share"'+dis+'>Share results</button>'+
+        (n<GROUP_MAX_MEMBERS?'<button class="btn ghost" type="button" data-gact="invite"'+dis+'>Invite friends</button>':'')+'</div>';
     }
   }
-  h+='<p class="quip'+(grp.noteBad?"":" good")+'" role="status" data-gnote>'+esc(grp.note)+'</p>';
+  h+='<p class="quip gnote'+(grp.noteBad?"":" good")+'" role="status" data-gnote>'+esc(grp.note)+'</p>';
   if(el.dataset.h===h) return;
   /* keep whatever someone was typing when the card redraws */
   const vals={}, foc=document.activeElement&&el.contains(document.activeElement)?document.activeElement.id:"";
@@ -1665,7 +1715,7 @@ async function leaveGroup(g){
   upd["names."+uid]=F.deleteField();
   await F.updateDoc(F.doc(fb.db,"groups",g.id),upd);
   grp.list=(grp.list||[]).filter(x=>x.id!==g.id); delete grp.rows[g.id]; dropGroupCache();
-  grp.leaving=""; selectGroup(grp.list.length?grp.list[0].id:"");
+  grp.leaving=""; grp.menu=false; selectGroup(grp.list.length?grp.list[0].id:"");
   say("You left "+cleanGroup(g.name)+".");
   if(curGroup()) loadGroupRows();
 }
@@ -1690,7 +1740,12 @@ async function joinGroup(id){
       if(grp.list===null) await loadGroups(true);
       if((grp.list||[]).length>=GROUP_MAX) throw {code:"geshmak/toomany"};
       const upd={members:F.arrayUnion(uid)}; upd["names."+uid]=myName||"Mystery Yid";
-      await F.updateDoc(ref,upd);
+      try{ await F.updateDoc(ref,upd); }
+      catch(e){
+        /* someone may have taken the last spot a moment ago */
+        if(e&&e.code==="permission-denied"){ try{ const s2=await F.getDoc(ref); if(s2.exists()&&((s2.data()||{}).members||[]).length>=GROUP_MAX_MEMBERS) throw {code:"geshmak/full"}; }catch(e2){ if(e2&&e2.code==="geshmak/full") throw e2; } }
+        throw e;
+      }
       g.members=members.concat([uid]); g.names=Object.assign({},g.names||{}); g.names[uid]=myName||"Mystery Yid";
     }
     grp.list=(grp.list||[]).filter(x=>x.id!==id).concat([g]); dropGroupCache();
@@ -1752,8 +1807,10 @@ grpCard.addEventListener("click",e=>{
   if(tb){ grp.tab=tb.dataset.gtab; renderGroups(); loadRankings(); return; }
   const b=e.target.closest("[data-gact]"); if(!b) return;
   const a=b.dataset.gact, g=curGroup();
+  if(a!=="menu"&&a!=="leave"&&a!=="hide") grp.menu=false;
   if(a==="new"){ grp.form="new"; grp.leaving=""; say(""); renderGroups(); const f=document.getElementById("grp-myname")||document.getElementById("grp-gname"); if(f) f.focus(); }
   else if(a==="cancel"){ grp.form=""; say(""); renderGroups(); }
+  else if(a==="menu"){ grp.menu=!grp.menu; grp.leaving=""; renderGroups(); }
   else if(a==="ranks"){ grp.showRank=!grp.showRank; renderGroups(); if(grp.showRank) loadRankings(); }
   else if(a==="hide"&&g){ gGuard(()=>setHidden(g,!g.hide)); }
   else if(a==="signin"){ lb.msg="Sign in here, then scroll back up to start your group."; loadRows(); renderAuth(); toLB(); }
