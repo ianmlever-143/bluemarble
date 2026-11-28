@@ -77,7 +77,7 @@ h1 span{color:var(--sun)}
 .chips{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
 .chip.lbchip{background:var(--sky)}
 #lb{scroll-margin-top:16px}
-@media (max-width:440px){.chips .chip{padding-left:10px;padding-right:12px;font-size:15px}.chips .chip .ico{width:24px;height:24px}}
+
 /* all three clues, after a Yid is revealed */
 .allclues summary{cursor:pointer;list-style:none;display:flex;align-items:center;gap:10px;padding:10px 14px;border:2px solid var(--ink);border-radius:16px;background:#fff;font-family:var(--display);font-weight:600}
 .allclues summary::-webkit-details-marker{display:none}
@@ -259,11 +259,41 @@ input[type=text]:focus{background:var(--cream);outline:none;box-shadow:0 0 0 4px
 .tally .k-pink{background:var(--pink)} .tally .k-sun{background:var(--sun)} .tally .k-mint{background:var(--mint)} .tally .k-grape{background:var(--grape);color:#fff}
 .tally .sum{border-bottom:0;background:var(--ink);color:#fff;font-size:19px}
 .tally .sum .n{border-color:var(--sun);color:var(--sun);font-size:22px}
-.chai{text-align:center;align-items:center;background:var(--mint)}
-.chai h2{font-family:var(--title);font-weight:400;font-size:32px}
-.chai p{margin:0;font-size:14px;font-weight:500}
-.chai .hands{display:flex;gap:8px;align-items:center}
-.chai .hands .ico{width:48px;height:48px}
+.chai{background:var(--mint);padding:14px 16px;gap:10px}
+.chai p{margin:0;font-size:14px;font-weight:500;text-align:left}
+.chai .hands{display:flex;gap:10px;align-items:center}
+.chai .hands .ico{width:36px;height:36px;flex:none}
+.chai .btn.gold{font-size:16px;padding:8px 16px;align-self:flex-start}
+/* the moment you get one */
+.winline{margin:0;display:flex;align-items:center;gap:12px;font-family:var(--display);font-weight:700;font-size:18px;line-height:1.25;color:#B4235A}
+.winline.good{color:#0B7A55}
+.winline .big{flex:none;font-size:26px;border:3px solid var(--ink);border-radius:999px;padding:2px 14px;background:#fff;color:var(--ink);box-shadow:3px 3px 0 var(--ink)}
+.winline.good .big{background:var(--mint)}
+.winline.burst .big{position:relative}
+@media (prefers-reduced-motion:no-preference){
+  .winline.burst .big{animation:pop .55s cubic-bezier(.2,1.6,.4,1) both}
+  .winline.burst .big::before,.winline.burst .big::after{content:"\2726";position:absolute;font-size:18px;color:var(--sun);text-shadow:1px 1px 0 var(--ink);animation:spark .9s ease-out .15s both}
+  .winline.burst .big::before{left:-14px;top:-12px}
+  .winline.burst .big::after{right:-14px;top:-10px;animation-delay:.25s}
+}
+@keyframes pop{0%{transform:scale(.4)}100%{transform:scale(1)}}
+@keyframes spark{0%{opacity:0;transform:scale(.3) translateY(6px)}40%{opacity:1}100%{opacity:0;transform:scale(1.4) translateY(-10px)}}
+.nextyid{width:100%;justify-content:center;background:var(--sun)}
+.hintbox{margin:0;padding:10px 12px;border:2px dashed var(--ink);border-radius:14px;background:var(--cream);display:grid;grid-template-columns:auto 1fr;gap:10px;align-items:center;font-size:15px}
+.hintbox .ico{width:30px;height:30px}
+.btn.gold small{font-size:13px;font-weight:600}
+.btn.big.share{width:100%;justify-content:center;font-size:20px;padding:14px 20px}
+.soon{margin:0;display:flex;align-items:center;justify-content:center;gap:8px;font-family:var(--display);font-weight:700;font-size:16px}
+.soon .ico{width:26px;height:26px}
+.quiet{display:flex;gap:18px;flex-wrap:wrap;justify-content:center}
+.story-more summary{cursor:pointer;list-style:none;display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border:2px solid var(--ink);border-radius:999px;background:#fff;font-family:var(--display);font-weight:700}
+.story-more summary::-webkit-details-marker{display:none}
+.story-more summary::after{content:"\25BE"}
+.story-more[open] summary{margin-bottom:14px}
+.story-more[open] summary::after{content:"\25B4"}
+.story-more>.fact{margin-bottom:14px}
+.board.done{position:relative;top:auto}
+#share-note:empty{display:none}
 footer{font-size:14px;color:#fff;text-align:center;font-weight:500}
 footer button{background:none;border:0;color:#fff;text-decoration:underline;cursor:pointer;font-size:13px}
 
@@ -328,6 +358,66 @@ dialog h2{padding-right:46px}
 @media (prefers-reduced-motion:no-preference){.weekline .deco.l{animation:wkbob 3s ease-in-out infinite}.weekline .deco.r{animation:wkbob 3s ease-in-out infinite reverse}}
 @keyframes wkbob{0%,100%{translate:0 0}50%{translate:0 -4px}}
 .weekline .btn{padding:6px 12px;font-size:15px;box-shadow:3px 3px 0 var(--ink)}
+.weekline.cur{justify-content:space-between;padding:6px 10px 6px 12px}
+.wk-name{display:flex;align-items:center;gap:10px}
+.wk-btns{display:flex;align-items:center;gap:8px;margin-left:auto}
+.wk-past,.wk-help{border:3px solid var(--ink);background:#fff;color:var(--ink);font-family:var(--display);font-weight:700;font-size:14px;cursor:pointer;box-shadow:3px 3px 0 var(--ink);border-radius:999px}
+.wk-past{padding:6px 12px;white-space:nowrap}
+.wk-help{width:36px;height:36px;padding:0;font-size:18px;display:grid;place-items:center;flex:none}
+.wk-past:active,.wk-help:active{transform:translate(2px,2px);box-shadow:none}
+/* next clue: the invitation when you're stuck */
+.clue.next{display:block;padding:0;border:0;background:none}
+.nextclue{width:100%;display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:center;text-align:left;padding:12px;border:3px solid var(--ink);border-radius:16px;background:var(--sun);color:var(--ink);box-shadow:4px 4px 0 var(--ink);font-family:var(--display);cursor:pointer}
+.nextclue .worth{background:#fff}
+.nextclue b{display:block;font-size:18px;line-height:1.2}
+.nextclue small{display:block;font-family:var(--body);font-weight:500;font-size:14px;margin-top:2px}
+.nextclue .go{font-size:22px;font-weight:700}
+.nextclue:hover{transform:translate(-1px,-1px)}
+.nextclue:active{transform:translate(2px,2px);box-shadow:none}
+@media (prefers-reduced-motion:no-preference){.nextclue{animation:nudge .5s ease-out .6s 1 both}}
+@keyframes nudge{0%{scale:1}40%{scale:1.03}100%{scale:1}}
+/* how-to pop-up */
+.howto-steps{list-style:none;margin:0 0 16px;padding:0;display:flex;flex-direction:column;gap:10px}
+.howto-steps li{display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:center;background:var(--cream);border:2px solid var(--ink);border-radius:16px;padding:10px 12px;font-size:16px;line-height:1.35}
+.howto-steps .ico{width:40px;height:40px}
+.howto-steps b{font-family:var(--display)}
+.howto .btn.gold{width:100%;justify-content:center}
+.about .ladder{margin:8px 0 6px}
+.howto .fine{margin:10px 0 0;font-size:14px;color:#5A5590;text-align:center}
+/* phones: get to the game fast */
+@media (max-width:560px){
+  .wrap{gap:14px;padding:12px 14px 48px}
+  header{flex-direction:row;align-items:center;justify-content:space-between;gap:8px}
+  .logo{gap:6px}
+  .logo .ico{width:38px;height:38px}
+  h1{font-size:30px;text-shadow:3px 3px 0 var(--ink)}
+  .tag{font-size:12px;white-space:nowrap}
+  .chips{gap:6px;flex-wrap:nowrap}
+  .chips .chip{flex-direction:column;gap:0;padding:3px 6px 2px;font-size:11px;line-height:1.1;border-width:2px;border-radius:12px;box-shadow:2px 2px 0 var(--ink);min-width:48px}
+  .chips .chip .ico{width:22px;height:22px}
+  .chip .lg{display:none}
+  .stickers{display:none}
+  .weekline.cur{padding:4px 8px 4px 10px;border-width:2px;box-shadow:3px 3px 0 var(--ink)}
+  .weekline .wk-title{font-size:26px;text-shadow:2px 2px 0 var(--ink)}
+  .weekline .deco{width:30px;height:30px}
+  .wk-past{font-size:13px;padding:4px 10px;border-width:2px;box-shadow:2px 2px 0 var(--ink)}
+  .wk-help{width:30px;height:30px;font-size:16px;border-width:2px;box-shadow:2px 2px 0 var(--ink)}
+  .weekline.past{padding:6px 8px 6px 10px}
+  .weekline.past .wk b{font-size:18px}
+  .weekline.past .btn{font-size:13px;padding:4px 10px}
+  .board{border-width:2px;border-radius:14px;box-shadow:3px 3px 0 var(--ink);top:4px}
+  .cell{border-right-width:2px}
+  .cell .lab{font-size:10px;padding:1px 2px;border-bottom-width:1px}
+  .cell .val{font-size:17px;line-height:1.3}
+  .cell .val small{font-size:10px}
+  .clue.hidden{padding:8px 12px;align-items:center}
+  .clue.hidden .worth{font-size:15px}
+  .nextclue{padding:10px 12px}
+  .nextclue b{font-size:17px}
+}
+@media (min-width:561px){.chip .sm{display:none}}
+@media (max-width:345px){.logo .ico{display:none}h1{font-size:24px}.chips .chip{min-width:40px}}
+@media (max-width:390px){h1{font-size:26px}.logo .ico{width:30px;height:30px}.tag{font-size:11px}.chips{gap:5px}.chips .chip{min-width:44px;padding:3px 4px 2px;font-size:10.5px}.chips .chip .ico{width:20px;height:20px}}
 /* past weeks */
 .weeks{list-style:none;margin:0 0 12px;padding:0;display:flex;flex-direction:column;gap:8px}
 .weeks button{width:100%;display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:center;text-align:left;border:2px solid var(--ink);border-radius:16px;background:var(--cream);padding:10px 12px;cursor:pointer;font-family:var(--display);font-weight:700;font-size:18px;color:var(--ink)}
@@ -341,7 +431,7 @@ dialog h2{padding-right:46px}
 .read .t{display:flex;flex-direction:column;gap:2px}
 .read .t>span{font-family:var(--display);font-weight:600;text-decoration:underline;text-underline-offset:2px}
 .read small{font-family:var(--body);font-weight:500;font-size:13px;color:#5A5590}
-@media (max-width:420px){.cell .lab{font-size:11px}.cell .val{font-size:21px}.ladder{grid-template-columns:1fr}h1{font-size:44px}.logo .ico{width:54px;height:54px}.stickers .ico{width:34px;height:34px}}
+@media (max-width:420px){.ladder{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -524,9 +614,8 @@ dialog h2{padding-right:46px}
     </div>
     <div class="chips">
       <button class="chip" type="button" data-open="dlg-about"><svg class="ico" aria-hidden="true"><use href="#i-challah"/></svg>About</button>
-      <button class="chip lbchip" type="button" id="lb-chip"><svg class="ico" aria-hidden="true"><use href="#i-shofar"/></svg>Leaderboard</button>
+      <button class="chip lbchip" type="button" id="lb-chip" aria-label="Leaderboard"><svg class="ico" aria-hidden="true"><use href="#i-shofar"/></svg><span class="lg">Leaderboard</span><span class="sm" aria-hidden="true">Leaders</span></button>
       <button class="chip grpchip" type="button" id="grp-chip"><svg class="ico" aria-hidden="true"><use href="#i-wine"/></svg>Groups</button>
-      <span class="switch" role="group" aria-label="Choose a week" id="switch"></span>
     </div>
   </header>
 
@@ -606,6 +695,18 @@ dialog h2{padding-right:46px}
   </footer>
 </div>
 
+<dialog id="dlg-howto" class="about howto" aria-labelledby="howto-h">
+  <button class="x" type="button" data-close aria-label="Close">✕</button>
+  <h2 id="howto-h"><svg class="ico" aria-hidden="true"><use href="#i-dreidel"/></svg>How to play</h2>
+  <ol class="howto-steps">
+    <li><svg class="ico" aria-hidden="true"><use href="#i-torah"/></svg><span><b>Read the clue, name the Yid.</b> Start typing and pick a name from the list.</span></li>
+    <li><svg class="ico" aria-hidden="true"><use href="#i-bagel"/></svg><span><b>Stuck? Reveal the next clue.</b> Each Yid is worth 54 points on clue 1, 36 on clue 2, 18 on clue 3.</span></li>
+    <li><svg class="ico" aria-hidden="true"><use href="#i-menorah"/></svg><span><b>Find the thread.</b> Name all three Yids, then guess what connects them for 18 more. 180 is perfect.</span></li>
+  </ol>
+  <button class="btn gold" type="button" data-close id="howto-go" autofocus>Let's play</button>
+  <p class="fine">No timer. Take all the time you want.</p>
+</dialog>
+
 <dialog id="dlg-about" class="about">
   <button class="x" type="button" data-close aria-label="Close">✕</button>
   <h2><svg class="ico" aria-hidden="true"><use href="#i-challah"/></svg>About</h2>
@@ -614,8 +715,15 @@ dialog h2{padding-right:46px}
     <div class="sec">
   <p>Every week there are three new Yids: a <b>Today Yid</b>, a <b>Yester Yid</b> and a <b>Really Old Yid</b>. Everyone gets the same three. Missed a week? Find it under <b>Past weeks</b>.</p>
   <p>Each one comes with three clues. Name them on the first clue for <b>54</b> points, the second for <b>36</b>, the third for <b>18</b>. Start typing a name and pick from the list, or type your own. A wrong guess flips the next clue. Take all the time you want.</p>
-  <p>Then the bonus: the three share a connection to one another that you have to figure out. We call it <b>the thread</b>, and guessing it is worth <b>18</b> more. A perfect score is 180, which is ten times chai.</p>
-  <p><b>Play with friends.</b> Start a group on the leaderboard, send your friends the invite link, and see how you stack up every week.</p>
+  <p>Then the bonus: the three share a connection to one another that you have to figure out. We call it <b>the thread</b>, and guessing it is worth <b>18</b> more. Stuck after one guess? Take a hint and it's worth 9. A perfect score is 180, which is ten times chai.</p>
+  <p><b>Play with friends.</b> Start a group, send your friends the invite link, and see how you stack up every week.</p>
+  <p class="sub">What your total makes you</p>
+  <div class="ladder">
+    <div><svg class="ico" aria-hidden="true"><use href="#i-challah"/></svg><span>Oy.<small>0 to 35</small></span></div>
+    <div><svg class="ico" aria-hidden="true"><use href="#i-dreidel"/></svg><span>Hebrew School Dropout<small>36 to 71</small></span></div>
+    <div><svg class="ico" aria-hidden="true"><use href="#i-candles"/></svg><span>Sleepaway Camp Star<small>72 to 107</small></span></div>
+    <div><svg class="ico" aria-hidden="true"><use href="#i-star"/></svg><span>Mentsch Master<small>108 to 180</small></span></div>
+  </div>
     </div>
   </details>
   <details name="about">
@@ -699,6 +807,7 @@ const P1 = {
   thread: {
     title: "They all chose to be Jewish",
     prompt: "Amar'e, Marilyn and Ruth have something in common. What ties them together?",
+    hint: "Ruth told Naomi, \u201cYour people shall be my people.\u201d",
     keywords: ["convert", "conversion", "giyur", "geirus", "gerut", "jew by choice", "jews by choice", "chose judaism", "chose to be jewish", "became jewish", "proselyte", "joined the jewish"],
     words: ["ger", "gerim", "giyoret", "converts", "converted", "convert", "conversion"],
     body: [
@@ -762,6 +871,7 @@ const P2 = {
   thread: {
     title: "The tribe of Levi (we think)",
     prompt: "Dan, Eli and Miriam have something in common. What ties them together?",
+    hint: "A look at the last names could help ya out! Or, maybe think about the aliyahs given out at synagogue.",
     keywords: ["tribe of levi", "priest", "kohan", "cohan", "leviim", "levi im"],
     words: ["levi", "levite", "levites", "levy", "levys", "levis", "kohen", "kohens", "cohen", "cohens", "kohein", "aaron", "aharon", "levitical"],
     body: [
@@ -826,6 +936,7 @@ const P3 = {
   thread: {
     title: "Interfaith power couples",
     prompt: "Benny, Irving and Esther have something in common. What ties them together?",
+    hint: "These are some power couples, wouldn't you say?",
     keywords: ["inter faith", "interfaith", "inter marri", "intermarri", "intermarry", "mixed marri", "mixed faith", "mixed religion", "mixed couple", "mixed relationship", "non jew", "nonjew", "not jewish", "werent jewish", "wasnt jewish", "isnt jewish", "arent jewish", "not a jew", "not jews", "outside the tribe", "outside of the tribe", "outside the faith", "outside their faith", "outside his faith", "outside her faith", "outside judaism", "outside the religion", "outside their religion", "outside the jewish", "married out", "marry out", "marrying out", "different faith", "different religion", "different faiths", "different religions", "another faith", "another religion", "other faith", "other religion", "power couple", "married gentile", "married a gentile", "married goy", "married a goy", "married christian", "married a christian", "married catholic", "married a catholic", "married shiksa", "married a shiksa", "married a non", "married non", "married someone not", "jewish and non", "jew and non"],
     words: ["interfaith", "intermarried", "intermarriage", "intermarriages", "intermarry", "intermarrying", "interreligious", "multifaith", "gentile", "gentiles", "goy", "goyim", "goyish", "shiksa", "shiksas", "shegetz", "nonjewish", "exogamy", "exogamous"],
     alt: {
@@ -858,11 +969,11 @@ const CURRENT = PUZZLES[PUZZLES.length-1];
 let PUZZLE = CURRENT;
 
 const POINTS = [54, 36, 18];
-const BONUS = 18;
+const BONUS = 18, HINT_BONUS = 9;
 const RANKS = [
-  { min: 162, name: "Mentsch Master", icon: "star", emoji: "\u{1F451}" },
-  { min: 108, name: "Sleepaway Camp Star", icon: "candles", emoji: "\u{1F3D5}\uFE0F" },
-  { min: 54,  name: "Hebrew School Dropout", icon: "dreidel", emoji: "\u{1F392}" },
+  { min: 108, name: "Mentsch Master", icon: "star", emoji: "\u{1F451}" },
+  { min: 72,  name: "Sleepaway Camp Star", icon: "candles", emoji: "\u{1F3D5}\uFE0F" },
+  { min: 36,  name: "Hebrew School Dropout", icon: "dreidel", emoji: "\u{1F392}" },
   { min: 0,   name: "Oy.", icon: "challah", emoji: "\u{1F62C}" }
 ];
 const QUIPS = {
@@ -878,6 +989,7 @@ const QUIPS = {
   right: ["Mazel tov!", "Look at you. Your bubbe is kvelling.", "Yasher koach!"],
   miss: "It's okay. Moses didn't make it to the end either.",
   thread: "Now you're cooking with schmaltz.",
+  close: "Ooh, so close! Give us the full name.",
   perfect: "A perfect day. Call your mother, she'll want to hear this."
 };
 
@@ -913,14 +1025,22 @@ function matchThread(guess, thread){
   return thread.words.some(w=>toks.some(t=>t===w || (w.length>=6 && lev(t,w)<=1)));
 }
 function roundPoints(r){ return r.status==="won" ? POINTS[r.clue] : 0; }
-function total(state){ return state.rounds.reduce((s,r)=>s+roundPoints(r),0) + (state.bonus==="won"?BONUS:0); }
+function bonusPts(s){ return s.bonus==="won" ? (s.hint?HINT_BONUS:BONUS) : 0; }
+function total(state){ return state.rounds.reduce((s,r)=>s+roundPoints(r),0) + bonusPts(state); }
+/* a first or last name on its own: close, but not the full answer */
+function partialName(guess, aliases){
+  const g=norm(guess); if(!g||g.indexOf(" ")>=0) return false;
+  const STOP=["the","queen","king","rabbi","and","of"];
+  return aliases.some(a=>norm(a).split(" ").some(t=>t.length>=3&&STOP.indexOf(t)<0&&(g===t||(t.length>=5&&lev(g,t)<=1))));
+}
 function rankFor(score){ return RANKS.find(r=>score>=r.min); }
 function shareText(state){
   const t=total(state);
   const rk=rankFor(t), E=["\u{1F4F1}","\u{1F4DC}","\u{1F3FA}"];
   const lines=["\u2721\uFE0F Geshmak! Week "+PUZZLE.id+": "+t+"/180"+(t===180?" \u{1F389}":""), rk.emoji+" "+rk.name, ""];
-  state.rounds.forEach((r,i)=>{ lines.push(E[i]+" "+PUZZLE.rounds[i].era+": "+roundPoints(r)+"/54"); });
-  lines.push("\u{1F9F5} The thread: "+(state.bonus==="won"?BONUS:0)+"/18");
+  const R="\u{1F7E5}", G="\u{1F7E9}", W="\u2B1C", Y="\u{1F7E8}";
+  state.rounds.forEach((r,i)=>{ lines.push(E[i]+" "+(r.status==="won"?R.repeat(r.clue)+G+W.repeat(2-r.clue):R+R+R)); });
+  lines.push("\u{1F9F5} "+(state.bonus==="won"?(state.hint?Y:G):R));
   lines.push("", "Can you name the Yid? \u{1F56F}\uFE0F\u{1F35E}\u{1F377}");
   try{ if(/github\.io$/.test(location.hostname)) lines.push(location.origin+location.pathname); }catch(e){}
   return lines.join("\n");
@@ -952,15 +1072,14 @@ const SHORT=["Today","Yester","Really Old"];
 const PAST = PUZZLES.filter(p=>p!==CURRENT).reverse();
 function stateOf(p){ return p.id===PUZZLE.id?state:rawState(p.id); }
 function renderSwitch(){
-  const s=stateOf(CURRENT), fin=!!(s&&finished(s)), onPast=PUZZLE!==CURRENT;
-  document.getElementById("switch").innerHTML=
-    '<button type="button" data-puzzle="'+CURRENT.id+'" aria-pressed="'+!onPast+'"'+(fin?' aria-label="This week, finished"':'')+'>This week'+(fin?'<span class="ck" aria-hidden="true">\u2713</span>':'')+'</button>'+
-    (PAST.length?'<button type="button" data-open="dlg-weeks" aria-pressed="'+onPast+'">Past weeks</button>':'');
+  const onPast=PUZZLE!==CURRENT;
+  const help='<button type="button" class="wk-help" data-open="dlg-howto" aria-label="How to play">?</button>';
   const wl=document.getElementById("weekline");
   wl.className="weekline"+(onPast?" past":" cur");
   wl.innerHTML=onPast
-    ? '<span class="wk">'+ico("candles")+'<span><b>Week '+PUZZLE.id+'</b> from the archive</span></span><button class="btn ghost" type="button" data-puzzle="'+CURRENT.id+'">Back to this week</button>'
-    : '<svg class="ico deco l" aria-hidden="true"><use href="#i-dreidel"/></svg><h2 class="wk-title">Week '+PUZZLE.id+'</h2><svg class="ico deco r" aria-hidden="true"><use href="#i-star"/></svg>';
+    ? '<span class="wk">'+ico("candles")+'<span><b>Week '+PUZZLE.id+'</b> from the archive</span></span><span class="wk-btns"><button class="btn ghost" type="button" data-puzzle="'+CURRENT.id+'">Back to this week</button>'+help+'</span>'
+    : '<span class="wk-name"><svg class="ico deco l" aria-hidden="true"><use href="#i-dreidel"/></svg><h2 class="wk-title">Week '+PUZZLE.id+'</h2></span>'+
+      '<span class="wk-btns">'+(PAST.length?'<button type="button" class="wk-past" data-open="dlg-weeks">Past weeks</button>':'')+help+'</span>';
 }
 function renderWeeks(){
   document.getElementById("weeks-list").innerHTML=PAST.map(p=>{
@@ -979,32 +1098,22 @@ function renderBoard(){
   });
   const bd=state.bonus!=="playing";
   h+='<div class="cell k-grape'+(bd?'':' pending')+(act===-1&&!bd?' now':'')+'"><span class="lab">Thread</span>'+
-     '<span class="val" aria-label="Thread bonus: '+(bd?(state.bonus==="won"?18:0)+' points':'not played yet')+'">'+(bd?(state.bonus==="won"?18:0):(act===-1?'?':'–'))+'</span></div>';
+     '<span class="val" aria-label="Thread bonus: '+(bd?bonusPts(state)+' points':'not played yet')+'">'+(bd?bonusPts(state):(act===-1?'?':'–'))+'</span></div>';
   h+='<div class="cell total"><span class="lab">Total</span><span class="val" aria-label="Total: '+total(state)+' of 180">'+total(state)+'<small> /180</small></span></div>';
-  document.getElementById("board").innerHTML=h;
+  const bdEl=document.getElementById("board"); bdEl.innerHTML=h; bdEl.classList.toggle("done",finished(state));
 }
-function introHTML(){
-  return '<section class="card c-sun" aria-label="How scoring works"><div class="band"><h2 class="era">'+ico("dreidel")+'How scoring works</h2><span class="side"><span class="pts">180 max</span><button class="x" type="button" data-act="start" aria-label="Close and start playing">✕</button></span></div>'+
-    '<p style="margin:0">Three Yids, three clues each. The sooner you name them, the more you score. No timer, so take all the time you want.</p>'+
-    '<ul class="rules">'+
-    '<li><span class="worth">54</span><span>Name the Yid on the <b>first clue</b></span></li>'+
-    '<li><span class="worth">36</span><span>Name them on the <b>second clue</b></span></li>'+
-    '<li><span class="worth">18</span><span>Name them on the <b>third clue</b></span></li>'+
-    '<li><span class="worth bonus">+18</span><span><b>Bonus: the thread.</b> Guess the connection that brings all three together</span></li>'+
-    '<li><span class="worth max">180</span><span>A perfect score. That\'s ten times chai.</span></li>'+
-    '</ul>'+
-    '<p style="margin:0">A wrong guess flips the next clue, which costs you 18.</p>'+
-    '<p class="sub">What your total makes you</p>'+
-    '<div class="ladder">'+
-    '<div>'+ico("challah")+'<span>Oy.<small>0 to 36</small></span></div>'+
-    '<div>'+ico("dreidel")+'<span>Hebrew School Dropout<small>54 to 90</small></span></div>'+
-    '<div>'+ico("candles")+'<span>Sleepaway Camp Star<small>108 to 144</small></span></div>'+
-    '<div>'+ico("star")+'<span>Mentsch Master<small>162 to 180</small></span></div>'+
-    '</div>'+
-    '<div class="row"><button class="btn gold" type="button" data-act="start" id="start-btn">Let\'s play</button></div>'+
-    ico("wine","peek")+'</section>';
+function showHowTo(){
+  const d=document.getElementById("dlg-howto");
+  if(!d||d.open||showHowTo.done) return;
+  showHowTo.done=true;
+  try{ d.showModal(); }catch(e){ d.setAttribute("open",""); }
 }
-let confirming=false;
+function startPlaying(){
+  if(state.started) return;
+  seenIntro=true; lsSet("geshmak-intro","1"); state.started=true; save();
+  render(touchy()?null:"guess-"+Math.max(0,activeIndex()));
+}
+let confirming=false, celebrate=-1;
 const openClues={};
 function missesHTML(m){
   if(!m||!m.length) return "";
@@ -1044,7 +1153,7 @@ function renderJoin(){
 }
 function render(focusId){
   renderSwitch(); renderBoard();
-  if(!state.started){ game.innerHTML=introHTML(); return; }
+  if(!state.started) showHowTo();
   const act=activeIndex();
   let html="";
   PUZZLE.rounds.forEach((R,i)=>{
@@ -1053,20 +1162,24 @@ function render(focusId){
     let badge;
     if(r.status==="won") badge='<span class="pts won">+'+POINTS[r.clue]+'</span>';
     else if(r.status==="lost") badge='<span class="pts zero">+0</span>';
-    else badge='<span class="pts">up to 54</span>';
+    else badge='<span class="pts">up to '+POINTS[isAct?r.clue:0]+'</span>';
     html+='<section class="'+cls+'" aria-label="'+esc(R.era)+'">';
     html+='<div class="band"><h2 class="era">'+ico(R.icon)+esc(R.era)+'</h2>'+badge+'</div>';
     if(done){
       html+='<div class="answer pop">'+esc(R.answer)+'</div>';
+      if(r.quip) html+='<p class="winline'+(r.status==="won"?' good':'')+(celebrate===i?' burst':'')+'" role="status"><span class="big">+'+roundPoints(r)+'</span><span>'+esc(r.quip)+'</span></p>';
       const ck=PUZZLE.id+"-"+i;
       html+='<details class="allclues" data-ck="'+ck+'"'+(openClues[ck]?' open':'')+'><summary>'+ico("torah")+'See all three clues</summary><ol class="clues">'+
         R.clues.map((c,j)=>'<li class="clue"><span class="worth">'+POINTS[j]+'<small>pts</small></span><p>'+esc(c)+'</p></li>').join("")+'</ol></details>';
       html+='<p class="learn">'+ico("challah")+'<span><b>Nosh on this:</b> '+esc(R.learn)+'</span></p>';
       if(R.read) html+='<a class="read" href="'+esc(R.read[2])+'" target="_blank" rel="noopener">'+ico("book")+'<span class="t"><span>'+esc(R.read[0])+'</span><small>Read more on '+esc(R.read[1])+' ↗</small></span></a>';
+      if(i<2&&act===i+1) html+='<button class="btn nextyid" type="button" data-act="goto" data-to="'+(i+1)+'">Next: '+esc(PUZZLE.rounds[i+1].era)+' <span aria-hidden="true">\u2193</span></button>';
+      else if(i===2&&act===-1&&state.bonus==="playing") html+='<button class="btn nextyid" type="button" data-act="goto" data-to="3">Next: the bonus <span aria-hidden="true">\u2193</span></button>';
     } else if(isAct){
       html+='<ol class="clues">';
       R.clues.forEach((c,j)=>{
         if(j<=r.clue) html+='<li class="clue"><span class="worth">'+POINTS[j]+'<small>pts</small></span><p>'+esc(c)+'</p></li>';
+        else if(j===r.clue+1&&!confirming) html+='<li class="clue next"><button type="button" class="nextclue" data-act="next"><span class="worth">'+POINTS[j]+'<small>pts</small></span><span><b>Stuck? Reveal the next clue!</b><small>Clue '+(j+1)+' is still worth '+POINTS[j]+' points</small></span><span class="go" aria-hidden="true">\u2192</span></button></li>';
         else html+='<li class="clue hidden"><span class="worth">'+POINTS[j]+'<small>pts</small></span><p>Clue '+(j+1)+' is waiting.</p></li>';
       });
       html+='</ol>';
@@ -1075,9 +1188,7 @@ function render(focusId){
             '<ul class="sugg" id="sugg-'+i+'" role="listbox" aria-label="Possible Yids" hidden></ul></div>'+
             '<button class="btn" type="submit">Guess</button></form>';
       html+=missesHTML(r.misses);
-      html+=confirming?sureHTML("giveup-yes"):'<div class="row">'+(r.clue<2
-            ? '<button class="btn ghost" type="button" data-act="next">Next clue</button>'
-            : '<button class="btn ghost" type="button" data-act="giveup">I give up, tell me</button>')+'</div>';
+      html+=confirming?sureHTML("giveup-yes"):(r.clue<2?'':'<div class="row"><button class="btn ghost" type="button" data-act="giveup">I give up, tell me</button></div>');
       html+='<p class="quip'+(state.quipGood?' good':'')+'" role="status">'+esc(state.quip)+'</p>';
     } else {
       html+='<p class="wait">'+ico(["bagel","torah","book"][i]||"bagel")+'Three clues coming up! Guess the '+esc(PUZZLE.rounds[i-1]?PUZZLE.rounds[i-1].era:"one above")+' first.</p>';
@@ -1092,42 +1203,49 @@ function render(focusId){
   if(act===-1){
     const T=PUZZLE.thread;
     if(state.bonus==="playing"){
-      html+='<section class="card c-grape active" aria-label="Bonus"><div class="band"><h2 class="era">'+ico("menorah")+'Bonus: the thread</h2><span class="pts">+18</span></div>'+
+      html+='<section class="card c-grape active" aria-label="Bonus"><div class="band"><h2 class="era">'+ico("menorah")+'Bonus: the thread</h2><span class="pts">up to '+(state.hint?HINT_BONUS:BONUS)+'</span></div>'+
         '<p style="margin:0">'+esc(T.prompt)+'</p>'+
+        (state.hint&&T.hint?'<p class="hintbox">'+ico("torah")+'<span><b>Hint:</b> '+esc(T.hint)+'</span></p>':'')+
         '<form data-form="thread"><label class="sr" for="thread-guess">What connects all three?</label>'+
         '<input type="text" id="thread-guess" name="geshmak-thread" autocomplete="off" autocorrect="off" spellcheck="false" enterkeyhint="go" data-1p-ignore data-lpignore="true" data-bwignore data-form-type="other" autocapitalize="sentences" placeholder="They all…">'+
         '<button class="btn" type="submit">Guess</button></form>'+
         missesHTML(state.tmisses)+
-        (confirming?sureHTML("reveal-yes"):'<div class="row"><button class="btn ghost" type="button" data-act="reveal">Just tell me</button></div>')+
+        (confirming?sureHTML("reveal-yes"):'<div class="row">'+(T.hint&&!state.hint&&(state.tmisses||[]).length?'<button class="btn gold" type="button" data-act="hint">Want a hint? <small>(worth 9)</small></button>':'')+'<button class="btn ghost" type="button" data-act="reveal">Just tell me</button></div>')+
         '<p class="quip'+(state.quipGood?' good':'')+'" role="status">'+esc(state.quip)+'</p>'+ico("bagel","peek")+'</section>';
     } else {
-      const t=total(state), rk=rankFor(t);
-      html+='<section class="card c-grape thread pop" aria-label="The thread"><div class="band"><h2 class="era">'+ico("menorah")+esc(T.title)+'</h2>'+
-        '<span class="pts '+(state.bonus==="won"?'won':'zero')+'">+'+(state.bonus==="won"?18:0)+'</span></div>'+
-        T.body.map(p=>'<p class="fact">'+ico(p[0])+'<span>'+p[1]+'</span></p>').join("")+
-        (T.sources&&T.sources.length?'<div class="more"><p class="sub">Want to learn more? Check out these sources!</p><ul>'+
-          T.sources.map(s=>'<li><a href="'+esc(s[2])+'" target="_blank" rel="noopener">'+esc(s[0])+'</a> <span>'+esc(s[1])+'</span></li>').join("")+'</ul></div>':'')+
-        ico("shofar","peek")+'</section>';
+      const t=total(state), rk=rankFor(t), bp=bonusPts(state);
       html+='<section class="card c-sky" aria-label="Your result"><div class="band"><h2 class="era">'+ico("wine")+'Your score</h2><span class="pts">'+t+' / 180</span></div>'+
         '<div class="rank pop">'+ico(rk.icon)+esc(rk.name)+'</div>'+
         '<p class="quip good" role="status">'+esc(t===180?QUIPS.perfect:state.quip)+'</p>'+
         '<div class="tally">'+
         state.rounds.map((r,i)=>'<div class="line">'+ico(PUZZLE.rounds[i].icon)+'<span>'+esc(PUZZLE.rounds[i].era)+'</span><span class="n k-'+PUZZLE.rounds[i].color+'">'+roundPoints(r)+'<small> /54</small></span></div>').join("")+
-        '<div class="line">'+ico("menorah")+'<span>The thread</span><span class="n k-grape">'+(state.bonus==="won"?18:0)+'<small> /18</small></span></div>'+
+        '<div class="line">'+ico("menorah")+'<span>The thread'+(state.hint&&state.bonus==="won"?' <small>(with hint)</small>':'')+'</span><span class="n k-grape">'+bp+'<small> /18</small></span></div>'+
         '<div class="line sum">'+ico("challah")+'<span>Total</span><span class="n">'+t+'<small> /180</small></span></div>'+
         '</div>'+
+        '<button class="btn big share" type="button" data-act="share">Share my score</button>'+
+        '<p class="quip good" id="share-note" role="status"></p>'+
+        '<p class="soon">'+ico("star")+'<span>New Yids coming soon!</span></p>'+
         '<div class="join" id="score-join"></div>'+
-        '<div class="row"><button class="btn" type="button" data-act="share">Share my score</button>'+
-        (PUZZLE!==CURRENT?'<button class="btn ghost" type="button" data-puzzle="'+CURRENT.id+'">Back to this week</button>':'')+
-        (PAST.some(p=>p!==PUZZLE)?'<button class="btn ghost" type="button" data-open="dlg-weeks">'+(PUZZLE===CURRENT?'Play past weeks':'More past weeks')+'</button>':'')+'</div>'+
-        '<p class="quip good" id="share-note" role="status"></p>'+ico("dreidel","peek")+'</section>';
-      html+='<section class="card chai" aria-label="Support the game"><h2>Like the game?</h2>'+
-        '<div class="hands">'+ico("hand","wiggle")+
-        '<a class="btn gold" href="https://venmo.com/u/'+encodeURIComponent(VENMO_HANDLE)+'" target="_blank" rel="noopener">Give me a Chai-Five</a></div>'+
-        '<p>Venmo @'+esc(VENMO_HANDLE)+' (Ian Lever). $18 is traditional. So is $1.80.</p>'+ico("pom","peek")+'</section>';
+        '<div class="quiet">'+
+        (PUZZLE!==CURRENT?'<button class="linkbtn" type="button" data-puzzle="'+CURRENT.id+'">Back to this week</button>':'')+
+        (PAST.some(p=>p!==PUZZLE)?'<button class="linkbtn" type="button" data-open="dlg-weeks">'+(PUZZLE===CURRENT?'Play past weeks':'More past weeks')+'</button>':'')+'</div>'+
+        ico("dreidel","peek")+'</section>';
+      const body=T.body.map(p=>'<p class="fact">'+ico(p[0])+'<span>'+p[1]+'</span></p>');
+      const src=(T.sources&&T.sources.length?'<div class="more"><p class="sub">Want to learn more? Check out these sources!</p><ul>'+
+          T.sources.map(s=>'<li><a href="'+esc(s[2])+'" target="_blank" rel="noopener">'+esc(s[0])+'</a> <span>'+esc(s[1])+'</span></li>').join("")+'</ul></div>':'');
+      const sk="story-"+PUZZLE.id;
+      html+='<section class="card c-grape thread" aria-label="The thread"><div class="band"><h2 class="era">'+ico("menorah")+esc(T.title)+'</h2>'+
+        '<span class="pts '+(state.bonus==="won"?'won':'zero')+'">+'+bp+'</span></div>'+
+        body.slice(0,2).join("")+
+        (body.length>2||src?'<details class="story-more" data-ck="'+sk+'"'+(openClues[sk]?' open':'')+'><summary>Keep reading</summary>'+body.slice(2).join("")+src+'</details>':'')+
+        ico("shofar","peek")+'</section>';
+      html+='<section class="card chai" aria-label="Support the game"><div class="hands">'+ico("hand","wiggle")+
+        '<p><b>Like the game?</b> Venmo @'+esc(VENMO_HANDLE)+'. $18 is traditional. So is $1.80.</p></div>'+
+        '<a class="btn gold" href="https://venmo.com/u/'+encodeURIComponent(VENMO_HANDLE)+'" target="_blank" rel="noopener">Give me a Chai-Five</a></section>';
     }
   }
   game.innerHTML=html;
+  celebrate=-1;
   renderJoin();
   if(focusId){ const el=document.getElementById(focusId); if(el) el.focus(); }
 }
@@ -1923,7 +2041,8 @@ document.addEventListener("click",e=>{
   switchPuzzle(Number(b.dataset.puzzle));
 });
 function finishRound(i,status,quip,good){
-  state.rounds[i].status=status; state.quip=quip; state.quipGood=good; confirming=false;
+  const r=state.rounds[i];
+  r.status=status; r.quip=quip; state.quip=""; state.quipGood=good; confirming=false; celebrate=i;
   save(); render();
   const nxt=activeIndex();
   const el=document.getElementById(nxt>=0?"guess-"+nxt:"thread-guess"); if(el&&!touchy()) el.focus({preventScroll:true});
@@ -1952,6 +2071,8 @@ game.addEventListener("submit",e=>{
     if(!r.misses) r.misses=[];
     if(matchName(val,PUZZLE.rounds[i].aliases)){
       finishRound(i,"won", r.clue===0?QUIPS.first:pick(QUIPS.right), true);
+    } else if(partialName(val,PUZZLE.rounds[i].aliases)){
+      state.quip=QUIPS.close; state.quipGood=false; save(); render("guess-"+i);
     } else if(tried(r.misses)){
       state.quip=QUIPS.again; state.quipGood=false; save(); render("guess-"+i);
     } else {
@@ -1970,13 +2091,15 @@ game.addEventListener("submit",e=>{
 game.addEventListener("click",e=>{
   const b=e.target.closest("[data-act]"); if(!b) return;
   const a=b.dataset.act, i=activeIndex();
-  if(a==="start"){ seenIntro=true; lsSet("geshmak-intro","1"); state.started=true; save(); render("guess-0"); }
+  if(a==="start"){ startPlaying(); }
   else if(a==="next"){ confirming=false; state.rounds[i].clue++; state.quip=""; save(); render("guess-"+i); }
   else if(a==="giveup"||a==="reveal"){ confirming=true; state.quip=""; render(); const y=game.querySelector('[data-act="sure-no"]'); if(y) y.focus(); }
   else if(a==="sure-no"){ confirming=false; render(touchy()?null:(i>=0?"guess-"+i:"thread-guess")); }
   else if(a==="giveup-yes"){ finishRound(i,"lost",QUIPS.miss,false); }
   else if(a==="reveal-yes"){ finishBonus("lost",QUIPS.miss,false); }
   else if(a==="toboard"){ toLB(); }
+  else if(a==="goto"){ const n=Number(b.dataset.to); toCard(n); const el=document.getElementById(n<3?"guess-"+n:"thread-guess"); if(el&&!touchy()) el.focus({preventScroll:true}); }
+  else if(a==="hint"){ state.hint=true; state.quip=""; save(); render(touchy()?null:"thread-guess"); }
   else if(a==="share"){ shareOut(shareText(state),document.getElementById("share-note"),"Go brag in the group chat."); }
 });
 document.addEventListener("click",e=>{
@@ -1985,6 +2108,7 @@ document.addEventListener("click",e=>{
   if(d.id==="dlg-weeks") renderWeeks();
   if(d.showModal) d.showModal(); else d.setAttribute("open","");
 });
+document.getElementById("dlg-howto").addEventListener("close",startPlaying);
 document.querySelectorAll("[data-close]").forEach(b=>b.addEventListener("click",()=>b.closest("dialog").close()));
 document.querySelectorAll("dialog").forEach(d=>d.addEventListener("click",e=>{ if(e.target===d) d.close(); }));
 document.getElementById("contact").addEventListener("click",()=>{
@@ -1993,7 +2117,7 @@ document.getElementById("contact").addEventListener("click",()=>{
 try{ if(/[?&]test\b/.test(location.search)) document.getElementById("reset").hidden=false; }catch(e){}
 document.getElementById("reset").addEventListener("click",()=>{
   confirming=false;
-  seenIntro=false; lsSet("geshmak-intro","0"); state=freshState(); save(); render(); renderLB(); window.scrollTo(0,0);
+  seenIntro=false; lsSet("geshmak-intro","0"); state=freshState(); save(); showHowTo.done=false; render(); renderLB(); window.scrollTo(0,0);
 });
 render(); renderLB(); renderGroups(); initLB();
 </script>
